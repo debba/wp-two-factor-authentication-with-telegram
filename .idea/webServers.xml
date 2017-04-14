@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="09daf838-b26a-470b-a270-7c021968895e" name="Locale" url="http://localhost">
+        <fileTransfer port="0" mountedRoot="/Library/WebServer/Documents/wordpress" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
