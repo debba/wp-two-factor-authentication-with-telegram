@@ -1,0 +1,52 @@
+/**
+ * WP Factor Telegram Plugin
+ */
+
+#factor-chat-confirm {
+    display: none;
+}
+
+#factor-chat-response {
+    display:none;
+}
+
+.load-spinner {
+    float:left;
+}
+
+.wpft-notice {
+    background: #fff;
+    border-left: 4px solid #fff;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
+    margin: 5px 15px 2px;
+    padding: 1px 12px
+}
+
+.wpft-notice {
+    background: #fff;
+    border-left: 4px solid #fff;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
+    margin: 5px 15px 2px;
+    padding: 12px 12px
+}
+
+.wpft-notice-warning {
+    border-left-color: #ffb900;
+}
+
+.wpft-notice p {
+    margin: .5em 0;
+    padding: 2px;
+    font-size: 13px;
+}
+
+.wpft-notice p:before {
+    margin-right: 6px;
+    vertical-align: bottom;
+}
+
+.input-valid {
+    border: 1px solid green !important;
+}
