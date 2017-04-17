@@ -106,3 +106,5 @@ if( isset( $_GET[ 'tab' ] ) ) {
     </div>
 
 </div>
+
+<?php do_action("tft_copyright"); ?>

@@ -72,3 +72,8 @@
 .input-valid {
     border: 1px solid green !important;
 }
+
+.social-foot {
+    border:0;
+    text-decoration:none;
+}

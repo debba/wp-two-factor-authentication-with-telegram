@@ -433,6 +433,33 @@ final class WP_Factor_Telegram_Plugin {
             </tr>
 
             <tr>
+
+                <td colspan="3">
+
+                    <?php
+                        $username = $this->telegram->get_me()->username;
+                    ?>
+
+                    <div>
+
+                        <ol>
+                            <li><?php
+						        _e(sprintf('Apri Telegram e avvia una conversazione con %s', '<a href="https://telegram.me/WordPressLoginBot" target="_blank">@WordpressLoginBot</a>'), 'two-factor-telegram'); ?></li>
+                            <li><?php
+						        _e(sprintf('Digita il comando %s per ottenere la tua Chat ID.', '<code>/get_id</code>'), 'two-factor-telegram'); ?></li>
+                            <li><?php
+						        _e('All\' interno della risposta sarà presente la <strong>Chat ID</strong>', 'two-factor-telegram'); ?></li>
+                            <li><?php _e( sprintf('Ora apri una conversazione con %s e schiaccia su <strong>Avvia</strong>', '<a href="https://telegram.me/'.$username.'">@'.$username.'</a>' ), 'two-factor-telegram'); ?></li>
+                            <li><?php _e('Adesso puoi proseguire :) Inserisci la tua Chat ID di seguitp e premi Invia codice.', 'two-factor-plugin'); ?></li>
+                        </ol>
+
+                        </p>
+                    </div>
+                </td>
+
+            </tr>
+
+            <tr>
                 <th>
                     <label for="tg_wp_factor_chat_id"><?php _e( 'Telegram Chat ID', 'two-factor-telegram' ); ?>
                     </label></th>
@@ -637,6 +664,22 @@ final class WP_Factor_Telegram_Plugin {
     }
 
 
+	function ts_footer_admin_text()
+	{
+		return __('Questo plugin è stato creato da', 'two-factor-telegram').' <a href="https://www.dueclic.com/" target="_blank">dueclic</a>. <a class="social-foot" href="https://www.facebook.com/dueclic/"><span class="dashicons dashicons-facebook bg-fb"></span></a>';
+	}
+
+	function ts_footer_version()
+	{
+		return "";
+	}
+
+	public function change_copyright() {
+		add_filter('admin_footer_text', array($this, 'ts_footer_admin_text'), 11);
+		add_filter('update_footer', array($this, 'ts_footer_version'), 11);
+	}
+
+
 	/**
 	 * Add hooks
 	 */
@@ -672,6 +715,8 @@ final class WP_Factor_Telegram_Plugin {
 		add_action( 'wp_ajax_send_token_check', array( $this, 'send_token_check' ) );
 		add_action( 'wp_ajax_token_check', array( $this, 'token_check' ) );
 		add_action( 'wp_ajax_check_bot', array( $this, 'check_bot' ) );
+
+		add_action("tft_copyright", array($this, "change_copyright"));
 
 	}
 
