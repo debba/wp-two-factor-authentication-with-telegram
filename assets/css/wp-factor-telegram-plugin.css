@@ -47,6 +47,18 @@
     vertical-align: bottom;
 }
 
+.wft-settings-description span.success {
+    color: #6495ED;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.wft-settings-description span.error {
+    color: #ed0d00;
+    font-weight: 700;
+    font-style: normal;
+}
+
 .input-valid {
     border: 1px solid green !important;
 }

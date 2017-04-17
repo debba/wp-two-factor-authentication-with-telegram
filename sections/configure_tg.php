@@ -1,6 +1,7 @@
-<div class="section panel">
+<div id="wft-wrap" class="wrap">
 
 	<h1><?php _e( "Configura Two Factor Authentication con Telegram" ); ?></h1>
+
 	<form method="post" enctype="multipart/form-data" action="options.php">
 		<hr>
 		<?php

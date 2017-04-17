@@ -100,7 +100,8 @@ final class WP_Factor_Telegram_Plugin {
 		setcookie( $this->cookie_name, null, strtotime( '-1 day' ) );
 		setcookie( $this->cookie_name, sha1( $auth_code ), time() + ( 60 * 20 ) );
 
-		$this->telegram->send_tg_token( $auth_code );
+		$chat_id = get_the_author_meta(  "tg_wp_factor_chat_id", $user->ID );
+		$this->telegram->send_tg_token( $auth_code, $chat_id );
 
 		$redirect_to = isset( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : $_SERVER['REQUEST_URI'];
 
@@ -185,14 +186,16 @@ final class WP_Factor_Telegram_Plugin {
 
 	public function tg_login( $user_login, $user ) {
 
-		if ( get_option( $this->namespace )['enabled'] !== '1' ) {
-			return;
+		if ( get_option( $this->namespace )['enabled'] === '1' && get_the_author_meta(  "tg_wp_factor_enabled", $user->ID ) === "1" ) {
+
+			wp_clear_auth_cookie();
+
+			$this->show_two_factor_login( $user );
+			exit;
+
 		}
 
-		wp_clear_auth_cookie();
-
-		$this->show_two_factor_login( $user );
-		exit;
+		return;
 
 	}
 
@@ -331,7 +334,14 @@ final class WP_Factor_Telegram_Plugin {
 				$options[ $id ] = stripslashes( $options[ $id ] );
 				$options[ $id ] = esc_attr( $options[ $id ] );
 				echo "<input class='regular-text $class' type='text' id='$id' name='" . $option_name . "[$id]' value='$options[$id]' />";
-				echo ( $desc != '' ) ? "<br /><span class='description'>$desc</span>" : "";
+
+				if ( $id == "bot_token" ) {
+					?>
+                    <button id="checkbot" class="button-secondary" type="button"><?php echo __( "Controlla", "two-factor-telegram" ) ?></button>
+					<?php
+				}
+
+				echo ( $desc != '' ) ? '<br /><p class="wft-settings-description" id="'.$id.'_desc">'.$desc.'</p>' : "";
 				break;
 
 			case 'checkbox':
@@ -343,7 +353,7 @@ final class WP_Factor_Telegram_Plugin {
                        name="<?php echo $option_name; ?>[<?php echo $id; ?>]"
                        value="1" <?php echo checked( 1, $options[ $id ] ); ?> />
 				<?php
-				echo ( $desc != '' ) ? "<br /><span class='description'>$desc</span>" : "";
+				echo ( $desc != '' ) ? "<br /><p class='wft-settings-description'>$desc</p>" : "";
 				break;
 			case 'textarea':
 
@@ -378,12 +388,26 @@ final class WP_Factor_Telegram_Plugin {
 	}
 
 	public function settings_error_set_chatid() {
-		?>
-        <div class="notice notice-warning is-dismissible">
-            <p><?php _e( sprintf( 'Per impostare l\'autenticazione a due fattori con Telegram, <a href="%s">clicca qui</a>.', admin_url( 'profile.php' ) ), "two-factor-telegram" ); ?></p>
-        </div>
-		<?php
+
+	    if (get_current_screen()->id != "profile") {
+		    ?>
+            <div class="notice notice-warning is-dismissible">
+                <p><?php _e( sprintf( 'Per impostare l\'autenticazione a due fattori con Telegram, <a href="%s">clicca qui</a>.', admin_url( 'profile.php' ) ), "two-factor-telegram" ); ?></p>
+            </div>
+		    <?php
+	    }
 	}
+
+	public function settings_error_not_valid_bot() {
+
+	    if (get_current_screen()->id != "settings_page_tg-conf") {
+		    ?>
+            <div class="notice notice-error is-dismissible">
+                <p><?php _e( sprintf( 'Per configurare correttamente l\'autenticazione a due fattori con Telegram, <a href="%s">clicca qui</a>.', 'options-general.php?page=tg-conf' ), "two-factor-telegram" ); ?></p>
+            </div>
+		    <?php
+	    }
+    }
 
 	/**
 	 * @param $user
@@ -402,6 +426,7 @@ final class WP_Factor_Telegram_Plugin {
                     </label>
                 </th>
                 <td colspan="2">
+                    <input type="hidden" name="tg_wp_factor_valid" id="tg_wp_factor_valid" value="0">
                     <input type="checkbox" name="tg_wp_factor_enabled" id="tg_wp_factor_enabled" value="1"
                            class="regular-text" <?php echo checked( esc_attr( get_the_author_meta( 'tg_wp_factor_enabled', $user->ID ) ), 1 ); ?> /><br/>
                 </td>
@@ -519,6 +544,38 @@ final class WP_Factor_Telegram_Plugin {
 
 	}
 
+	public function check_bot() {
+
+		$response = array(
+			'type' => 'error',
+			'msg'  => __( 'Il bot indicato non esiste.', 'two-factor-telegram' )
+		);
+
+		if ( ! isset( $_POST['bot_token'] ) || $_POST['bot_token'] == "" ) {
+			die( json_encode( $response ) );
+		}
+
+		$tg = $this->telegram;
+		$me = $tg->set_bot_token($_POST['bot_token'])->get_me();
+
+		if ( $me === false ) {
+			die ( json_encode( $response ) );
+		}
+
+		$response = array(
+            'type' => 'success',
+            'msg' => __('Il bot indicato esiste', 'two-factor-telegram'),
+            'args' => array(
+                'id' => $me->id,
+                'first_name' => $me->first_name,
+                'username' => $me->username
+            )
+        );
+
+		die (json_encode($response));
+
+	}
+
 	public function token_check() {
 
 		$response = array(
@@ -551,12 +608,21 @@ final class WP_Factor_Telegram_Plugin {
 			return false;
 		}
 
+		if ($_POST['tg_wp_factor_valid'] == 0 || $_POST['tg_wp_factor_chat_id'] == "")
+			return false;
+
 		update_user_meta( $user_id, 'tg_wp_factor_chat_id', $_POST['tg_wp_factor_chat_id'] );
 		update_user_meta( $user_id, 'tg_wp_factor_enabled', $_POST['tg_wp_factor_enabled'] );
 
 		return true;
 
 	}
+
+	public function is_valid_bot() {
+
+	    return ( $this->telegram->get_me() !== FALSE );
+
+    }
 
 
 	/**
@@ -576,9 +642,13 @@ final class WP_Factor_Telegram_Plugin {
 
 		}
 
-		if ( get_user_meta( get_current_user_id(), "tg_wp_factor_chat_id" ) === false ) {
-			add_action( 'admin_notices', array( $this, 'settings_error_set_chatid' ) );
+		if ( !$this->is_valid_bot() ) {
+			add_action( 'admin_notices', array( $this, 'settings_error_not_valid_bot' ) );
 		}
+
+        if ( $this->is_valid_bot() && get_the_author_meta( "tg_wp_factor_chat_id", get_current_user_id() ) === false ) {
+            add_action( 'admin_notices', array( $this, 'settings_error_set_chatid' ) );
+        }
 
 		add_action( 'show_user_profile', array( $this, 'tg_add_two_factor_fields' ) );
 		add_action( 'edit_user_profile', array( $this, 'tg_add_two_factor_fields' ) );
@@ -589,6 +659,7 @@ final class WP_Factor_Telegram_Plugin {
 		add_action( 'admin_footer', array( $this, 'hook_tg_lib' ) );
 		add_action( 'wp_ajax_send_token_check', array( $this, 'send_token_check' ) );
 		add_action( 'wp_ajax_token_check', array( $this, 'token_check' ) );
+		add_action( 'wp_ajax_check_bot', array( $this, 'check_bot' ) );
 
 	}
 
