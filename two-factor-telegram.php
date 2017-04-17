@@ -1,12 +1,12 @@
 <?php
 
 /*
-Plugin Name: Two Factor Login with Telegram
-Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
-Description: A brief description of the Plugin.
+Plugin Name: Two Factor Authentication with Telegram
+Plugin URI: https://www.dueclic.com/two-factor-telegram/
+Description: Enable Two Factor Authentication with Telegram.
 Version: 1.0
 Author: debba
-Author URI: http://URI_Of_The_Plugin_Author
+Author URI: https://www.dueclic.com
 License: A "Slug" license name e.g. GPL2
 */
 

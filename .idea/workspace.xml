@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fe6952c4-f7e7-46a0-8173-f48c1fd071f6" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css" afterPath="$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" afterPath="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sections/configure_tg.php" afterPath="$PROJECT_DIR$/sections/configure_tg.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/two-factor-telegram.php" afterPath="$PROJECT_DIR$/two-factor-telegram.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,7 +25,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="class-wp-factor-telegram-plugin.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="class-wp-factor-telegram-plugin.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="290">
@@ -50,11 +48,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="two-factor-telegram.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="two-factor-telegram.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/two-factor-telegram.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="24" column="26" lean-forward="false" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="26" />
+            <state relative-caret-position="75">
+              <caret line="5" column="59" lean-forward="false" selection-start-line="5" selection-start-column="59" selection-end-line="5" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -157,7 +155,6 @@
         <option value="$PROJECT_DIR$/two-factory-telegram.php" />
         <option value="$PROJECT_DIR$/includes/class-wp-factor-telegram.php" />
         <option value="$PROJECT_DIR$/assets/js/two-factor-telegram.js" />
-        <option value="$PROJECT_DIR$/two-factor-telegram.php" />
         <option value="$PROJECT_DIR$/includes/class-wp-telegram-auth.php" />
         <option value="$PROJECT_DIR$/includes/class-wp-telegram.php" />
         <option value="$PROJECT_DIR$/assets/js/wp-factor-telegram-plugin.js" />
@@ -165,6 +162,7 @@
         <option value="$PROJECT_DIR$/sections/configure_tg.php" />
         <option value="$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css" />
         <option value="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" />
+        <option value="$PROJECT_DIR$/two-factor-telegram.php" />
       </list>
     </option>
   </component>
@@ -445,7 +443,7 @@
       <workItem from="1492449657980" duration="20000" />
       <workItem from="1492449698647" duration="191000" />
       <workItem from="1492451856962" duration="2792000" />
-      <workItem from="1492462600914" duration="4858000" />
+      <workItem from="1492462600914" duration="4986000" />
     </task>
     <task id="LOCAL-00001" summary="Manca solo la comunicazione interna.">
       <created>1492426700251</created>
@@ -468,11 +466,18 @@
       <option name="project" value="LOCAL" />
       <updated>1492466267277</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Chiusa versione 1.0">
+      <created>1492467545131</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1492467545132</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45302000" />
+    <option name="totallyTimeSpent" value="45430000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1280" height="726" extended-state="0" />
@@ -528,7 +533,8 @@
     <MESSAGE value="Manca solo la comunicazione interna." />
     <MESSAGE value="Segnalazione login falliti." />
     <MESSAGE value="Inserita FAQ" />
-    <option name="LAST_COMMIT_MESSAGE" value="Inserita FAQ" />
+    <MESSAGE value="Chiusa versione 1.0" />
+    <option name="LAST_COMMIT_MESSAGE" value="Chiusa versione 1.0" />
   </component>
   <component name="WordPressConfiguration" enabled="true">
     <wordpressPath>/Library/WebServer/Documents/wordpress</wordpressPath>
@@ -849,14 +855,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/two-factor-telegram.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="24" column="26" lean-forward="false" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sections/configure_tg.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="321">
@@ -885,6 +883,14 @@
             <marker date="1492467466000" expanded="true" signature="11588:11612" ph="..." />
             <marker date="1492467466000" expanded="true" signature="11616:12599" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/two-factor-telegram.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="59" lean-forward="false" selection-start-line="5" selection-start-column="59" selection-end-line="5" selection-end-column="59" />
+          <folding />
         </state>
       </provider>
     </entry>
