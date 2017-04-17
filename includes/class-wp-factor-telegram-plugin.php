@@ -272,21 +272,6 @@ final class WP_Factor_Telegram_Plugin {
 
 		$field_args = array(
 			'type'      => 'text',
-			'id'        => 'chat_id',
-			'name'      => 'chat_id',
-			'desc'      => __( 'Chat ID (Telegram) per segnalazione login falliti.', "two-factor-telegram" ),
-			'std'       => '',
-			'label_for' => 'chat_id',
-			'class'     => 'css_class'
-		);
-
-		add_settings_field( 'chat_id', __( 'Chat ID', "two-factor-telegram" ), array(
-			$this,
-			'tg_display_setting'
-		), $this->namespace . '.php', $this->namespace . '_section', $field_args );
-
-		$field_args = array(
-			'type'      => 'text',
 			'id'        => 'bot_token',
 			'name'      => 'bot_token',
 			'desc'      => __( 'Bot Token', "two-factor-telegram" ),
@@ -296,6 +281,21 @@ final class WP_Factor_Telegram_Plugin {
 		);
 
 		add_settings_field( 'bot_token', __( 'Bot Token', "two-factor-telegram" ), array(
+			$this,
+			'tg_display_setting'
+		), $this->namespace . '.php', $this->namespace . '_section', $field_args );
+
+		$field_args = array(
+			'type'      => 'text',
+			'id'        => 'chat_id',
+			'name'      => 'chat_id',
+			'desc'      => __( 'Chat ID (Telegram) per segnalazione login falliti.', "two-factor-telegram" ),
+			'std'       => '',
+			'label_for' => 'chat_id',
+			'class'     => 'css_class'
+		);
+
+		add_settings_field( 'chat_id', __( 'Chat ID', "two-factor-telegram" ), array(
 			$this,
 			'tg_display_setting'
 		), $this->namespace . '.php', $this->namespace . '_section', $field_args );
@@ -489,6 +489,17 @@ final class WP_Factor_Telegram_Plugin {
 
 		wp_enqueue_script( "tg_lib_js" );
 
+		wp_enqueue_script('jquery-ui-accordion');
+        wp_enqueue_script(
+            'custom-accordion',
+	        plugins_url( 'assets/js/wp-factor-telegram-accordion.js', dirname(__FILE__)),
+            array('jquery')
+        );
+
+		wp_register_style('jquery-custom-style', plugins_url('/assets/jquery-ui-1.11.4.custom/jquery-ui.css', dirname(__FILE__)), array(), '1', 'screen');
+		wp_enqueue_style('jquery-custom-style');
+
+
 	}
 
 	public function hook_tg_lib() {
@@ -501,6 +512,7 @@ final class WP_Factor_Telegram_Plugin {
 
                 $(document).ready(function () {
                     WP_Factor_Telegram_Plugin.init();
+
                 });
 
             })(jQuery);

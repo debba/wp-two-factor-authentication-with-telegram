@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fe6952c4-f7e7-46a0-8173-f48c1fd071f6" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/img/help-api-token.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/js/wp-factor-telegram-accordion.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css" afterPath="$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" afterPath="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sections/configure_tg.php" afterPath="$PROJECT_DIR$/sections/configure_tg.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,65 +19,64 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="class-wp-factor-telegram-plugin.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="276" column="82" lean-forward="false" selection-start-line="276" selection-start-column="82" selection-end-line="276" selection-end-column="82" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="author-template.php" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Documents/API/wordpress/wp-includes/author-template.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="123" column="9" lean-forward="false" selection-start-line="123" selection-start-column="9" selection-end-line="123" selection-end-column="9" />
-              <folding>
-                <marker date="1471987110000" expanded="true" signature="12393:12529" ph="SELECT DISTI... " />
-                <marker date="1471987110000" expanded="true" signature="14872:14978" ph="SELECT DISTI... wp_posts" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="configure_tg.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sections/configure_tg.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="15" lean-forward="true" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="plugin.php" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Documents/API/wordpress/wp-admin/includes/plugin.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="1857" column="9" lean-forward="false" selection-start-line="1857" selection-start-column="9" selection-end-line="1857" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="class-wp-telegram.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/includes/class-wp-telegram.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="130" column="82" lean-forward="false" selection-start-line="130" selection-start-column="62" selection-end-line="130" selection-end-column="82" />
+            <state relative-caret-position="36">
+              <caret line="68" column="17" lean-forward="false" selection-start-line="68" selection-start-column="17" selection-end-line="68" selection-end-column="17" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-wp-factor-telegram-plugin.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="186">
+              <caret line="95" column="25" lean-forward="false" selection-start-line="95" selection-start-column="22" selection-end-line="95" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="wp-factor-telegram-accordion.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/js/wp-factor-telegram-accordion.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="two-factor-telegram.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/two-factor-telegram.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="24" column="26" lean-forward="false" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="configure_tg.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/sections/configure_tg.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="14" column="238" lean-forward="false" selection-start-line="14" selection-start-column="238" selection-end-line="14" selection-end-column="238" />
+              <folding>
+                <marker date="1492466155000" expanded="true" signature="1157:1353" ph="..." />
+                <marker date="1492466155000" expanded="true" signature="1185:1353" ph="..." />
+                <marker date="1492466155000" expanded="true" signature="1547:1696" ph="..." />
+                <marker date="1492466155000" expanded="true" signature="1584:1696" ph="..." />
+                <marker date="1492466155000" expanded="true" signature="2439:2463" ph="..." />
+                <marker date="1492466155000" expanded="true" signature="2815:3804" ph="..." />
+                <marker date="1492466155000" expanded="true" signature="2843:3777" ph="..." />
+                <marker date="1492466155000" expanded="true" signature="3923:4225" ph="..." />
+                <marker date="1492466155000" expanded="true" signature="3951:4198" ph="..." />
+                <marker date="1492466155000" expanded="true" signature="4759:4813" ph="..." />
+                <marker date="1492466155000" expanded="true" signature="4932:5018" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -81,8 +84,18 @@
       <file leaf-file-name="wp-factor-telegram-plugin.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/js/wp-factor-telegram-plugin.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="40" lean-forward="false" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="40" />
+            <state relative-caret-position="255">
+              <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="wp-factor-telegram-plugin.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="23" column="24" lean-forward="false" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -100,10 +113,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tg_login</find>
-      <find>show_two_factor_login</find>
-      <find>tg_send_</find>
-      <find>validate_tg</find>
       <find>is_valid_authcode</find>
       <find>enque</find>
       <find>i</find>
@@ -130,6 +139,10 @@
       <find>tg_wp_factor_enabled</find>
       <find>tg_col</find>
       <find>namespace</find>
+      <find>set</find>
+      <find>jquery</find>
+      <find>jQuery</find>
+      <find>How</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -144,12 +157,13 @@
         <option value="$PROJECT_DIR$/includes/class-wp-factor-telegram.php" />
         <option value="$PROJECT_DIR$/assets/js/two-factor-telegram.js" />
         <option value="$PROJECT_DIR$/two-factor-telegram.php" />
-        <option value="$PROJECT_DIR$/sections/configure_tg.php" />
-        <option value="$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css" />
-        <option value="$PROJECT_DIR$/assets/js/wp-factor-telegram-plugin.js" />
         <option value="$PROJECT_DIR$/includes/class-wp-telegram-auth.php" />
         <option value="$PROJECT_DIR$/includes/class-wp-telegram.php" />
+        <option value="$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css" />
+        <option value="$PROJECT_DIR$/assets/js/wp-factor-telegram-plugin.js" />
         <option value="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" />
+        <option value="$PROJECT_DIR$/assets/js/wp-factor-telegram-accordion.js" />
+        <option value="$PROJECT_DIR$/sections/configure_tg.php" />
       </list>
     </option>
   </component>
@@ -173,7 +187,7 @@
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
     <option name="width" value="1280" />
-    <option name="height" value="727" />
+    <option name="height" value="726" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -191,7 +205,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -274,6 +287,20 @@
               <option name="myItemId" value="assets" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="two-factor-telegram" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="two-factor-telegram" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="css" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
@@ -281,6 +308,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -291,11 +319,13 @@
     <property name="ignore_missing_gitignore" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/sections" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets/img" />
+      <recent name="$PROJECT_DIR$/assets" />
+      <recent name="$PROJECT_DIR$/sections" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -408,7 +438,13 @@
       <workItem from="1492178771337" duration="11546000" />
       <workItem from="1492417942856" duration="83000" />
       <workItem from="1492418029402" duration="64000" />
-      <workItem from="1492418154219" duration="9062000" />
+      <workItem from="1492418154219" duration="9405000" />
+      <workItem from="1492428113127" duration="12000" />
+      <workItem from="1492428485796" duration="235000" />
+      <workItem from="1492449657980" duration="20000" />
+      <workItem from="1492449698647" duration="191000" />
+      <workItem from="1492451856962" duration="2792000" />
+      <workItem from="1492462600914" duration="3590000" />
     </task>
     <task id="LOCAL-00001" summary="Manca solo la comunicazione interna.">
       <created>1492426700251</created>
@@ -417,21 +453,27 @@
       <option name="project" value="LOCAL" />
       <updated>1492426700251</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Segnalazione login falliti.">
+      <created>1492427334275</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1492427334275</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36851000" />
+    <option name="totallyTimeSpent" value="44034000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1280" height="727" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="22" width="1280" height="726" extended-state="0" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2092084" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22859451" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32841823" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32755905" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32440946" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32334384" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -475,7 +517,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Manca solo la comunicazione interna." />
-    <option name="LAST_COMMIT_MESSAGE" value="Manca solo la comunicazione interna." />
+    <MESSAGE value="Segnalazione login falliti." />
+    <option name="LAST_COMMIT_MESSAGE" value="Segnalazione login falliti." />
   </component>
   <component name="WordPressConfiguration" enabled="true">
     <wordpressPath>/Library/WebServer/Documents/wordpress</wordpressPath>
@@ -490,14 +533,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/two-factor-telegram.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="24" column="26" lean-forward="false" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/js/wp-factor-telegram-plugin.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -518,7 +553,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="32" lean-forward="false" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -747,90 +781,97 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
           <caret line="1285" column="9" lean-forward="false" selection-start-line="1285" selection-start-column="9" selection-end-line="1285" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css">
+    <entry file="file://$PROJECT_DIR$/includes/class-wp-telegram-auth.php" />
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="481">
-          <caret line="56" column="18" lean-forward="false" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="18" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Documents/API/wordpress/wp-includes/author-template.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="556">
+          <caret line="123" column="9" lean-forward="false" selection-start-line="123" selection-start-column="9" selection-end-line="123" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Documents/API/wordpress/wp-admin/includes/plugin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="1857" column="9" lean-forward="false" selection-start-line="1857" selection-start-column="9" selection-end-line="1857" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/two-factor-telegram.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="32" column="37" lean-forward="true" selection-start-line="32" selection-start-column="37" selection-end-line="32" selection-end-column="37" />
+        <state relative-caret-position="240">
+          <caret line="24" column="26" lean-forward="false" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/js/wp-factor-telegram-plugin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="40" lean-forward="false" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/class-wp-telegram-auth.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="8" lean-forward="false" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/assets/js/wp-factor-telegram-accordion.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Documents/API/wordpress/wp-includes/author-template.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="123" column="9" lean-forward="false" selection-start-line="123" selection-start-column="9" selection-end-line="123" selection-end-column="9" />
-          <folding>
-            <marker date="1471987110000" expanded="true" signature="12393:12529" ph="SELECT DISTI... " />
-            <marker date="1471987110000" expanded="true" signature="14872:14978" ph="SELECT DISTI... wp_posts" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/class-wp-telegram.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="130" column="82" lean-forward="false" selection-start-line="130" selection-start-column="62" selection-end-line="130" selection-end-column="82" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sections/configure_tg.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="15" lean-forward="true" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Documents/API/wordpress/wp-admin/includes/plugin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="1857" column="9" lean-forward="false" selection-start-line="1857" selection-start-column="9" selection-end-line="1857" selection-end-column="9" />
+          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="276" column="82" lean-forward="false" selection-start-line="276" selection-start-column="82" selection-end-line="276" selection-end-column="82" />
+        <state relative-caret-position="186">
+          <caret line="95" column="25" lean-forward="false" selection-start-line="95" selection-start-column="22" selection-end-line="95" selection-end-column="25" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/class-wp-telegram.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="68" column="17" lean-forward="false" selection-start-line="68" selection-start-column="17" selection-end-line="68" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="23" column="24" lean-forward="false" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/js/wp-factor-telegram-plugin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sections/configure_tg.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="14" column="238" lean-forward="false" selection-start-line="14" selection-start-column="238" selection-end-line="14" selection-end-column="238" />
+          <folding>
+            <marker date="1492466155000" expanded="true" signature="1157:1353" ph="..." />
+            <marker date="1492466155000" expanded="true" signature="1185:1353" ph="..." />
+            <marker date="1492466155000" expanded="true" signature="1547:1696" ph="..." />
+            <marker date="1492466155000" expanded="true" signature="1584:1696" ph="..." />
+            <marker date="1492466155000" expanded="true" signature="2439:2463" ph="..." />
+            <marker date="1492466155000" expanded="true" signature="2815:3804" ph="..." />
+            <marker date="1492466155000" expanded="true" signature="2843:3777" ph="..." />
+            <marker date="1492466155000" expanded="true" signature="3923:4225" ph="..." />
+            <marker date="1492466155000" expanded="true" signature="3951:4198" ph="..." />
+            <marker date="1492466155000" expanded="true" signature="4759:4813" ph="..." />
+            <marker date="1492466155000" expanded="true" signature="4932:5018" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
