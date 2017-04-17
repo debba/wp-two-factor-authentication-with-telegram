@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fe6952c4-f7e7-46a0-8173-f48c1fd071f6" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css" afterPath="$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/wp-factor-telegram-plugin.js" afterPath="$PROJECT_DIR$/assets/js/wp-factor-telegram-plugin.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" afterPath="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/class-wp-telegram.php" afterPath="$PROJECT_DIR$/includes/class-wp-telegram.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sections/configure_tg.php" afterPath="$PROJECT_DIR$/sections/configure_tg.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,8 +18,8 @@
       <file leaf-file-name="class-wp-factor-telegram-plugin.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="102" column="77" lean-forward="false" selection-start-line="102" selection-start-column="77" selection-end-line="102" selection-end-column="77" />
+            <state relative-caret-position="115">
+              <caret line="276" column="82" lean-forward="false" selection-start-line="276" selection-start-column="82" selection-end-line="276" selection-end-column="82" />
               <folding />
             </state>
           </provider>
@@ -55,8 +51,18 @@
       <file leaf-file-name="configure_tg.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sections/configure_tg.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="14" lean-forward="true" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
+            <state relative-caret-position="120">
+              <caret line="8" column="15" lean-forward="true" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="plugin.php" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Documents/API/wordpress/wp-admin/includes/plugin.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="203">
+              <caret line="1857" column="9" lean-forward="false" selection-start-line="1857" selection-start-column="9" selection-end-line="1857" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -94,8 +100,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>wp-auth-id</find>
-      <find>LOGIN_HTML</find>
       <find>tg_login</find>
       <find>show_two_factor_login</find>
       <find>tg_send_</find>
@@ -124,6 +128,8 @@
       <find>get_user_meta</find>
       <find>get_the_author_meta</find>
       <find>tg_wp_factor_enabled</find>
+      <find>tg_col</find>
+      <find>namespace</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -402,17 +408,26 @@
       <workItem from="1492178771337" duration="11546000" />
       <workItem from="1492417942856" duration="83000" />
       <workItem from="1492418029402" duration="64000" />
-      <workItem from="1492418154219" duration="8443000" />
+      <workItem from="1492418154219" duration="9062000" />
     </task>
+    <task id="LOCAL-00001" summary="Manca solo la comunicazione interna.">
+      <created>1492426700251</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1492426700251</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36232000" />
+    <option name="totallyTimeSpent" value="36851000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1280" height="727" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2092084" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2092084" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32841823" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -459,7 +474,8 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="Manca solo la comunicazione interna." />
+    <option name="LAST_COMMIT_MESSAGE" value="Manca solo la comunicazione interna." />
   </component>
   <component name="WordPressConfiguration" enabled="true">
     <wordpressPath>/Library/WebServer/Documents/wordpress</wordpressPath>
@@ -474,14 +490,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6780">
-          <caret line="452" column="0" lean-forward="true" selection-start-line="452" selection-start-column="0" selection-end-line="452" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/two-factor-telegram.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -783,14 +791,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sections/configure_tg.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="14" lean-forward="true" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Documents/API/wordpress/wp-includes/author-template.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
@@ -810,10 +810,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/sections/configure_tg.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="15" lean-forward="true" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Documents/API/wordpress/wp-admin/includes/plugin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="1857" column="9" lean-forward="false" selection-start-line="1857" selection-start-column="9" selection-end-line="1857" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="102" column="77" lean-forward="false" selection-start-line="102" selection-start-column="77" selection-end-line="102" selection-end-column="77" />
+        <state relative-caret-position="115">
+          <caret line="276" column="82" lean-forward="false" selection-start-line="276" selection-start-column="82" selection-end-line="276" selection-end-column="82" />
           <folding />
         </state>
       </provider>

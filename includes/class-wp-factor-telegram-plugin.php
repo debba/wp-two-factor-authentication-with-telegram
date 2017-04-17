@@ -274,7 +274,7 @@ final class WP_Factor_Telegram_Plugin {
 			'type'      => 'text',
 			'id'        => 'chat_id',
 			'name'      => 'chat_id',
-			'desc'      => __( 'Chat ID (Telegram)', "two-factor-telegram" ),
+			'desc'      => __( 'Chat ID (Telegram) per segnalazione login falliti.', "two-factor-telegram" ),
 			'std'       => '',
 			'label_for' => 'chat_id',
 			'class'     => 'css_class'
