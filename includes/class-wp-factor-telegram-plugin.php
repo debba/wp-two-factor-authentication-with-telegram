@@ -258,7 +258,7 @@ final class WP_Factor_Telegram_Plugin {
 	}
 
 	public function tg_load_menu() {
-		add_options_page( __( "Two Factor Auth Telegram", "two-factor-telegram" ), __( "Two Factor Auth Telegram", "two-factor-telegram" ), "manage_options", "tg-conf", array(
+		add_options_page( __( "Autenticazione a due fattori con Telegram", "two-factor-telegram" ), __( "Autenticazione a due fattori con Telegram", "two-factor-telegram" ), "manage_options", "tg-conf", array(
 			$this,
 			"configure_tg"
 		) );

@@ -8,7 +8,7 @@ if( isset( $_GET[ 'tab' ] ) ) {
 
 <div id="wft-wrap" class="wrap">
 
-	<h1><?php _e("Configura", "two-factor-telegram"); ?> - <?php _e( "Two Factor Authentication con Telegram", "two-factor-telegram" ); ?></h1>
+	<h1><?php _e("Configura", "two-factor-telegram"); ?> - <?php _e( "Autenticazione a due fattori con Telegram", "two-factor-telegram" ); ?></h1>
 
     <h2 class="wpft-tab-wrapper nav-tab-wrapper">
         <a href="<?php echo admin_url( 'options-general.php?page=tg-conf&tab=config' ); ?>" class="nav-tab <?php echo $active_tab == 'config' ? 'nav-tab-active' : ''; ?>"><?php _e("Configura", "two-factor-telegram"); ?></a>

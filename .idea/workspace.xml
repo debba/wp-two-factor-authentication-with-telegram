@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="fe6952c4-f7e7-46a0-8173-f48c1fd071f6" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/two-factor-telegram.php" afterPath="$PROJECT_DIR$/two-factor-telegram.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" afterPath="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sections/configure_tg.php" afterPath="$PROJECT_DIR$/sections/configure_tg.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,11 +29,11 @@
       <file leaf-file-name="class-wp-factor-telegram-plugin.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="451" column="155" lean-forward="false" selection-start-line="451" selection-start-column="155" selection-end-line="451" selection-end-column="155" />
+            <state relative-caret-position="186">
+              <caret line="570" column="81" lean-forward="false" selection-start-line="570" selection-start-column="71" selection-end-line="570" selection-end-column="81" />
               <folding>
-                <marker date="1492467466000" expanded="true" signature="11588:11612" ph="..." />
-                <marker date="1492467466000" expanded="true" signature="11616:12599" ph="..." />
+                <marker date="1492467945000" expanded="true" signature="11622:11646" ph="..." />
+                <marker date="1492467945000" expanded="true" signature="11650:12633" ph="..." />
               </folding>
             </state>
           </provider>
@@ -48,33 +49,33 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="two-factor-telegram.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="two-factor-telegram.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/two-factor-telegram.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="59" lean-forward="false" selection-start-line="5" selection-start-column="59" selection-end-line="5" selection-end-column="59" />
+            <state relative-caret-position="525">
+              <caret line="35" column="53" lean-forward="true" selection-start-line="35" selection-start-column="53" selection-end-line="35" selection-end-column="53" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="configure_tg.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="configure_tg.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sections/configure_tg.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="71" column="187" lean-forward="true" selection-start-line="71" selection-start-column="64" selection-end-line="71" selection-end-column="187" />
+            <state relative-caret-position="165">
+              <caret line="10" column="111" lean-forward="false" selection-start-line="10" selection-start-column="111" selection-end-line="10" selection-end-column="111" />
               <folding>
-                <marker date="1492466394000" expanded="true" signature="1157:1353" ph="..." />
-                <marker date="1492466394000" expanded="true" signature="1185:1353" ph="..." />
-                <marker date="1492466394000" expanded="true" signature="1547:1696" ph="..." />
-                <marker date="1492466394000" expanded="true" signature="1584:1696" ph="..." />
-                <marker date="1492466394000" expanded="true" signature="2439:2463" ph="..." />
-                <marker date="1492466394000" expanded="true" signature="2815:3804" ph="..." />
-                <marker date="1492466394000" expanded="true" signature="2843:3777" ph="..." />
-                <marker date="1492466394000" expanded="true" signature="3923:4225" ph="..." />
-                <marker date="1492466394000" expanded="true" signature="3951:4198" ph="..." />
-                <marker date="1492466394000" expanded="true" signature="4759:4813" ph="..." />
-                <marker date="1492466394000" expanded="true" signature="4932:5018" ph="..." />
+                <marker date="1492467966000" expanded="true" signature="1160:1356" ph="..." />
+                <marker date="1492467966000" expanded="true" signature="1188:1356" ph="..." />
+                <marker date="1492467966000" expanded="true" signature="1550:1699" ph="..." />
+                <marker date="1492467966000" expanded="true" signature="1587:1699" ph="..." />
+                <marker date="1492467966000" expanded="true" signature="2442:2466" ph="..." />
+                <marker date="1492467966000" expanded="true" signature="2818:3807" ph="..." />
+                <marker date="1492467966000" expanded="true" signature="2846:3780" ph="..." />
+                <marker date="1492467966000" expanded="true" signature="3926:4228" ph="..." />
+                <marker date="1492467966000" expanded="true" signature="3954:4201" ph="..." />
+                <marker date="1492467966000" expanded="true" signature="4762:4816" ph="..." />
+                <marker date="1492467966000" expanded="true" signature="4935:5021" ph="..." />
               </folding>
             </state>
           </provider>
@@ -112,7 +113,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>is_valid_authcode</find>
       <find>enque</find>
       <find>i</find>
       <find>get_option</find>
@@ -142,6 +142,7 @@
       <find>jquery</find>
       <find>jQuery</find>
       <find>How</find>
+      <find>Two Factor</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -159,10 +160,10 @@
         <option value="$PROJECT_DIR$/includes/class-wp-telegram.php" />
         <option value="$PROJECT_DIR$/assets/js/wp-factor-telegram-plugin.js" />
         <option value="$PROJECT_DIR$/assets/js/wp-factor-telegram-accordion.js" />
-        <option value="$PROJECT_DIR$/sections/configure_tg.php" />
         <option value="$PROJECT_DIR$/assets/css/wp-factor-telegram-plugin.css" />
-        <option value="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" />
         <option value="$PROJECT_DIR$/two-factor-telegram.php" />
+        <option value="$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php" />
+        <option value="$PROJECT_DIR$/sections/configure_tg.php" />
       </list>
     </option>
   </component>
@@ -252,56 +253,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="includes" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="two-factor-telegram" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="two-factor-telegram" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="two-factor-telegram" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="two-factor-telegram" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="two-factor-telegram" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="two-factor-telegram" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -443,7 +394,7 @@
       <workItem from="1492449657980" duration="20000" />
       <workItem from="1492449698647" duration="191000" />
       <workItem from="1492451856962" duration="2792000" />
-      <workItem from="1492462600914" duration="4986000" />
+      <workItem from="1492462600914" duration="5292000" />
     </task>
     <task id="LOCAL-00001" summary="Manca solo la comunicazione interna.">
       <created>1492426700251</created>
@@ -473,11 +424,18 @@
       <option name="project" value="LOCAL" />
       <updated>1492467545132</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Chiusa versione 1.0">
+      <created>1492467664109</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1492467664109</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45430000" />
+    <option name="totallyTimeSpent" value="45736000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1280" height="726" extended-state="0" />
@@ -855,42 +813,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sections/configure_tg.php">
+    <entry file="file://$PROJECT_DIR$/two-factor-telegram.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="71" column="187" lean-forward="true" selection-start-line="71" selection-start-column="64" selection-end-line="71" selection-end-column="187" />
-          <folding>
-            <marker date="1492466394000" expanded="true" signature="1157:1353" ph="..." />
-            <marker date="1492466394000" expanded="true" signature="1185:1353" ph="..." />
-            <marker date="1492466394000" expanded="true" signature="1547:1696" ph="..." />
-            <marker date="1492466394000" expanded="true" signature="1584:1696" ph="..." />
-            <marker date="1492466394000" expanded="true" signature="2439:2463" ph="..." />
-            <marker date="1492466394000" expanded="true" signature="2815:3804" ph="..." />
-            <marker date="1492466394000" expanded="true" signature="2843:3777" ph="..." />
-            <marker date="1492466394000" expanded="true" signature="3923:4225" ph="..." />
-            <marker date="1492466394000" expanded="true" signature="3951:4198" ph="..." />
-            <marker date="1492466394000" expanded="true" signature="4759:4813" ph="..." />
-            <marker date="1492466394000" expanded="true" signature="4932:5018" ph="..." />
-          </folding>
+        <state relative-caret-position="525">
+          <caret line="35" column="53" lean-forward="true" selection-start-line="35" selection-start-column="53" selection-end-line="35" selection-end-column="53" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/includes/class-wp-factor-telegram-plugin.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="451" column="155" lean-forward="false" selection-start-line="451" selection-start-column="155" selection-end-line="451" selection-end-column="155" />
+        <state relative-caret-position="186">
+          <caret line="570" column="81" lean-forward="false" selection-start-line="570" selection-start-column="71" selection-end-line="570" selection-end-column="81" />
           <folding>
-            <marker date="1492467466000" expanded="true" signature="11588:11612" ph="..." />
-            <marker date="1492467466000" expanded="true" signature="11616:12599" ph="..." />
+            <marker date="1492467945000" expanded="true" signature="11622:11646" ph="..." />
+            <marker date="1492467945000" expanded="true" signature="11650:12633" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/two-factor-telegram.php">
+    <entry file="file://$PROJECT_DIR$/sections/configure_tg.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="59" lean-forward="false" selection-start-line="5" selection-start-column="59" selection-end-line="5" selection-end-column="59" />
-          <folding />
+        <state relative-caret-position="165">
+          <caret line="10" column="111" lean-forward="false" selection-start-line="10" selection-start-column="111" selection-end-line="10" selection-end-column="111" />
+          <folding>
+            <marker date="1492467966000" expanded="true" signature="1160:1356" ph="..." />
+            <marker date="1492467966000" expanded="true" signature="1188:1356" ph="..." />
+            <marker date="1492467966000" expanded="true" signature="1550:1699" ph="..." />
+            <marker date="1492467966000" expanded="true" signature="1587:1699" ph="..." />
+            <marker date="1492467966000" expanded="true" signature="2442:2466" ph="..." />
+            <marker date="1492467966000" expanded="true" signature="2818:3807" ph="..." />
+            <marker date="1492467966000" expanded="true" signature="2846:3780" ph="..." />
+            <marker date="1492467966000" expanded="true" signature="3926:4228" ph="..." />
+            <marker date="1492467966000" expanded="true" signature="3954:4201" ph="..." />
+            <marker date="1492467966000" expanded="true" signature="4762:4816" ph="..." />
+            <marker date="1492467966000" expanded="true" signature="4935:5021" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
