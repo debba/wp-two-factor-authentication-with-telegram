@@ -186,7 +186,7 @@ final class WP_Factor_Telegram_Plugin {
 
 	public function tg_login( $user_login, $user ) {
 
-		if ( get_option( $this->namespace )['enabled'] === '1' && get_the_author_meta(  "tg_wp_factor_enabled", $user->ID ) === "1" ) {
+		if ( $this->is_valid_bot() && $this->is_enabled() && $this->is_enabled_user($user->ID) ) {
 
 			wp_clear_auth_cookie();
 
@@ -398,6 +398,17 @@ final class WP_Factor_Telegram_Plugin {
 	    }
 	}
 
+	public function settings_error_set_correct_chatid() {
+
+		if (get_current_screen()->id != "profile") {
+			?>
+            <div class="notice notice-warning is-dismissible">
+                <p><?php _e( "Le tue preferenze sono state salvate, tuttavia la Chat ID inserita non è corretta." , "two-factor-telegram" ); ?></p>
+            </div>
+			<?php
+		}
+	}
+
 	public function settings_error_not_valid_bot() {
 
 	    if (get_current_screen()->id != "settings_page_tg-conf") {
@@ -427,8 +438,7 @@ final class WP_Factor_Telegram_Plugin {
                 </th>
                 <td colspan="2">
                     <input type="hidden" name="tg_wp_factor_valid" id="tg_wp_factor_valid" value="0">
-                    <input type="checkbox" name="tg_wp_factor_enabled" id="tg_wp_factor_enabled" value="1"
-                           class="regular-text" <?php echo checked( esc_attr( get_the_author_meta( 'tg_wp_factor_enabled', $user->ID ) ), 1 ); ?> /><br/>
+                    <input type="checkbox" name="tg_wp_factor_enabled" id="tg_wp_factor_enabled" value="1" class="regular-text" <?php echo checked( esc_attr( get_the_author_meta( 'tg_wp_factor_enabled', $user->ID ) ), 1 ); ?> /><br/>
                 </td>
             </tr>
 
@@ -450,7 +460,7 @@ final class WP_Factor_Telegram_Plugin {
                             <li><?php
 						        _e('All\' interno della risposta sarà presente la <strong>Chat ID</strong>', 'two-factor-telegram'); ?></li>
                             <li><?php _e( sprintf('Ora apri una conversazione con %s e schiaccia su <strong>Avvia</strong>', '<a href="https://telegram.me/'.$username.'">@'.$username.'</a>' ), 'two-factor-telegram'); ?></li>
-                            <li><?php _e('Adesso puoi proseguire :) Inserisci la tua Chat ID di seguitp e premi Invia codice.', 'two-factor-plugin'); ?></li>
+                            <li><?php _e('Adesso puoi proseguire :) Inserisci la tua Chat ID di seguito e schiaccia su <strong>Invia codice</strong> per la verifica.', 'two-factor-plugin'); ?></li>
                         </ol>
 
                         </p>
@@ -647,22 +657,31 @@ final class WP_Factor_Telegram_Plugin {
 			return false;
 		}
 
-		if ($_POST['tg_wp_factor_valid'] == 0 || $_POST['tg_wp_factor_chat_id'] == "")
+		update_user_meta( $user_id, 'tg_wp_factor_enabled', $_POST['tg_wp_factor_enabled'] );
+
+		if ($_POST['tg_wp_factor_valid'] == 0 || $_POST['tg_wp_factor_chat_id'] == "") {
+			add_action('admin_notices', array($this, 'settings_error_set_correct_chatid'));
 			return false;
+		}
 
 		update_user_meta( $user_id, 'tg_wp_factor_chat_id', $_POST['tg_wp_factor_chat_id'] );
-		update_user_meta( $user_id, 'tg_wp_factor_enabled', $_POST['tg_wp_factor_enabled'] );
+		$this->telegram->send(__("WP Two Factor Plugin è stato configurato correttamente.", "two-factor-telegram"), $_POST['tg_wp_factor_chat_id']);
 
 		return true;
 
 	}
 
 	public function is_valid_bot() {
-
 	    return ( $this->telegram->get_me() !== FALSE );
-
     }
 
+    public function is_enabled() {
+	    return get_option( $this->namespace )['enabled'] === '1';
+    }
+
+    public function is_enabled_user($user_id){
+	    return (get_the_author_meta(  "tg_wp_factor_enabled", $user_id ) === "1" && get_the_author_meta( "tg_wp_factor_chat_id", $user_id ) !== '');
+    }
 
 	function ts_footer_admin_text()
 	{
@@ -678,6 +697,17 @@ final class WP_Factor_Telegram_Plugin {
 		add_filter('admin_footer_text', array($this, 'ts_footer_admin_text'), 11);
 		add_filter('update_footer', array($this, 'ts_footer_version'), 11);
 	}
+
+	public function check_valid_plugin(){
+
+		if ( !$this->is_valid_bot() ) {
+			add_action( 'admin_notices', array( $this, 'settings_error_not_valid_bot' ) );
+		}
+
+		if ( $this->is_valid_bot() && $this->is_enabled() && (get_the_author_meta( "tg_wp_factor_chat_id", get_current_user_id()) === '') ) {
+			add_action( 'admin_notices', array( $this, 'settings_error_set_chatid' ) );
+		}
+    }
 
 
 	/**
@@ -697,13 +727,7 @@ final class WP_Factor_Telegram_Plugin {
 
 		}
 
-		if ( !$this->is_valid_bot() ) {
-			add_action( 'admin_notices', array( $this, 'settings_error_not_valid_bot' ) );
-		}
-
-        if ( $this->is_valid_bot() && get_the_author_meta( "tg_wp_factor_chat_id", get_current_user_id() ) === false ) {
-            add_action( 'admin_notices', array( $this, 'settings_error_set_chatid' ) );
-        }
+		add_action( 'admin_init', array($this, 'check_valid_plugin'));
 
 		add_action( 'show_user_profile', array( $this, 'tg_add_two_factor_fields' ) );
 		add_action( 'edit_user_profile', array( $this, 'tg_add_two_factor_fields' ) );
