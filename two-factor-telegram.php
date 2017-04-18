@@ -1,13 +1,13 @@
 <?php
 
 /*
-Plugin Name: Two Factor Authentication with Telegram
+Plugin Name: WP Two Factor Authentication with Telegram
 Plugin URI: https://www.dueclic.com/two-factor-telegram/
-Description: Enable Two Factor Authentication with Telegram.
+Description: Abilita l'autenticazione a due fattori con Telegram
 Version: 1.0
 Author: debba
 Author URI: https://www.dueclic.com
-License: A "Slug" license name e.g. GPL2
+License: GPLv2 or later
 */
 
 error_reporting( E_ERROR );
