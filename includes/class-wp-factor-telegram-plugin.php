@@ -121,7 +121,7 @@ final class WP_Factor_Telegram_Plugin {
 
         <p class="notice notice-warning">
 			<?php
-			_e( "Inserisci il codice inviato sul tuo account Telegram.", "two-factor-telegram" );
+			_e( "Inserisci il codice inviato sul tuo account Telegram.", "two-factor-login-telegram" );
 			?>
         </p>
         <p>
@@ -129,7 +129,7 @@ final class WP_Factor_Telegram_Plugin {
             <input type="text" name="authcode" id="authcode" class="input" value="" size="5"/>
         </p>
 		<?php
-		submit_button( 'Autenticati con Telegram', 'two-factor-telegram' );
+		submit_button( 'Autenticati con Telegram', 'two-factor-login-telegram' );
 	}
 
 	/**
@@ -166,7 +166,7 @@ final class WP_Factor_Telegram_Plugin {
 
         <p id="backtoblog">
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>"
-               title="<?php __( "Ti sei perso?", "two-factor-telegram" ); ?>"><?php echo sprintf( '&larr; Torna a %s', get_bloginfo( 'title', 'display' ) ); ?></a>
+               title="<?php __( "Ti sei perso?", "two-factor-login-telegram" ); ?>"><?php echo sprintf( '&larr; Torna a %s', get_bloginfo( 'title', 'display' ) ); ?></a>
         </p>
 
 		<?php
@@ -236,7 +236,7 @@ final class WP_Factor_Telegram_Plugin {
 
 			$this->telegram->send_tg_token( $auth_code );
 
-			$this->login_html( $user, $_REQUEST['redirect_to'], __( 'Errore: codice di verifica errato.', 'two-factor-telegram' ) );
+			$this->login_html( $user, $_REQUEST['redirect_to'], __( 'Errore: codice di verifica errato.', 'two-factor-login-telegram' ) );
 			exit;
 		}
 
@@ -258,7 +258,7 @@ final class WP_Factor_Telegram_Plugin {
 	}
 
 	public function tg_load_menu() {
-		add_options_page( __( "Autenticazione a due fattori con Telegram", "two-factor-telegram" ), __( "Autenticazione a due fattori con Telegram", "two-factor-telegram" ), "manage_options", "tg-conf", array(
+		add_options_page( __( "Autenticazione a due fattori con Telegram", "two-factor-login-telegram" ), __( "Autenticazione a due fattori con Telegram", "two-factor-login-telegram" ), "manage_options", "tg-conf", array(
 			$this,
 			"configure_tg"
 		) );
@@ -268,19 +268,19 @@ final class WP_Factor_Telegram_Plugin {
 
 		register_setting( $this->namespace, $this->namespace );
 
-		add_settings_section( $this->namespace . '_section', __( 'Configurazione Telegram', "two-factor-telegram" ), '', $this->namespace . '.php' );
+		add_settings_section( $this->namespace . '_section', __( 'Configurazione Telegram', "two-factor-login-telegram" ), '', $this->namespace . '.php' );
 
 		$field_args = array(
 			'type'      => 'text',
 			'id'        => 'bot_token',
 			'name'      => 'bot_token',
-			'desc'      => __( 'Bot Token', "two-factor-telegram" ),
+			'desc'      => __( 'Bot Token', "two-factor-login-telegram" ),
 			'std'       => '',
 			'label_for' => 'bot_token',
 			'class'     => 'css_class'
 		);
 
-		add_settings_field( 'bot_token', __( 'Bot Token', "two-factor-telegram" ), array(
+		add_settings_field( 'bot_token', __( 'Bot Token', "two-factor-login-telegram" ), array(
 			$this,
 			'tg_display_setting'
 		), $this->namespace . '.php', $this->namespace . '_section', $field_args );
@@ -289,13 +289,13 @@ final class WP_Factor_Telegram_Plugin {
 			'type'      => 'text',
 			'id'        => 'chat_id',
 			'name'      => 'chat_id',
-			'desc'      => __( 'Chat ID (Telegram) per segnalazione login falliti.', "two-factor-telegram" ),
+			'desc'      => __( 'Chat ID (Telegram) per segnalazione login falliti.', "two-factor-login-telegram" ),
 			'std'       => '',
 			'label_for' => 'chat_id',
 			'class'     => 'css_class'
 		);
 
-		add_settings_field( 'chat_id', __( 'Chat ID', "two-factor-telegram" ), array(
+		add_settings_field( 'chat_id', __( 'Chat ID', "two-factor-login-telegram" ), array(
 			$this,
 			'tg_display_setting'
 		), $this->namespace . '.php', $this->namespace . '_section', $field_args );
@@ -304,13 +304,13 @@ final class WP_Factor_Telegram_Plugin {
 			'type'      => 'checkbox',
 			'id'        => 'enabled',
 			'name'      => 'enabled',
-			'desc'      => __( 'Scegli se abilitare il plugin.', 'two-factor-telegram' ),
+			'desc'      => __( 'Scegli se abilitare il plugin.', 'two-factor-login-telegram' ),
 			'std'       => '',
 			'label_for' => 'enabled',
 			'class'     => 'css_class'
 		);
 
-		add_settings_field( 'enabled', __( 'Abilita plugin?', 'two-factor-telegram' ), array(
+		add_settings_field( 'enabled', __( 'Abilita plugin?', 'two-factor-login-telegram' ), array(
 			$this,
 			'tg_display_setting'
 		), $this->namespace . '.php', $this->namespace . '_section', $field_args );
@@ -337,7 +337,7 @@ final class WP_Factor_Telegram_Plugin {
 
 				if ( $id == "bot_token" ) {
 					?>
-                    <button id="checkbot" class="button-secondary" type="button"><?php echo __( "Controlla", "two-factor-telegram" ) ?></button>
+                    <button id="checkbot" class="button-secondary" type="button"><?php echo __( "Controlla", "two-factor-login-telegram" ) ?></button>
 					<?php
 				}
 
@@ -380,7 +380,7 @@ final class WP_Factor_Telegram_Plugin {
 		/** @noinspection PhpUndefinedConstantInspection */
 
 		$plugin_links = array(
-			'<a href="' . admin_url( 'options-general.php?page=tg-conf' ) . '">' . __( 'Impostazioni', 'two-factor-telegram' ) . '</a>',
+			'<a href="' . admin_url( 'options-general.php?page=tg-conf' ) . '">' . __( 'Impostazioni', 'two-factor-login-telegram' ) . '</a>',
 		);
 
 		return array_merge( $plugin_links, $links );
@@ -392,7 +392,7 @@ final class WP_Factor_Telegram_Plugin {
 	    if (get_current_screen()->id != "profile") {
 		    ?>
             <div class="notice notice-warning is-dismissible">
-                <p><?php _e( sprintf( 'Per impostare l\'autenticazione a due fattori con Telegram, <a href="%s">clicca qui</a>.', admin_url( 'profile.php' ) ), "two-factor-telegram" ); ?></p>
+                <p><?php _e( sprintf( 'Per impostare l\'autenticazione a due fattori con Telegram, <a href="%s">clicca qui</a>.', admin_url( 'profile.php' ) ), "two-factor-login-telegram" ); ?></p>
             </div>
 		    <?php
 	    }
@@ -403,7 +403,7 @@ final class WP_Factor_Telegram_Plugin {
 	    if (get_current_screen()->id != "settings_page_tg-conf") {
 		    ?>
             <div class="notice notice-error is-dismissible">
-                <p><?php _e( sprintf( 'Per configurare correttamente l\'autenticazione a due fattori con Telegram, <a href="%s">clicca qui</a>.', 'options-general.php?page=tg-conf' ), "two-factor-telegram" ); ?></p>
+                <p><?php _e( sprintf( 'Per configurare correttamente l\'autenticazione a due fattori con Telegram, <a href="%s">clicca qui</a>.', 'options-general.php?page=tg-conf' ), "two-factor-login-telegram" ); ?></p>
             </div>
 		    <?php
 	    }
@@ -416,13 +416,13 @@ final class WP_Factor_Telegram_Plugin {
 	public function tg_add_two_factor_fields( $user ) {
 
 		?>
-        <h3><?php _e( 'Autenticazione a due fattori con Telegram', 'two-factor-telegram' ); ?></h3>
+        <h3><?php _e( 'Autenticazione a due fattori con Telegram', 'two-factor-login-telegram' ); ?></h3>
 
         <table class="form-table">
 
             <tr>
                 <th>
-                    <label for="tg_wp_factor_enabled"><?php _e( 'Abilita autenticazione a due fattori', 'two-factor-telegram' ); ?>
+                    <label for="tg_wp_factor_enabled"><?php _e( 'Abilita autenticazione a due fattori', 'two-factor-login-telegram' ); ?>
                     </label>
                 </th>
                 <td colspan="2">
@@ -444,12 +444,12 @@ final class WP_Factor_Telegram_Plugin {
 
                         <ol>
                             <li><?php
-						        _e(sprintf('Apri Telegram e avvia una conversazione con %s', '<a href="https://telegram.me/WordPressLoginBot" target="_blank">@WordpressLoginBot</a>'), 'two-factor-telegram'); ?></li>
+						        _e(sprintf('Apri Telegram e avvia una conversazione con %s', '<a href="https://telegram.me/WordPressLoginBot" target="_blank">@WordpressLoginBot</a>'), 'two-factor-login-telegram'); ?></li>
                             <li><?php
-						        _e(sprintf('Digita il comando %s per ottenere la tua Chat ID.', '<code>/get_id</code>'), 'two-factor-telegram'); ?></li>
+						        _e(sprintf('Digita il comando %s per ottenere la tua Chat ID.', '<code>/get_id</code>'), 'two-factor-login-telegram'); ?></li>
                             <li><?php
-						        _e('All\' interno della risposta sarà presente la <strong>Chat ID</strong>', 'two-factor-telegram'); ?></li>
-                            <li><?php _e( sprintf('Ora apri una conversazione con %s e schiaccia su <strong>Avvia</strong>', '<a href="https://telegram.me/'.$username.'">@'.$username.'</a>' ), 'two-factor-telegram'); ?></li>
+						        _e('All\' interno della risposta sarà presente la <strong>Chat ID</strong>', 'two-factor-login-telegram'); ?></li>
+                            <li><?php _e( sprintf('Ora apri una conversazione con %s e schiaccia su <strong>Avvia</strong>', '<a href="https://telegram.me/'.$username.'">@'.$username.'</a>' ), 'two-factor-login-telegram'); ?></li>
                             <li><?php _e('Adesso puoi proseguire :) Inserisci la tua Chat ID di seguitp e premi Invia codice.', 'two-factor-plugin'); ?></li>
                         </ol>
 
@@ -461,32 +461,32 @@ final class WP_Factor_Telegram_Plugin {
 
             <tr>
                 <th>
-                    <label for="tg_wp_factor_chat_id"><?php _e( 'Telegram Chat ID', 'two-factor-telegram' ); ?>
+                    <label for="tg_wp_factor_chat_id"><?php _e( 'Telegram Chat ID', 'two-factor-login-telegram' ); ?>
                     </label></th>
                 <td>
                     <input type="text" name="tg_wp_factor_chat_id" id="tg_wp_factor_chat_id"
                            value="<?php echo esc_attr( get_the_author_meta( 'tg_wp_factor_chat_id', $user->ID ) ); ?>"
                            class="regular-text"/><br/>
-                    <span class="description"><?php _e( 'Inserisci la tua Telegram Chat ID', 'two-factor-telegram' ); ?></span>
+                    <span class="description"><?php _e( 'Inserisci la tua Telegram Chat ID', 'two-factor-login-telegram' ); ?></span>
                 </td>
                 <td>
                     <button class="button"
-                            id="tg_wp_factor_chat_id_send"><?php _e( "Invia codice", "two-factor-telegram" ); ?></button>
+                            id="tg_wp_factor_chat_id_send"><?php _e( "Invia codice", "two-factor-login-telegram" ); ?></button>
                 </td>
             </tr>
 
             <tr id="factor-chat-confirm">
                 <th>
-                    <label for="tg_wp_factor_chat_id_confirm"><?php _e( 'Codice di conferma', 'two-factor-telegram' ); ?>
+                    <label for="tg_wp_factor_chat_id_confirm"><?php _e( 'Codice di conferma', 'two-factor-login-telegram' ); ?>
                     </label></th>
                 <td>
                     <input type="text" name="tg_wp_factor_chat_id_confirm" id="tg_wp_factor_chat_id_confirm" value=""
                            class="regular-text"/><br/>
-                    <span class="description"><?php _e( 'Inserisci il codice di conferma che hai ricevuto su Telegram', 'two-factor-telegram' ); ?></span>
+                    <span class="description"><?php _e( 'Inserisci il codice di conferma che hai ricevuto su Telegram', 'two-factor-login-telegram' ); ?></span>
                 </td>
                 <td>
                     <button class="button"
-                            id="tg_wp_factor_chat_id_check"><?php _e( "Controlla", "two-factor-telegram" ); ?></button>
+                            id="tg_wp_factor_chat_id_check"><?php _e( "Controlla", "two-factor-login-telegram" ); ?></button>
                 </td>
             </tr>
             <tr id="factor-chat-response">
@@ -509,7 +509,7 @@ final class WP_Factor_Telegram_Plugin {
 
 		wp_localize_script( "tg_lib_js", "tlj", array(
 
-			"ajax_error" => __( 'Errore server temporaneo ', 'two-factor-telegram' ),
+			"ajax_error" => __( 'Errore server temporaneo ', 'two-factor-login-telegram' ),
 			"spinner"    => admin_url( "/images/spinner.gif" )
 
 		) );
@@ -554,7 +554,7 @@ final class WP_Factor_Telegram_Plugin {
 
 		$response = array(
 			'type' => 'error',
-			'msg'  => __( 'La Chat ID è vuota o inesistente.', 'two-factor-telegram' )
+			'msg'  => __( 'La Chat ID è vuota o inesistente.', 'two-factor-login-telegram' )
 		);
 
 
@@ -568,14 +568,14 @@ final class WP_Factor_Telegram_Plugin {
 		setcookie( $this->check_cookie_name, sha1( $auth_code ), time() + ( 60 * 20 ) );
 
 		$tg   = $this->telegram;
-		$send = $tg->send( __( sprintf( "Il codice di controllo per WP Two Factor Telegram è %s", $auth_code ), 'two-factor-telegram' ), $_POST['chat_id'] );
+		$send = $tg->send( __( sprintf( "Il codice di controllo per WP Two Factor Telegram è %s", $auth_code ), 'two-factor-login-telegram' ), $_POST['chat_id'] );
 
 		if ( ! $send ) {
-			$response['msg'] = __( 'Il codice di controllo non è stato mandato ' . $tg->lastError, 'two-factor-telegram' );
+			$response['msg'] = __( 'Il codice di controllo non è stato mandato ' . $tg->lastError, 'two-factor-login-telegram' );
 		} else {
 
 			$response['type'] = "success";
-			$response['msg']  = __( "Codice di controllo inviato con successo", 'two-factor-telegram' );
+			$response['msg']  = __( "Codice di controllo inviato con successo", 'two-factor-login-telegram' );
 
 		}
 
@@ -587,7 +587,7 @@ final class WP_Factor_Telegram_Plugin {
 
 		$response = array(
 			'type' => 'error',
-			'msg'  => __( 'Il bot indicato non esiste.', 'two-factor-telegram' )
+			'msg'  => __( 'Il bot indicato non esiste.', 'two-factor-login-telegram' )
 		);
 
 		if ( ! isset( $_POST['bot_token'] ) || $_POST['bot_token'] == "" ) {
@@ -603,7 +603,7 @@ final class WP_Factor_Telegram_Plugin {
 
 		$response = array(
             'type' => 'success',
-            'msg' => __('Il bot indicato esiste', 'two-factor-telegram'),
+            'msg' => __('Il bot indicato esiste', 'two-factor-login-telegram'),
             'args' => array(
                 'id' => $me->id,
                 'first_name' => $me->first_name,
@@ -619,7 +619,7 @@ final class WP_Factor_Telegram_Plugin {
 
 		$response = array(
 			'type' => 'error',
-			'msg'  => __( 'Il token indicato non è corretto.', 'two-factor-telegram' )
+			'msg'  => __( 'Il token indicato non è corretto.', 'two-factor-login-telegram' )
 		);
 
 
@@ -629,11 +629,11 @@ final class WP_Factor_Telegram_Plugin {
 
 
 		if ( ! $this->is_valid_authcode( $_POST['token'], $this->check_cookie_name ) ) {
-			$response['msg'] = __( 'Il codice di controllo inserito è errato.', 'two-factor-telegram' );
+			$response['msg'] = __( 'Il codice di controllo inserito è errato.', 'two-factor-login-telegram' );
 		} else {
 
 			$response['type'] = "success";
-			$response['msg']  = __( "Il codice di controllo è corretto.", 'two-factor-telegram' );
+			$response['msg']  = __( "Il codice di controllo è corretto.", 'two-factor-login-telegram' );
 
 		}
 
@@ -666,7 +666,7 @@ final class WP_Factor_Telegram_Plugin {
 
 	function ts_footer_admin_text()
 	{
-		return __('Questo plugin è stato creato da', 'two-factor-telegram').' <a href="https://www.dueclic.com/" target="_blank">dueclic</a>. <a class="social-foot" href="https://www.facebook.com/dueclic/"><span class="dashicons dashicons-facebook bg-fb"></span></a>';
+		return __('Questo plugin è stato creato da', 'two-factor-login-telegram').' <a href="https://www.dueclic.com/" target="_blank">dueclic</a>. <a class="social-foot" href="https://www.facebook.com/dueclic/"><span class="dashicons dashicons-facebook bg-fb"></span></a>';
 	}
 
 	function ts_footer_version()

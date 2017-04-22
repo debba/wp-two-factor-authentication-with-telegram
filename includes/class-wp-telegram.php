@@ -61,7 +61,7 @@ class WP_Telegram {
 		) );
 
 		if ( is_wp_error( $request ) ) {
-			$this->lastError = __( "Errore interno, riprova.", "two-factor-telegram" );
+			$this->lastError = __( "Errore interno, riprova.", "two-factor-login-telegram" );
 
 			return false;
 		}
@@ -72,7 +72,7 @@ class WP_Telegram {
 			return true;
 		}
 
-		$this->lastError = sprintf( __( "%s (Codice errore %d)", $body->description, $body->error_code, "two-factor-telegram" ) );
+		$this->lastError = sprintf( __( "%s (Codice errore %d)", $body->description, $body->error_code, "two-factor-login-telegram" ) );
 
 		return false;
 
@@ -100,14 +100,14 @@ class WP_Telegram {
 		$request = $this->make_request( "/getMe" );
 
 		if ( is_wp_error( $request ) ) {
-			$this->lastError = __( "Errore interno, riprova.", "two-factor-telegram" );
+			$this->lastError = __( "Errore interno, riprova.", "two-factor-login-telegram" );
 
 			return false;
 		}
 
 		$body = json_decode( wp_remote_retrieve_body( $request ) );
 		if ( $body->ok != 1 ) {
-			$this->lastError = sprintf( __( "%s (Codice errore %d)", $body->description, $body->error_code, "two-factor-telegram" ) );
+			$this->lastError = sprintf( __( "%s (Codice errore %d)", $body->description, $body->error_code, "two-factor-login-telegram" ) );
 			return false;
 		}
 
@@ -131,7 +131,7 @@ class WP_Telegram {
 			$chat_id = get_user_meta( get_current_user_id(), "tg_wp_factor_chat_id" );
 		}
 
-		return $this->send( __( "Il tuo codice di accesso è: " . $token, "two-factor-telegram" ), $chat_id );
+		return $this->send( __( "Il tuo codice di accesso è: " . $token, "two-factor-login-telegram" ), $chat_id );
 	}
 
 	/**

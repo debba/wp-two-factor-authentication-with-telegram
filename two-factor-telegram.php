@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Two Factor Authentication with Telegram
-Plugin URI: https://www.dueclic.com/two-factor-telegram/
+Plugin URI: https://www.dueclic.com/two-factor-login-telegram/
 Description: Enable Two Factor Authentication with Telegram.
 Version: 1.0
 Author: debba
