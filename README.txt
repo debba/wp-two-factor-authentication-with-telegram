@@ -1,36 +1,48 @@
 === WP Two Factor Authentication with Telegram ===
 Contributors: dueclic
 Tags: two factor authentication, authentication, telegram
-Requires at least: 4.7.3
-Tested up to: 4.7.3
-Stable tag: 1.0
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires at least: 4.7.4
+Tested up to: 4.7.4
+Stable tag: 1.1
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Abilita l'autenticazione a due fattori con Telegram
+This plugin enables two factor authentication with Telegram
 
 == Description ==
 
-WP Two Factor Authentication with Telegram permette di abilitare l'autenticazione a due fattori sfruttando Telegram.
+WP Two Factor Authentication with Telegram allows you to enable Two-factor authentication for WordPress Login using Telegram.
 
-* **Configurazione semplice**: installa il plugin e configuralo in pochi secondi.
+* **Easy Configuration**: install plugin and setup in a few seconds.
 
-* **Permetti agli utenti di abilitare l'autenticazione a due fattori**: ogni utente direttamente dal suo Profilo potrà abilitare la sua Chat ID
+* **Increase security**: increase the level of security in your blog / website by adding and additional authentication factor
 
-* **Invia segnalazione di Login falliti**: imposta una Chat ID di amministrazione per ricevere le notifiche ogni volta che avviene un'accesso fallito al tuo sito
+* **Speed**: Forget additional apps, sms or captcha. Use Telegram for a very fast experience!
 
-* **Guida**: utilizza la guida interna al plugin per creare il Telegram Bot necessario per l'utilizzo
+* **Allow users to enable Two-factor authentication**: every user directly from own profile may decide to require secure login.
 
-* **Lingue**: il plugin è disponibile in Italiano ma sarà presto localizzato anche in inglese.
+* **Send alert**: set a Telegram Chat Id for an admin to receive  for receiving notifications every time users fail login.
+
+* **FAQ**: read the FAQ inside plugin for create your Telegram Bot
+
+* **Languages**: plugin is available in Italian and English languages.
 
 == Changelog ==
 
+= 1.1 =
+
+* Insert english translation
+
 = 1.0 =
 
-* Introdotta prima release
+* First public release
 
 == Upgrade Notice ==
 
+= 1.1 =
+
+* Insert english translation
+
 = 1.0 =
 
-* Introdotta prima release
+* First public release

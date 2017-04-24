@@ -21,9 +21,10 @@ class WP_Telegram {
 	 * @return string
 	 */
 
-	private function get_route($route){
-		$endpoint  = sprintf( "https://api.telegram.org/bot%s", $this->bot_token );
-		return $endpoint.$route;
+	private function get_route( $route ) {
+		$endpoint = sprintf( "https://api.telegram.org/bot%s", $this->bot_token );
+
+		return $endpoint . $route;
 	}
 
 	/**
@@ -37,7 +38,8 @@ class WP_Telegram {
 
 	private function make_request( $route, $args = array() ) {
 
-		$endpoint = $this->get_route($route);
+		$endpoint = $this->get_route( $route );
+
 		return wp_remote_post( $endpoint, array(
 			'body' => $args
 		) );
@@ -61,7 +63,7 @@ class WP_Telegram {
 		) );
 
 		if ( is_wp_error( $request ) ) {
-			$this->lastError = __( "Errore interno, riprova.", "two-factor-login-telegram" );
+			$this->lastError = __( "Ooops! Server failure, try again!", "two-factor-login-telegram" );
 
 			return false;
 		}
@@ -72,7 +74,7 @@ class WP_Telegram {
 			return true;
 		}
 
-		$this->lastError = sprintf( __( "%s (Codice errore %d)", $body->description, $body->error_code, "two-factor-login-telegram" ) );
+		$this->lastError = sprintf( __( "%s (Error code %d)", $body->description, $body->error_code, "two-factor-login-telegram" ) );
 
 		return false;
 
@@ -80,13 +82,15 @@ class WP_Telegram {
 
 	/**
 	 * Set bot token
+	 *
 	 * @param $bot_token
 	 *
 	 * @return $this
 	 */
 
-	public function set_bot_token($bot_token) {
+	public function set_bot_token( $bot_token ) {
 		$this->bot_token = $bot_token;
+
 		return $this;
 	}
 
@@ -100,14 +104,15 @@ class WP_Telegram {
 		$request = $this->make_request( "/getMe" );
 
 		if ( is_wp_error( $request ) ) {
-			$this->lastError = __( "Errore interno, riprova.", "two-factor-login-telegram" );
+			$this->lastError = __( "Ooops! Server failure, try again!", "two-factor-login-telegram" );
 
 			return false;
 		}
 
 		$body = json_decode( wp_remote_retrieve_body( $request ) );
 		if ( $body->ok != 1 ) {
-			$this->lastError = sprintf( __( "%s (Codice errore %d)", $body->description, $body->error_code, "two-factor-login-telegram" ) );
+			$this->lastError = sprintf( __( "%s (Error code %d)", $body->description, $body->error_code, "two-factor-login-telegram" ) );
+
 			return false;
 		}
 
@@ -131,7 +136,8 @@ class WP_Telegram {
 			$chat_id = get_user_meta( get_current_user_id(), "tg_wp_factor_chat_id" );
 		}
 
-		return $this->send( __( "Il tuo codice di accesso è: " . $token, "two-factor-login-telegram" ), $chat_id );
+
+		return $this->send( sprintf( __( "This is your access code: %s", "two-factor-login-telegram" ), $token ), $chat_id );
 	}
 
 	/**
@@ -145,7 +151,7 @@ class WP_Telegram {
 	public function send_tg_failed_login( $user_login ) {
 		$chat_id = get_option( $this->namespace )['chat_id'];
 
-		return $this->send( __( "Tentativo di accesso fallito da parte dell'utente: " . $user_login . " IP: " . $_SERVER['REMOTE_ADDR'] ), $chat_id );
+		return $this->send( sprintf( __( "Failed attempt to access for the user: %s (IP: %s)", "two-factor-login-telegram" ), $user_login, $_SERVER['REMOTE_ADDR'] ), $chat_id );
 	}
 
 }
