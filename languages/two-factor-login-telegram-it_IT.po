@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP Two Factor Authentication with Telegram\n"
-"POT-Creation-Date: 2017-04-25 01:37+0200\n"
-"PO-Revision-Date: 2017-04-25 01:37+0200\n"
+"POT-Creation-Date: 2017-04-25 04:09+0200\n"
+"PO-Revision-Date: 2017-04-25 04:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it_IT\n"
@@ -94,19 +94,19 @@ msgid "Enable Two-Factor Authentication"
 msgstr "Abilita Autenticazione a due fattori"
 
 #: includes/class-wp-factor-telegram-plugin.php:455
-#: sections/configure_tg.php:45 sections/configure_tg.php:78
+#: sections/configure_tg.php:61 sections/configure_tg.php:94
 #, php-format
 msgid "Open Telegram and start a conversation with %s"
 msgstr "Apri Telegram ed avvia una conversazione con %s"
 
 #: includes/class-wp-factor-telegram-plugin.php:461
-#: sections/configure_tg.php:84
+#: sections/configure_tg.php:100
 #, php-format
 msgid "Type command %s to obtain your Chat ID."
 msgstr "Scrivi il comando %s per ottenere la tua Chat ID."
 
 #: includes/class-wp-factor-telegram-plugin.php:466
-#: sections/configure_tg.php:89
+#: sections/configure_tg.php:105
 msgid "Inside of the answer you'll find your <strong>Chat ID</strong>"
 msgstr "All'interno della risposta trovarai la tua <strong>Chat ID</strong>"
 
@@ -180,24 +180,38 @@ msgid "This bot exists."
 msgstr "Il bot esiste."
 
 #: includes/class-wp-factor-telegram-plugin.php:642
-msgid "The token entered is wrong."
-msgstr "Il token inserito è errato."
-
-#: includes/class-wp-factor-telegram-plugin.php:652
-msgid "Validation code entered is wrong."
-msgstr "Il codice di verifica è errato."
-
-#: includes/class-wp-factor-telegram-plugin.php:656
-msgid "Validation code is correct."
-msgstr "Il codice di verifica è corretto."
-
-#: includes/class-wp-factor-telegram-plugin.php:689
-msgid "This plugin is powered by"
-msgstr "Questo plugin è stato creato da"
-
+#: includes/class-wp-factor-telegram-plugin.php:669
 #: includes/class-wp-telegram.php:66 includes/class-wp-telegram.php:107
 msgid "Ooops! Server failure, try again!"
 msgstr "Ooops! Il server è momentaneamente occupato, riprova!"
+
+#: includes/class-wp-factor-telegram-plugin.php:660
+msgid "Thanks for the support."
+msgstr "Grazie per il supporto."
+
+#: includes/class-wp-factor-telegram-plugin.php:666
+msgid "Error: Please, insert a valid name."
+msgstr "Errore: inserisci un nome valido."
+
+#: includes/class-wp-factor-telegram-plugin.php:672
+msgid "Error: Please, insert a valid email."
+msgstr "Errore: inserisci una email valida."
+
+#: includes/class-wp-factor-telegram-plugin.php:687
+msgid "The token entered is wrong."
+msgstr "Il token inserito è errato."
+
+#: includes/class-wp-factor-telegram-plugin.php:697
+msgid "Validation code entered is wrong."
+msgstr "Il codice di verifica è errato."
+
+#: includes/class-wp-factor-telegram-plugin.php:701
+msgid "Validation code is correct."
+msgstr "Il codice di verifica è corretto."
+
+#: includes/class-wp-factor-telegram-plugin.php:734
+msgid "This plugin is powered by"
+msgstr "Questo plugin è stato creato da"
 
 #: includes/class-wp-telegram.php:77 includes/class-wp-telegram.php:114
 #, php-format
@@ -222,15 +236,19 @@ msgstr "Configurazione"
 msgid "Two Factor Authentication with Telegram"
 msgstr "Autenticazione a due fattori con Telegram"
 
-#: sections/configure_tg.php:19 sections/configure_tg.php:31
+#: sections/configure_tg.php:19 sections/configure_tg.php:47
 msgid "FAQ"
 msgstr ""
 
-#: sections/configure_tg.php:34
+#: sections/configure_tg.php:29 sections/configure_tg.php:128
+msgid "Suggestions"
+msgstr "Suggerimenti"
+
+#: sections/configure_tg.php:50
 msgid "Bot token"
 msgstr ""
 
-#: sections/configure_tg.php:37
+#: sections/configure_tg.php:53
 msgid ""
 "If you want to enable <strong>Two Factor Authentication with Telegram</"
 "strong> plugin you need to provide a valid token for a Telegram Bot."
@@ -238,42 +256,42 @@ msgstr ""
 "Per abilitare l' <strong>autenticazione a due fattori con Telegram</strong> "
 "devi indicare un token valido di un Bot Telegram."
 
-#: sections/configure_tg.php:39
+#: sections/configure_tg.php:55
 msgid "Have you ever created a bot in Telegram? It's so easy!"
 msgstr "Non hai mai creato un bot su Telegram? E' semplicissimo!"
 
-#: sections/configure_tg.php:51
+#: sections/configure_tg.php:67
 #, php-format
 msgid "Type command %s to create a new bot"
 msgstr "Scrivi il comando %s per creare un nuovo bot"
 
-#: sections/configure_tg.php:55
+#: sections/configure_tg.php:71
 msgid "Provide username and name for the new bot."
 msgstr "Scegli uno username e un nome per il nuovo bot."
 
-#: sections/configure_tg.php:57
+#: sections/configure_tg.php:73
 msgid "In the anwser will be your <strong>Bot Token</strong>"
 msgstr ""
 "Se tutto è andato a buon fine, il bot è stato creato. All'interno della "
 "risposta sarà presente il tuo <strong>Bot Token</strong>"
 
-#: sections/configure_tg.php:67
+#: sections/configure_tg.php:83
 msgid "Get Chat ID for Telegram user"
 msgstr "Ottenere la Chat ID dell'utente Telegram"
 
-#: sections/configure_tg.php:70
+#: sections/configure_tg.php:86
 msgid "Chat ID identifies your user profile in Telegram."
 msgstr "La Chat ID identifica il tuo utente su Telegram."
 
-#: sections/configure_tg.php:72
+#: sections/configure_tg.php:88
 msgid "You have no idea what is your Chat ID? Follow these simple steps."
 msgstr "Non conosci la tua Chat ID? Segui questi semplici messaggi!"
 
-#: sections/configure_tg.php:97
+#: sections/configure_tg.php:113
 msgid "Activation of service"
 msgstr "Attivazione del servizio"
 
-#: sections/configure_tg.php:100
+#: sections/configure_tg.php:116
 msgid ""
 "Open a conversation with the created bot that you provided for the plugin "
 "and push <strong>Start</strong>"
@@ -281,14 +299,71 @@ msgstr ""
 "Per attivare il servizio, apri una conversazione col Bot da te creato ed "
 "indicato nelle impostazioni del plugin e premi su <strong>Avvia</strong>"
 
-#: sections/configure_tg.php:116
+#: sections/configure_tg.php:132
+msgid ""
+"We developed this plugin to improve the security in WordPress. We love "
+"Telegram and let's hope that this plugin would be agreeable."
+msgstr ""
+"Abbiamo sviluppato questo plugin con lo scopo di aumentare la sicurezza su "
+"WordPress. Adoriamo Telegram e speriamo che questo plugin sia cosa per te "
+"gradita."
+
+#: sections/configure_tg.php:133
+msgid ""
+"We consider these early versions only a test, but we have got so many ideas "
+"for the future. "
+msgstr ""
+"Consideriamo queste prime versioni solo dei test, ma abbiamo in testa grandi "
+"idee per il futuro."
+
+#: sections/configure_tg.php:135
+msgid ""
+"If you like the project and you've suggestions or you want report problems, "
+"please compile this form."
+msgstr ""
+"Se ti piace il progetto ed hai suggerimenti o vuoi semplicemente segnalarci "
+"dei malfunzionamenti, ti preghiamo di compilare questo form."
+
+#: sections/configure_tg.php:139
+msgid "Thanks"
+msgstr "Grazie"
+
+#: sections/configure_tg.php:150 sections/configure_tg.php:154
+msgid "Your name"
+msgstr "Il tuo nome"
+
+#: sections/configure_tg.php:159 sections/configure_tg.php:163
+msgid "Your email"
+msgstr "La tua email"
+
+#: sections/configure_tg.php:167
+msgid "Message"
+msgstr "Messaggio"
+
+#: sections/configure_tg.php:170
+msgid "Leave a message"
+msgstr "Lasciaci un messaggio"
+
+#: sections/configure_tg.php:179
+msgid "Send"
+msgstr "Invia"
+
+#: sections/configure_tg.php:191
+msgid "If you want, follow us on "
+msgstr "Se vuoi, seguici anche su"
+
+#: sections/configure_tg.php:191
+msgid " and keep update!"
+msgstr "e rimani aggiornato con noi!"
+
+#: sections/configure_tg.php:208
 #, php-format
 msgid "First time? <a href=\"%s\">Take a look into the FAQ!</a>"
 msgstr "Prima volta? <a href=\"%s\">Dai uno sguardo alle FAQ!</a>"
 
-#: sections/configure_tg.php:130
+#: sections/configure_tg.php:222
 msgid "Save Changes"
-msgstr ""
+msgstr "Salva"
 
 #. Description of the plugin/theme
 #: two-factor-telegram.php:16
@@ -310,6 +385,9 @@ msgstr ""
 #. Author URI of the plugin/theme
 msgid "https://www.dueclic.com"
 msgstr ""
+
+#~ msgid "Lasciaci un messaggio"
+#~ msgstr "Leave a messale"
 
 #~ msgid "Autenticati con Telegram"
 #~ msgstr "Login with Telegram"

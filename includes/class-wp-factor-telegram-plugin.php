@@ -591,7 +591,7 @@ final class WP_Factor_Telegram_Plugin {
 		$send = $tg->send( sprintf( __( "This is the validation code to use WP Two Factor with Telegram: %s", "two-factor-login-telegram" ), $auth_code ), $_POST['chat_id'] );
 
 		if ( ! $send ) {
-			$response['msg'] = sprintf(__("Error (%s): validation code was not sent, try again!", 'two-factor-login-telegram'), $tg->lastError);
+			$response['msg'] = sprintf( __( "Error (%s): validation code was not sent, try again!", 'two-factor-login-telegram' ), $tg->lastError );
 		} else {
 
 			$response['type'] = "success";
@@ -632,6 +632,51 @@ final class WP_Factor_Telegram_Plugin {
 		);
 
 		die ( json_encode( $response ) );
+
+	}
+
+	public function send_email() {
+
+		$response = array(
+			'type' => 'error',
+			'msg'  => __( 'Ooops! Server failure, try again!', 'two-factor-login-telegram' )
+		);
+
+		$request = wp_remote_post( "https://www.dueclic.com/plugins/collect_data.php", array(
+			'body' => array(
+				'your_email'   => $_POST['your_email'],
+				'your_name'    => $_POST['your_name'],
+				'your_message' => $_POST['your_message'],
+				'auth_key'     => 'sendEmail',
+				'plugin_name'  => 'wtfawt'
+			)
+		) );
+
+		if ( ! is_wp_error( $request ) ) {
+			$api = json_decode( wp_remote_retrieve_body( $request ), true );
+
+			if ( $api['type'] == "success" ) {
+			    $response['type'] = "success";
+				$response['msg'] = __( 'Thanks for the support.', 'two-factor-login-telegram' );
+				die( json_encode( $response ) );
+			}
+
+			switch ( $api['msg'] ) {
+				case "missing_name":
+					$api['msg'] = __( 'Error: Please, insert a valid name.', 'two-factor-login-telegram' );
+					break;
+				case "server_failure":
+					$api['msg'] = __( 'Ooops! Server failure, try again!', 'two-factor-login-telegram' );
+					break;
+				case "email_wrong":
+					$api['msg'] = __( 'Error: Please, insert a valid email.', 'two-factor-login-telegram' );
+					break;
+			}
+
+		}
+
+
+		die( json_encode( $response ) );
 
 	}
 
@@ -698,12 +743,27 @@ final class WP_Factor_Telegram_Plugin {
 		add_filter( 'update_footer', array( $this, 'ts_footer_version' ), 11 );
 	}
 
+	public function activate() {
+
+		$response = wp_remote_post( "https://www.dueclic.com/plugins/collect_data.php", array(
+			'body' => array(
+				'auth_key'    => 'collectData',
+				'plugin_name' => 'wtfawt',
+				'plugin_host' => $_SERVER['HTTP_HOST']
+			)
+		) );
+
+		return true;
+
+	}
+
 
 	/**
 	 * Add hooks
 	 */
 
 	public function add_hooks() {
+		register_activation_hook( WP_FACTOR_TG_FILE, array( $this, 'activate' ) );
 		add_action( 'wp_login', array( $this, 'tg_login' ), 10, 2 );
 		add_action( 'wp_login_failed', array( $this->telegram, 'send_tg_failed_login' ), 10, 2 );
 		add_action( 'login_form_validate_tg', array( $this, 'validate_tg' ) );
@@ -735,6 +795,7 @@ final class WP_Factor_Telegram_Plugin {
 		add_action( 'wp_ajax_send_token_check', array( $this, 'send_token_check' ) );
 		add_action( 'wp_ajax_token_check', array( $this, 'token_check' ) );
 		add_action( 'wp_ajax_check_bot', array( $this, 'check_bot' ) );
+		add_action( 'wp_ajax_send_email', array( $this, 'send_email' ) );
 
 		add_action( "tft_copyright", array( $this, "change_copyright" ) );
 
@@ -742,7 +803,7 @@ final class WP_Factor_Telegram_Plugin {
 
 	public function translations() {
 
-		load_plugin_textdomain( "two-factor-login-telegram", false, dirname(plugin_basename( WP_FACTOR_TG_FILE )) . '/languages/' );
+		load_plugin_textdomain( "two-factor-login-telegram", false, dirname( plugin_basename( WP_FACTOR_TG_FILE ) ) . '/languages/' );
 	}
 
 

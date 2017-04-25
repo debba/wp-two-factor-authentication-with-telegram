@@ -32,6 +32,7 @@ WP Two Factor Authentication with Telegram allows you to enable Two-factor authe
 = 1.1 =
 
 * Insert english translation
+* Introduced a tab for report problems or leave suggestions
 
 = 1.0 =
 
@@ -42,6 +43,7 @@ WP Two Factor Authentication with Telegram allows you to enable Two-factor authe
 = 1.1 =
 
 * Insert english translation
+* Introduced a tab for report problems or leave suggestions
 
 = 1.0 =
 

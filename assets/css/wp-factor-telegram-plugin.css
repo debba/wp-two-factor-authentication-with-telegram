@@ -46,6 +46,14 @@
     border-left-color: #ffb900;
 }
 
+.wpft-notice-success {
+    border-left-color: #46b450;
+}
+
+.wpft-notice-error {
+    border-left-color: #ed0d00;
+}
+
 .wpft-notice p {
     margin: .5em 0;
     padding: 2px;
@@ -76,4 +84,8 @@
 .social-foot {
     border:0;
     text-decoration:none;
+}
+
+.response-email-error, .response-email-success {
+    display:none;
 }
