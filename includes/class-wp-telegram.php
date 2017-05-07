@@ -151,7 +151,14 @@ class WP_Telegram {
 	public function send_tg_failed_login( $user_login ) {
 		$chat_id = get_option( $this->namespace )['chat_id'];
 
-		return $this->send( sprintf( __( "Failed attempt to access for the user: %s (IP: %s)", "two-factor-login-telegram" ), $user_login, $_SERVER['REMOTE_ADDR'] ), $chat_id );
+		/**
+		 * @from 1.2
+		 * Get IP address behind CloudFlare proxy
+		 */
+
+		$ip_address = (isset($_SERVER["HTTP_CF_CONNECTING_IP"])?$_SERVER["HTTP_CF_CONNECTING_IP"]:$_SERVER['REMOTE_ADDR']);
+
+		return $this->send( sprintf( __( "Failed attempt to access for the user: %s (IP: %s)", "two-factor-login-telegram" ), $user_login, $ip_address ), $chat_id );
 	}
 
 }

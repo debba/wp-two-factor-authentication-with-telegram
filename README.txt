@@ -1,9 +1,9 @@
 === WP Two Factor Authentication with Telegram ===
 Contributors: dueclic
-Tags: two factor authentication, authentication, telegram
+Tags: two factor authentication, authentication, telegram, auth, authenticate, login, security, two factor auth
 Requires at least: 4.7.4
 Tested up to: 4.7.4
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -28,6 +28,10 @@ WP Two Factor Authentication with Telegram allows you to enable Two-factor authe
 * **Languages**: plugin is available in Italian and English languages.
 
 == Changelog ==
+
+= 1.2 =
+
+* For failed login get IP behind a CloudFlare proxy (Thx Manuel for suggestion)
 
 = 1.1 =
 
