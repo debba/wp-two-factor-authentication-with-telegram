@@ -31,7 +31,7 @@ WP Two Factor Authentication with Telegram allows you to enable Two-factor authe
 
 = 1.2 =
 
-* For failed login get IP behind a CloudFlare proxy (Thx Manuel for suggestion)
+* In failed send with Telegram the IP address behind a CloudFlare proxy (Thx Manuel for suggestion)
 
 = 1.1 =
 
