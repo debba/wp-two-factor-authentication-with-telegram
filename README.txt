@@ -2,8 +2,8 @@
 Contributors: dueclic
 Tags: two factor authentication, authentication, telegram, auth, authenticate, login, security, two factor auth
 Requires at least: 4.7.4
-Tested up to: 4.7.4
-Stable tag: 1.2
+Tested up to: 4.9.4
+Stable tag: 1.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

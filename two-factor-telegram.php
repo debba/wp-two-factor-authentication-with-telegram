@@ -6,7 +6,7 @@
  * Description: This plugin enables two factor authentication with Telegram
  * Author: dueclic
  * Author URI: https://www.dueclic.com
- * Version: 1.2
+ * Version: 1.3
  * License: GPL v3
  * Text Domain: two-factor-login-telegram
  * Domain Path: /languages/
