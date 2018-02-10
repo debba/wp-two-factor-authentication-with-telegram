@@ -29,6 +29,10 @@ WP Two Factor Authentication with Telegram allows you to enable Two-factor authe
 
 == Changelog ==
 
+= 1.3 =
+
+* Extended compatibility to WP 4.9.4
+
 = 1.2 =
 
 * In failed send with Telegram the IP address behind a CloudFlare proxy (Thx Manuel for suggestion)
