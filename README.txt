@@ -7,7 +7,7 @@ Stable tag: 1.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This plugin enables two factor authentication with Telegram
+This plugin enables two factor authentication with Telegram by increasing your security and sends an alert every time a wrong login occurs.
 
 == Description ==
 
