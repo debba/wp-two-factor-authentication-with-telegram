@@ -89,3 +89,17 @@
 .response-email-error, .response-email-success {
     display:none;
 }
+
+.heading-top {
+    background: #fff;
+    padding: 20px;
+}
+
+.heading-top .cover-tg-plugin {
+    background: url('../img/plugin_cover-100.png') no-repeat center center;
+    height: 100px;
+}
+
+.heading-top h1 {
+    text-align:center;
+}

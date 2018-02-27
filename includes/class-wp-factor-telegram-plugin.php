@@ -158,6 +158,12 @@ final class WP_Factor_Telegram_Plugin {
 		}
 		?>
 
+        <style>
+            body.login div#login h1 a {
+                background-image: url("<?php echo plugins_url("assets/img/plugin_logo.png", WP_FACTOR_TG_FILE); ?>");
+            }
+        </style>
+
         <form name="validate_tg" id="loginform"
               action="<?php echo esc_url( site_url( 'wp-login.php?action=validate_tg', 'login_post' ) ); ?>"
               method="post" autocomplete="off">
@@ -423,7 +429,7 @@ final class WP_Factor_Telegram_Plugin {
 	public function tg_add_two_factor_fields( $user ) {
 
 		?>
-        <h3><?php _e( 'Two-Factor Authentication with Telegram', 'two-factor-login-telegram' ); ?></h3>
+        <h3 id="wptl"><?php _e( 'Two-Factor Authentication with Telegram', 'two-factor-login-telegram' ); ?></h3>
 
         <table class="form-table">
 
