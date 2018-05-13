@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP Two Factor Authentication with Telegram\n"
-"POT-Creation-Date: 2018-02-27 14:12+0100\n"
-"PO-Revision-Date: 2018-02-27 14:15+0100\n"
+"POT-Creation-Date: 2018-05-13 19:29+0200\n"
+"PO-Revision-Date: 2018-05-13 19:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.0.7\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
@@ -37,50 +37,52 @@ msgstr "Autenticati con Telegram"
 msgid "Are you lost?"
 msgstr "Ti sei perso?"
 
-#: includes/class-wp-factor-telegram-plugin.php:249
-msgid "Wrong verification code, try again!"
-msgstr "Errore: codice di verifica errato, riprova!"
+#: includes/class-wp-factor-telegram-plugin.php:250
+msgid "Wrong verification code, we just sent a new code, please try again!"
+msgstr ""
+"Errore: codice di verifica errato, ti abbiamo appena inviato un nuovo "
+"codice, riprova!"
 
-#: includes/class-wp-factor-telegram-plugin.php:271
-#: includes/class-wp-factor-telegram-plugin.php:432
+#: includes/class-wp-factor-telegram-plugin.php:272
+#: includes/class-wp-factor-telegram-plugin.php:433
 msgid "Two-Factor Authentication with Telegram"
 msgstr "Autenticazione a due fattori con Telegram"
 
-#: includes/class-wp-factor-telegram-plugin.php:281
+#: includes/class-wp-factor-telegram-plugin.php:282
 msgid "Telegram Configuration"
 msgstr "Configurazione Telegram"
 
-#: includes/class-wp-factor-telegram-plugin.php:287
-#: includes/class-wp-factor-telegram-plugin.php:293
+#: includes/class-wp-factor-telegram-plugin.php:288
+#: includes/class-wp-factor-telegram-plugin.php:294
 msgid "Bot Token"
 msgstr ""
 
-#: includes/class-wp-factor-telegram-plugin.php:302
+#: includes/class-wp-factor-telegram-plugin.php:303
 msgid "Chat ID (Telegram) for failed login report."
 msgstr "Chat ID (Telegram) per invio login falliti."
 
-#: includes/class-wp-factor-telegram-plugin.php:308
+#: includes/class-wp-factor-telegram-plugin.php:309
 msgid "Chat ID"
 msgstr ""
 
-#: includes/class-wp-factor-telegram-plugin.php:317
+#: includes/class-wp-factor-telegram-plugin.php:318
 msgid "Select the checkbox below to enable the plugin."
 msgstr "Scegli se abilitare il plugin."
 
-#: includes/class-wp-factor-telegram-plugin.php:323
+#: includes/class-wp-factor-telegram-plugin.php:324
 msgid "Enable plugin?"
 msgstr "Abilita il plugin?"
 
-#: includes/class-wp-factor-telegram-plugin.php:351
+#: includes/class-wp-factor-telegram-plugin.php:352
 msgid "Check"
 msgstr "Verifica"
 
-#: includes/class-wp-factor-telegram-plugin.php:394
+#: includes/class-wp-factor-telegram-plugin.php:395
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: includes/class-wp-factor-telegram-plugin.php:406
-#: includes/class-wp-factor-telegram-plugin.php:418
+#: includes/class-wp-factor-telegram-plugin.php:407
+#: includes/class-wp-factor-telegram-plugin.php:419
 #, php-format
 msgid ""
 "Do you want to configure Two Factor Authentication with Telegram?  <a href="
@@ -89,127 +91,127 @@ msgstr ""
 "Vuoi configurazione l'autenticazione a due fattori con Telegram?  <a href="
 "\"%s\">clicca qui</a>!"
 
-#: includes/class-wp-factor-telegram-plugin.php:438
+#: includes/class-wp-factor-telegram-plugin.php:439
 msgid "Enable Two-Factor Authentication"
 msgstr "Abilita Autenticazione a due fattori"
 
-#: includes/class-wp-factor-telegram-plugin.php:461
+#: includes/class-wp-factor-telegram-plugin.php:462
 #: sections/configure_tg.php:70 sections/configure_tg.php:111
 #, php-format
 msgid "Open Telegram and start a conversation with %s"
 msgstr "Apri Telegram ed avvia una conversazione con %s"
 
-#: includes/class-wp-factor-telegram-plugin.php:467
+#: includes/class-wp-factor-telegram-plugin.php:468
 #: sections/configure_tg.php:119
 #, php-format
 msgid "Type command %s to obtain your Chat ID."
 msgstr "Scrivi il comando %s per ottenere la tua Chat ID."
 
-#: includes/class-wp-factor-telegram-plugin.php:472
+#: includes/class-wp-factor-telegram-plugin.php:473
 #: sections/configure_tg.php:125
 msgid "Inside of the answer you'll find your <strong>Chat ID</strong>"
 msgstr "All'interno della risposta trovarai la tua <strong>Chat ID</strong>"
 
-#: includes/class-wp-factor-telegram-plugin.php:477
+#: includes/class-wp-factor-telegram-plugin.php:478
 #, php-format
 msgid "Now, open a conversation with %s and press on <strong>Start</strong>"
 msgstr "Ora, apri una conversazione con %s e premi su <strong>Avvia</strong>"
 
-#: includes/class-wp-factor-telegram-plugin.php:479
+#: includes/class-wp-factor-telegram-plugin.php:480
 msgid ""
 "You can go :) Insert your Chat ID and press <strong>Submit code</strong>"
 msgstr ""
 "Adesso puoi proseguire :) Inserisci la tua Chat ID di seguito e premi Invia "
 "codice."
 
-#: includes/class-wp-factor-telegram-plugin.php:490
+#: includes/class-wp-factor-telegram-plugin.php:491
 msgid "Telegram Chat ID"
 msgstr ""
 
-#: includes/class-wp-factor-telegram-plugin.php:496
+#: includes/class-wp-factor-telegram-plugin.php:497
 msgid "Put your Telegram Chat ID"
 msgstr "Inserisci la tua Chat ID di Telegram"
 
-#: includes/class-wp-factor-telegram-plugin.php:500
+#: includes/class-wp-factor-telegram-plugin.php:501
 msgid "Submit code"
 msgstr "Invia codice"
 
-#: includes/class-wp-factor-telegram-plugin.php:506
+#: includes/class-wp-factor-telegram-plugin.php:507
 msgid "Confirmation code"
 msgstr "Codice di conferma"
 
-#: includes/class-wp-factor-telegram-plugin.php:511
+#: includes/class-wp-factor-telegram-plugin.php:512
 msgid "Please enter the confirmation code you received on Telegram"
 msgstr "Inserisci il codice di conferma che hai appena ricevuto su Telegram"
 
-#: includes/class-wp-factor-telegram-plugin.php:515
+#: includes/class-wp-factor-telegram-plugin.php:516
 msgid "Validate"
 msgstr "Verifica"
 
-#: includes/class-wp-factor-telegram-plugin.php:538
+#: includes/class-wp-factor-telegram-plugin.php:539
 msgid "Ooops! Server failure, try again! "
 msgstr "Ooops! Il server è momentaneamente occupato, riprova!"
 
-#: includes/class-wp-factor-telegram-plugin.php:583
+#: includes/class-wp-factor-telegram-plugin.php:584
 msgid "Please fill Chat ID field."
 msgstr "Inserisci un valore valido per Chat ID."
 
-#: includes/class-wp-factor-telegram-plugin.php:597
+#: includes/class-wp-factor-telegram-plugin.php:598
 #, php-format
 msgid "This is the validation code to use WP Two Factor with Telegram: %s"
 msgstr ""
 "Questo è il codice di verifica necessario per utilizzare WP Two Factor with "
 "Telegram: %s"
 
-#: includes/class-wp-factor-telegram-plugin.php:600
+#: includes/class-wp-factor-telegram-plugin.php:601
 #, php-format
 msgid "Error (%s): validation code was not sent, try again!"
 msgstr ""
 "Errore (%s): non è stato possibile inviare il codice di verifica, riprova!"
 
-#: includes/class-wp-factor-telegram-plugin.php:604
+#: includes/class-wp-factor-telegram-plugin.php:605
 msgid "Validation code was successfully sent"
 msgstr "Il codice di verifica è stato inviato con successo"
 
-#: includes/class-wp-factor-telegram-plugin.php:616
+#: includes/class-wp-factor-telegram-plugin.php:617
 msgid "This bot does not exists."
 msgstr "Il bot non esiste."
 
-#: includes/class-wp-factor-telegram-plugin.php:632
+#: includes/class-wp-factor-telegram-plugin.php:633
 msgid "This bot exists."
 msgstr "Il bot esiste."
 
-#: includes/class-wp-factor-telegram-plugin.php:648
-#: includes/class-wp-factor-telegram-plugin.php:675
+#: includes/class-wp-factor-telegram-plugin.php:649
+#: includes/class-wp-factor-telegram-plugin.php:676
 #: includes/class-wp-telegram.php:66 includes/class-wp-telegram.php:107
 msgid "Ooops! Server failure, try again!"
 msgstr "Ooops! Il server è momentaneamente occupato, riprova!"
 
-#: includes/class-wp-factor-telegram-plugin.php:666
+#: includes/class-wp-factor-telegram-plugin.php:667
 msgid "Thanks for the support."
 msgstr "Grazie per il supporto."
 
-#: includes/class-wp-factor-telegram-plugin.php:672
+#: includes/class-wp-factor-telegram-plugin.php:673
 msgid "Error: Please, insert a valid name."
 msgstr "Errore: inserisci un nome valido."
 
-#: includes/class-wp-factor-telegram-plugin.php:678
+#: includes/class-wp-factor-telegram-plugin.php:679
 msgid "Error: Please, insert a valid email."
 msgstr "Errore: inserisci una email valida."
 
-#: includes/class-wp-factor-telegram-plugin.php:693
+#: includes/class-wp-factor-telegram-plugin.php:694
 msgid "The token entered is wrong."
 msgstr "Il token inserito è errato."
 
-#: includes/class-wp-factor-telegram-plugin.php:703
+#: includes/class-wp-factor-telegram-plugin.php:704
 msgid "Validation code entered is wrong."
 msgstr "Il codice di verifica è errato."
 
-#: includes/class-wp-factor-telegram-plugin.php:707
+#: includes/class-wp-factor-telegram-plugin.php:708
 msgid "Validation code is correct."
 msgstr "Il codice di verifica è corretto."
 
-#: includes/class-wp-factor-telegram-plugin.php:740
+#: includes/class-wp-factor-telegram-plugin.php:741
 msgid "This plugin is powered by"
 msgstr "Questo plugin è stato creato da"
 
@@ -374,8 +376,13 @@ msgstr "Salva"
 
 #. Description of the plugin/theme
 #: two-factor-telegram.php:15
-msgid "This plugin enables two factor authentication with Telegram"
-msgstr "Questo plugin abilita l’autenticazione a due fattori con Telegram"
+msgid ""
+"This plugin enables two factor authentication with Telegram by increasing "
+"your website security and sends an alert every time a wrong login occurs."
+msgstr ""
+"Questo plugin abilita l’autenticazione a dure fattori sfruttando Telegram "
+"rafforzando la sicurezza del tuo sito web e inviando un messaggio ogni volta "
+"che avviene un login errato."
 
 #. Plugin Name of the plugin/theme
 msgid "WP Two Factor Authentication with Telegram"
@@ -392,6 +399,9 @@ msgstr ""
 #. Author URI of the plugin/theme
 msgid "https://www.dueclic.com"
 msgstr ""
+
+#~ msgid "This plugin enables two factor authentication with Telegram"
+#~ msgstr "Questo plugin abilita l’autenticazione a due fattori con Telegram"
 
 #~ msgid "Lasciaci un messaggio"
 #~ msgstr "Leave a messale"

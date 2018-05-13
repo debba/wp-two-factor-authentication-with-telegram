@@ -244,9 +244,10 @@ final class WP_Factor_Telegram_Plugin {
 			setcookie( $this->cookie_name, null, strtotime( '-1 day' ) );
 			setcookie( $this->cookie_name, sha1( $auth_code ), time() + ( 60 * 20 ) );
 
-			$this->telegram->send_tg_token( $auth_code );
+			$chat_id = get_the_author_meta( "tg_wp_factor_chat_id", $user->ID );
+			$this->telegram->send_tg_token( $auth_code, $chat_id );
 
-			$this->login_html( $user, $_REQUEST['redirect_to'], __( 'Wrong verification code, try again!', 'two-factor-login-telegram' ) );
+			$this->login_html( $user, $_REQUEST['redirect_to'], __( 'Wrong verification code, we just sent a new code, please try again!', 'two-factor-login-telegram' ) );
 			exit;
 		}
 
@@ -439,7 +440,7 @@ final class WP_Factor_Telegram_Plugin {
                     </label>
                 </th>
                 <td colspan="2">
-                    <input type="hidden" name="tg_wp_factor_valid" id="tg_wp_factor_valid" value="0">
+                    <input type="hidden" name="tg_wp_factor_valid" id="tg_wp_factor_valid" value="<?php echo (int)(esc_attr( get_the_author_meta( 'tg_wp_factor_enabled', $user->ID ) ) === "1"); ?>">
                     <input type="checkbox" name="tg_wp_factor_enabled" id="tg_wp_factor_enabled" value="1"
                            class="regular-text" <?php echo checked( esc_attr( get_the_author_meta( 'tg_wp_factor_enabled', $user->ID ) ), 1 ); ?> /><br/>
                 </td>
