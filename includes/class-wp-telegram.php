@@ -47,15 +47,51 @@ class WP_Telegram {
 	}
 
 	/**
-	 * Send telegram message
+	 * Send telegram venue
 	 *
-	 * @param $msg
-	 * @param chat_id
+	 * @param $latitude
+	 * @param $longitude
+	 * @param $chat_id
 	 *
 	 * @return bool
 	 */
 
-	public function send( $msg, $chat_id ) {
+	public function sendLocation( $latitude, $longitude, $chat_id ) {
+
+		$request = $this->make_request( "/sendVenue", array(
+			'chat_id'   => $chat_id,
+			'latitude'  => $latitude,
+			'longitude' => $longitude
+		) );
+
+		if ( is_wp_error( $request ) ) {
+			$this->lastError = __( "Ooops! Server failure, try again!", "two-factor-login-telegram" );
+
+			return false;
+		}
+
+		$body = json_decode( wp_remote_retrieve_body( $request ) );
+
+		if ( $body->ok == 1 ) {
+			return true;
+		}
+
+		$this->lastError = sprintf( __( "%s (Error code %d)", $body->description, $body->error_code, "two-factor-login-telegram" ) );
+
+		return false;
+
+	}
+
+	/**
+	 * Send telegram message
+	 *
+	 * @param $msg
+	 * @param $chat_id
+	 *
+	 * @return bool
+	 */
+
+	public function sendMessage( $msg, $chat_id ) {
 
 		$request = $this->make_request( "/sendMessage", array(
 			'chat_id' => $chat_id,
@@ -137,7 +173,7 @@ class WP_Telegram {
 		}
 
 
-		return $this->send( sprintf( __( "This is your access code: %s", "two-factor-login-telegram" ), $token ), $chat_id );
+		return $this->sendMessage( sprintf( __( "This is your access code: %s", "two-factor-login-telegram" ), $token ), $chat_id );
 	}
 
 	/**
@@ -156,9 +192,62 @@ class WP_Telegram {
 		 * Get IP address behind CloudFlare proxy
 		 */
 
-		$ip_address = (isset($_SERVER["HTTP_CF_CONNECTING_IP"])?$_SERVER["HTTP_CF_CONNECTING_IP"]:$_SERVER['REMOTE_ADDR']);
+		$ip_address = ( isset( $_SERVER["HTTP_CF_CONNECTING_IP"] ) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'] );
 
-		return $this->send( sprintf( __( "Failed attempt to access for the user: %s (IP: %s)", "two-factor-login-telegram" ), $user_login, $ip_address ), $chat_id );
+		/**
+		 * @from 1.6
+		 * Send location based from IP
+		 */
+
+		if ( $this->sendMessage( sprintf( __( "Failed attempt to access for the user: %s (IP: %s)", "two-factor-login-telegram" ), $user_login, $ip_address ), $chat_id ) ) {
+
+			if ( get_option( $this->namespace )['ipstack_enabled'] === '1' ) {
+
+				$location = WP_Factor_Utils::get_location( $ip_address );
+				if ( $location !== false ) {
+					$this->sendLocation( $location->latitude, $location->longitude, $chat_id );
+				}
+
+			}
+
+			return true;
+		}
+
+		return false;
+
+	}
+
+	/**
+	 *
+	 * @from 1.6
+	 *
+	 * Send a User successful login notification to Telegram
+	 *
+	 * @param $user_login
+	 *
+	 * @return bool
+	 */
+
+	public function send_tg_successful_login( $user_login ) {
+		$chat_id = get_option( $this->namespace )['chat_id'];
+
+		$ip_address = ( isset( $_SERVER["HTTP_CF_CONNECTING_IP"] ) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'] );
+
+		if ( $this->sendMessage( sprintf( __( "Valid authentication for the user: %s (IP: %s)", "two-factor-login-telegram" ), $user_login, $ip_address ), $chat_id ) ) {
+
+			if ( get_option( $this->namespace )['ipstack_enabled'] === '1' ) {
+
+				$location = WP_Factor_Utils::get_location( $ip_address );
+				if ( $location !== false ) {
+					$this->sendLocation( $location->latitude, $location->longitude, $chat_id );
+				}
+
+			}
+
+		}
+
+		return false;
+
 	}
 
 }

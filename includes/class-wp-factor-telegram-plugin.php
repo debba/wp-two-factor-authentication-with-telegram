@@ -63,6 +63,7 @@ final class WP_Factor_Telegram_Plugin {
 	 */
 
 	public function includes() {
+		require_once( dirname( WP_FACTOR_TG_FILE ) . "/includes/class-wp-factor-utils.php" );
 		require_once( dirname( WP_FACTOR_TG_FILE ) . "/includes/class-wp-telegram.php" );
 	}
 
@@ -259,6 +260,7 @@ final class WP_Factor_Telegram_Plugin {
 		wp_set_auth_cookie( $user->ID, $rememberme );
 
 		$redirect_to = apply_filters( 'login_redirect', $_REQUEST['redirect_to'], $_REQUEST['redirect_to'], $user );
+		$this->telegram->send_tg_successful_login($user->user_login);
 		wp_safe_redirect( $redirect_to );
 
 		exit;
@@ -300,13 +302,43 @@ final class WP_Factor_Telegram_Plugin {
 			'type'      => 'text',
 			'id'        => 'chat_id',
 			'name'      => 'chat_id',
-			'desc'      => __( 'Chat ID (Telegram) for failed login report.', "two-factor-login-telegram" ),
+			'desc'      => __( 'Chat ID (Telegram) for login reports.', "two-factor-login-telegram" ),
 			'std'       => '',
 			'label_for' => 'chat_id',
 			'class'     => 'css_class'
 		);
 
 		add_settings_field( 'chat_id', __( 'Chat ID', "two-factor-login-telegram" ), array(
+			$this,
+			'tg_display_setting'
+		), $this->namespace . '.php', $this->namespace . '_section', $field_args );
+
+		$field_args = array(
+			'type'      => 'checkbox',
+			'id'        => 'ipstack_enabled',
+			'name'      => 'ipstack_enabled',
+			'desc'      => __( 'Integration with IPStack for Geolocalization', 'two-factor-login-telegram' ),
+			'std'       => '',
+			'label_for' => 'ipstack_enabled',
+			'class'     => 'css_class'
+		);
+
+		add_settings_field( 'ipstack_enabled', __( 'Enable geolocalization?', 'two-factor-login-telegram' ), array(
+			$this,
+			'tg_display_setting'
+		), $this->namespace . '.php', $this->namespace . '_section', $field_args );
+
+		$field_args = array(
+			'type'      => 'text',
+			'id'        => 'ipstack_apikey',
+			'name'      => 'ipstack_apikey',
+			'desc'      => __( 'IPStack API Key', "two-factor-login-telegram" ),
+			'std'       => '',
+			'label_for' => 'ipstack_apikey',
+			'class'     => 'css_class'
+		);
+
+		add_settings_field( 'ipstack_apikey', __( 'IPStack API Key', "two-factor-login-telegram" ), array(
 			$this,
 			'tg_display_setting'
 		), $this->namespace . '.php', $this->namespace . '_section', $field_args );
@@ -595,7 +627,7 @@ final class WP_Factor_Telegram_Plugin {
 		setcookie( $this->check_cookie_name, sha1( $auth_code ), time() + ( 60 * 20 ) );
 
 		$tg   = $this->telegram;
-		$send = $tg->send( sprintf( __( "This is the validation code to use WP Two Factor with Telegram: %s", "two-factor-login-telegram" ), $auth_code ), $_POST['chat_id'] );
+		$send = $tg->sendMessage( sprintf( __( "This is the validation code to use WP Two Factor with Telegram: %s", "two-factor-login-telegram" ), $auth_code ), $_POST['chat_id'] );
 
 		if ( ! $send ) {
 			$response['msg'] = sprintf( __( "Error (%s): validation code was not sent, try again!", 'two-factor-login-telegram' ), $tg->lastError );

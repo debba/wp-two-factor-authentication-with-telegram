@@ -6,7 +6,7 @@
  * Description: This plugin enables two factor authentication with Telegram by increasing your website security and sends an alert every time a wrong login occurs.
  * Author: dueclic
  * Author URI: https://www.dueclic.com
- * Version: 1.5
+ * Version: 1.6
  * License: GPL v3
  * Text Domain: two-factor-login-telegram
  * Domain Path: /languages/
