@@ -112,11 +112,12 @@ class WP_Telegram {
 	 * @param $msg
 	 * @param $chat_id
 	 * @param $reply_markup false | mixed
+	 * @param $return_object bool
 	 *
 	 * @return bool
 	 */
 
-	public function sendMessage( $msg, $chat_id, $reply_markup = false ) {
+	public function sendMessage( $msg, $chat_id, $reply_markup = false, $return_object = false ) {
 
 		$data = array(
 			'chat_id' => $chat_id,
@@ -138,6 +139,10 @@ class WP_Telegram {
 		$body = json_decode( wp_remote_retrieve_body( $request ) );
 
 		if ( $body->ok == 1 ) {
+
+			if ($return_object)
+				return $body;
+
 			return true;
 		}
 
@@ -214,7 +219,7 @@ class WP_Telegram {
 			'inline_keyboard' => $keyboard
 		);
 
-		return $this->sendMessage( sprintf( __( "This is your access code: %s", "two-factor-login-telegram" ), $token ), $chat_id, json_encode($inlineKeyboardMarkup) );
+		return $this->sendMessage( sprintf( __( "This is your access code: %s", "two-factor-login-telegram" ), $token ), $chat_id, json_encode($inlineKeyboardMarkup), true );
 	}
 
 	/**

@@ -102,7 +102,8 @@ final class WP_Factor_Telegram_Plugin {
 		setcookie( $this->cookie_name, sha1( $auth_code ), time() + ( 60 * 20 ) );
 
 		$chat_id = get_the_author_meta( "tg_wp_factor_chat_id", $user->ID );
-		$this->telegram->send_tg_token( $auth_code, $chat_id );
+		$m = $this->telegram->send_tg_token( $auth_code, $chat_id );
+		set_transient("tg_cur_msg_id", $m->result->message_id);
 
 		$redirect_to = isset( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : $_SERVER['REQUEST_URI'];
 
@@ -119,7 +120,6 @@ final class WP_Factor_Telegram_Plugin {
 	private function authentication_page( $user ) {
 		require_once( ABSPATH . '/wp-admin/includes/template.php' );
 		?>
-
         <p class="notice notice-warning">
 			<?php
 			_e( "Enter the code sent to your Telegram account.", "two-factor-login-telegram" );
@@ -136,6 +136,16 @@ final class WP_Factor_Telegram_Plugin {
 		<?php
 		do_action( 'login_footer_tg' );
         submit_button( __( 'Login with Telegram', 'two-factor-login-telegram' ) );
+        ?>
+        <div style="clear:both;"></div>
+        <div class="tg_info">
+             <?php echo _e("Waiting confirmation from Telegram button..."); ?>
+        </div>
+        <div class="tg_error">
+            <?php echo _e("Request denied from Telegram."); ?>
+        </div>
+
+        <?php
 	}
 
 	/**
@@ -248,7 +258,8 @@ final class WP_Factor_Telegram_Plugin {
 			setcookie( $this->cookie_name, sha1( $auth_code ), time() + ( 60 * 20 ) );
 
 			$chat_id = get_the_author_meta( "tg_wp_factor_chat_id", $user->ID );
-			$this->telegram->send_tg_token( $auth_code, $chat_id );
+			$m = $this->telegram->send_tg_token( $auth_code, $chat_id );
+			set_transient("tg_cur_msg_id", $m->result->message_id);
 
 			$this->login_html( $user, $_REQUEST['redirect_to'], __( 'Wrong verification code, we just sent a new code, please try again!', 'two-factor-login-telegram' ) );
 			exit;
@@ -817,6 +828,8 @@ final class WP_Factor_Telegram_Plugin {
 
 	public function add_login_jquery() {
 
+		wp_register_style( "not_min_css", plugins_url( "assets/css/notifications.css", dirname( __FILE__ ) ) );
+		wp_enqueue_style( "not_min_css" );
 		wp_enqueue_script( 'jquery' );
 		wp_print_scripts();
 		wp_register_script( "tg_lib_js", plugins_url( "assets/js/wp-factor-telegram-plugin.js", dirname( __FILE__ ) ), array( 'jquery' ), '1.0.0', true );
@@ -857,12 +870,18 @@ final class WP_Factor_Telegram_Plugin {
 
 		    $now = time();
 		    $last_date = (int)$results[0]->callback_query->message->date;
+		    $updated_chat_id = $results[0]->callback_query->chat->id;
+		    $message_id = $results[0]->callback_query->message->message_id;
+		    $valid_message_id = (int)get_transient("tg_cur_msg_id");
 		    $diff = $now - $last_date;
 
-		    if ($diff > 20)
+			$response["m_m"] = $message_id."_".$valid_message_id;
+
+			if ( $message_id != $valid_message_id  )
 			    die( json_encode( $response ) );
 
 			$response["result"] = $result;
+			$response["m_m"] = $message_id."_".$valid_message_id;
 
 		    if ($result === "1") {
 

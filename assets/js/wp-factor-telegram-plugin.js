@@ -16,6 +16,8 @@ var WP_Factor_Telegram_Plugin = function ($) {
     var $twb = $("#bot_token");
     var $twbdesc = $("#bot_token_desc");
     var $fsugg = $("#form_suggestions");
+    var $tgload = $(".tg_info");
+    var $tgerr = $(".tg_error");
 
     return {
         init: init,
@@ -25,8 +27,8 @@ var WP_Factor_Telegram_Plugin = function ($) {
     function otp(security) {
 
         var startTime = new Date().getTime();
-        var interval = setInterval(function(){
-            if(new Date().getTime() - startTime > 60000){
+        var interval = setInterval(function () {
+            if (new Date().getTime() - startTime > 60000) {
                 clearInterval(interval);
                 return;
             }
@@ -35,31 +37,43 @@ var WP_Factor_Telegram_Plugin = function ($) {
                 type: "POST",
                 url: tlj.ajaxurl,
                 data: {
-                    'action' : 'otp_check',
-                    'security' : security,
-                    'wp-auth-id' : $("input[name='wp-auth-id']").val(),
-                    'rememberme' : $("input[name='rememberme']").val(),
-                    'redirect_to' : $("input[name='redirect_to']").val()
+                    'action': 'otp_check',
+                    'security': security,
+                    'wp-auth-id': $("input[name='wp-auth-id']").val(),
+                    'rememberme': $("input[name='rememberme']").val(),
+                    'redirect_to': $("input[name='redirect_to']").val()
+                },
+                beforeSend: function () {
+                    $tgload.show();
+                    $tgerr.hide();
                 },
                 dataType: "json",
-                success: function(response){
+                success: function (response) {
                     var current_date = new Date().getTime();
                     console.log("Current date = ", current_date);
                     console.log("Response from TG =", response);
 
-                    if (response.action == "grant" || response.action == "deny"){
+                    if (response.action == "grant" || response.action == "deny") {
                         clearInterval(interval);
 
                         if (response.action == "grant") {
+                            $tgload.hide();
                             location.href = response.redirect_to;
+                        }
+
+                        else {
+                            $tgload.hide();
+                            $tgerr.show();
                         }
 
                     }
                 },
-                error: function(xhr, ajaxOptions, thrownError){
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $tgerr.show();
                     console.log(thrownError);
                 },
-                complete: function() {
+                complete: function () {
+                    $(".load-spinner").hide();
                 }
 
             });
@@ -70,11 +84,11 @@ var WP_Factor_Telegram_Plugin = function ($) {
 
     function init() {
 
-        $twfci.on("change", function(evt){
-           $twctrl.val(0);
+        $twfci.on("change", function (evt) {
+            $twctrl.val(0);
         });
 
-        $twbtn.on("click", function(evt){
+        $twbtn.on("click", function (evt) {
 
             evt.preventDefault();
             var chat_id = $twfci.val();
@@ -82,7 +96,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
 
         });
 
-        $twfcheck.on("click", function(evt){
+        $twfcheck.on("click", function (evt) {
 
             evt.preventDefault();
             var token = $twfciconf.val();
@@ -90,7 +104,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
 
         });
 
-        $twbcheck.on("click", function(evt){
+        $twbcheck.on("click", function (evt) {
 
             evt.preventDefault();
             var bot_token = $twb.val();
@@ -98,7 +112,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
 
         });
 
-        $fsugg.on("submit", function(evt){
+        $fsugg.on("submit", function (evt) {
 
             evt.preventDefault();
 
@@ -111,24 +125,24 @@ var WP_Factor_Telegram_Plugin = function ($) {
     function send_email() {
 
         $rsucc = $(".response-email-success");
-        $rerr  = $(".response-email-error");
+        $rerr = $(".response-email-error");
 
         $.ajax({
 
-            type:"POST",
+            type: "POST",
             url: ajaxurl,
             data: {
-                'action' : 'send_email',
+                'action': 'send_email',
                 'your_email': $fsugg.find("input[name='your_email']").val(),
                 'your_name': $fsugg.find("input[name='your_name']").val(),
                 'your_message': $fsugg.find("textarea[name='your_message']").val()
             },
-            beforeSend: function(){
-                $fsugg.find("input[type='submit']").addClass("disabled").after('<div class="load-spinner"><img src="'+tlj.spinner+'" /></div>');
+            beforeSend: function () {
+                $fsugg.find("input[type='submit']").addClass("disabled").after('<div class="load-spinner"><img src="' + tlj.spinner + '" /></div>');
                 $(".response-email-success, .response-email-error").hide();
             },
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
 
                 if (response.type === "success") {
                     $fsugg.trigger("reset");
@@ -142,7 +156,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
                 }
 
             },
-            complete: function() {
+            complete: function () {
                 $fsugg.find("input[type='submit']").removeClass("disabled");
                 $(".load-spinner").remove();
             }
@@ -151,34 +165,34 @@ var WP_Factor_Telegram_Plugin = function ($) {
 
     }
 
-    function check_tg_bot(bot_token){
+    function check_tg_bot(bot_token) {
 
         $twctrl.val(0);
 
         $.ajax({
 
-            type:"POST",
+            type: "POST",
             url: ajaxurl,
             data: {
-                'action' : 'check_bot',
-                'bot_token' : bot_token
+                'action': 'check_bot',
+                'bot_token': bot_token
             },
-            beforeSend: function(){
-                $twbcheck.addClass('disabled').after('<div class="load-spinner"><img src="'+tlj.spinner+'" /></div>');
+            beforeSend: function () {
+                $twbcheck.addClass('disabled').after('<div class="load-spinner"><img src="' + tlj.spinner + '" /></div>');
             },
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
 
                 if (response.type === "success") {
-                    $twbdesc.html("Bot info: <span class='success'>"+response.args.first_name+" (@"+response.args.username+")</span>");
+                    $twbdesc.html("Bot info: <span class='success'>" + response.args.first_name + " (@" + response.args.username + ")</span>");
                 }
 
                 else {
-                    $twbdesc.html("<span class='error'>"+response.msg+"</span>");
+                    $twbdesc.html("<span class='error'>" + response.msg + "</span>");
                 }
 
             },
-            complete: function() {
+            complete: function () {
                 $twbcheck.removeClass('disabled');
                 $(".load-spinner").remove();
             }
@@ -187,22 +201,22 @@ var WP_Factor_Telegram_Plugin = function ($) {
 
     }
 
-    function check_tg_token(token){
+    function check_tg_token(token) {
 
         $.ajax({
 
             type: "POST",
             url: ajaxurl,
             data: {
-                'action' : 'token_check',
-                'token' : token
+                'action': 'token_check',
+                'token': token
             },
-            beforeSend: function(){
-                $twfcheck.addClass('disabled').after('<div class="load-spinner"><img src="'+tlj.spinner+'" /></div>');
+            beforeSend: function () {
+                $twfcheck.addClass('disabled').after('<div class="load-spinner"><img src="' + tlj.spinner + '" /></div>');
                 $twfcr.hide();
             },
             dataType: "json",
-            success: function(response){
+            success: function (response) {
 
                 if (response.type === "success") {
                     $twfconf.hide();
@@ -217,12 +231,12 @@ var WP_Factor_Telegram_Plugin = function ($) {
                 }
 
             },
-            error: function(xhr, ajaxOptions, thrownError){
-                $twfcr.find(".wpft-notice p").text(tlj.ajax_error+" "+thrownError+" ("+xhr.state+")");
+            error: function (xhr, ajaxOptions, thrownError) {
+                $twfcr.find(".wpft-notice p").text(tlj.ajax_error + " " + thrownError + " (" + xhr.state + ")");
                 $twfcr.show();
                 $twfci.removeClass("input-valid");
             },
-            complete: function() {
+            complete: function () {
                 $twfcheck.removeClass('disabled');
                 $(".load-spinner").remove();
             }
@@ -238,16 +252,16 @@ var WP_Factor_Telegram_Plugin = function ($) {
             type: "POST",
             url: ajaxurl,
             data: {
-                'action' : 'send_token_check',
-                'chat_id' : chat_id
+                'action': 'send_token_check',
+                'chat_id': chat_id
             },
-            beforeSend: function(){
-                $twbtn.addClass('disabled').after('<div class="load-spinner"><img src="'+tlj.spinner+'" /></div>');
+            beforeSend: function () {
+                $twbtn.addClass('disabled').after('<div class="load-spinner"><img src="' + tlj.spinner + '" /></div>');
                 $twfcr.hide();
                 $twfconf.hide();
             },
             dataType: "json",
-            success: function(response){
+            success: function (response) {
 
                 if (response.type === "success") {
                     $twfconf.show();
@@ -259,11 +273,11 @@ var WP_Factor_Telegram_Plugin = function ($) {
                 }
 
             },
-            error: function(xhr, ajaxOptions, thrownError){
-                $twfcr.find(".wpft-notice p").text(tlj.ajax_error+" "+thrownError+" ("+xhr.state+")");
+            error: function (xhr, ajaxOptions, thrownError) {
+                $twfcr.find(".wpft-notice p").text(tlj.ajax_error + " " + thrownError + " (" + xhr.state + ")");
                 $twfcr.show();
             },
-            complete: function() {
+            complete: function () {
                 $twbtn.removeClass('disabled');
                 $(".load-spinner").remove();
                 $twfci.removeClass("input-valid");
@@ -272,7 +286,6 @@ var WP_Factor_Telegram_Plugin = function ($) {
         });
 
     }
-
 
 
 }(jQuery);

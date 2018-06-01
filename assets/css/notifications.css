@@ -1,0 +1,28 @@
+
+.tg_info, .tg_success, .tg_warning, .tg_error {
+    margin: 10px 0px;
+    padding:12px;
+
+}
+.tg_info {
+    color: #00529B;
+    background-color: #BDE5F8;
+}
+.tg_success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+.tg_warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+}
+.tg_error {
+    color: #D8000C;
+    display:none;
+    background-color: #FFD2D2;
+}
+.tg_info i, .tg_success i, .tg_warning i, .tg_error i {
+    margin:10px 22px;
+    font-size:2em;
+    vertical-align:middle;
+}
