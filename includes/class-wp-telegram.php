@@ -83,20 +83,46 @@ class WP_Telegram {
 	}
 
 	/**
+	 * Get Telegram updates
+	 * @return array|bool|mixed|object
+	 */
+
+	public function getUpdates(){
+
+		$request = $this->make_request( "/getUpdates", array() );
+
+		if ( is_wp_error( $request ) ) {
+			$this->lastError = __( "Ooops! Server failure, try again!", "two-factor-login-telegram" );
+			return false;
+		}
+
+		$body = json_decode( wp_remote_retrieve_body( $request ) );
+		return $body;
+
+	}
+
+	/**
 	 * Send telegram message
 	 *
 	 * @param $msg
 	 * @param $chat_id
+	 * @param $reply_markup false | mixed
 	 *
 	 * @return bool
 	 */
 
-	public function sendMessage( $msg, $chat_id ) {
+	public function sendMessage( $msg, $chat_id, $reply_markup = false ) {
 
-		$request = $this->make_request( "/sendMessage", array(
+		$data = array(
 			'chat_id' => $chat_id,
 			'text'    => $msg
-		) );
+		);
+
+		if ( $reply_markup !== false ) {
+			$data["reply_markup"] = $reply_markup;
+		}
+
+		$request = $this->make_request( "/sendMessage", $data );
 
 		if ( is_wp_error( $request ) ) {
 			$this->lastError = __( "Ooops! Server failure, try again!", "two-factor-login-telegram" );
@@ -172,8 +198,18 @@ class WP_Telegram {
 			$chat_id = get_user_meta( get_current_user_id(), "tg_wp_factor_chat_id" );
 		}
 
+		$keyboard             = array(
+			array(
+				array( 'text' => __('Grant access!', 'two-factor-login-telegram'), 'callback_data' => "1" ),
+				array( 'text' => __('Deny access!', 'two-factor-login-telegram'), 'callback_data' => "2" )
+			)
+		);
 
-		return $this->sendMessage( sprintf( __( "This is your access code: %s", "two-factor-login-telegram" ), $token ), $chat_id );
+		$inlineKeyboardMarkup = array(
+			'inline_keyboard' => $keyboard
+		);
+
+		return $this->sendMessage( sprintf( __( "This is your access code: %s", "two-factor-login-telegram" ), $token ), $chat_id, json_encode($inlineKeyboardMarkup) );
 	}
 
 	/**

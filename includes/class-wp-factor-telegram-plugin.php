@@ -202,6 +202,7 @@ final class WP_Factor_Telegram_Plugin {
 			wp_clear_auth_cookie();
 
 			$this->show_two_factor_login( $user );
+
 			exit;
 
 		}
@@ -796,6 +797,33 @@ final class WP_Factor_Telegram_Plugin {
 
 	}
 
+	public function check_tg_otp(){
+	    ?>
+        <script>
+            jQuery(document).ready(function($){
+               $.ajax({
+
+               });
+            });
+        </script>
+        <?php
+    }
+
+    public function add_login_jquery(){
+	    wp_enqueue_script( 'jquery' );
+	    wp_print_scripts();
+	    wp_register_script( "tg_lib_js", plugins_url( "assets/js/wp-factor-telegram-plugin.js", dirname( __FILE__ ) ), array( 'jquery' ), '1.0.0', true );
+
+	    wp_localize_script( "tg_lib_js", "tlj", array(
+
+		    "ajax_error" => __( 'Ooops! Server failure, try again! ', 'two-factor-login-telegram' ),
+		    "spinner"    => admin_url( "/images/spinner.gif" )
+
+	    ) );
+
+	    wp_enqueue_script( "tg_lib_js" );
+    }
+
 
 	/**
 	 * Add hooks
@@ -835,6 +863,8 @@ final class WP_Factor_Telegram_Plugin {
 		add_action( 'wp_ajax_token_check', array( $this, 'token_check' ) );
 		add_action( 'wp_ajax_check_bot', array( $this, 'check_bot' ) );
 		add_action( 'wp_ajax_send_email', array( $this, 'send_email' ) );
+		add_action( 'login_footer', array($this, 'check_tg_otp'));
+		add_action( 'login_head', array($this, 'add_login_jquery'));
 
 		add_action( "tft_copyright", array( $this, "change_copyright" ) );
 
