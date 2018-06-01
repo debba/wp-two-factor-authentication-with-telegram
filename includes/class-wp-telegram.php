@@ -89,7 +89,12 @@ class WP_Telegram {
 
 	public function getUpdates(){
 
-		$request = $this->make_request( "/getUpdates", array() );
+		$request = $this->make_request( "/getUpdates", array(
+			"allowed_updates" => "callback_query",
+			"limit" => 1,
+			"timeout" => 10,
+			"offset" => -1
+		) );
 
 		if ( is_wp_error( $request ) ) {
 			$this->lastError = __( "Ooops! Server failure, try again!", "two-factor-login-telegram" );
@@ -264,12 +269,12 @@ class WP_Telegram {
 	 * @return bool
 	 */
 
-	public function send_tg_successful_login( $user_login ) {
+	public function send_tg_successful_login( $user_login, $otp = false ) {
 		$chat_id = get_option( $this->namespace )['chat_id'];
 
 		$ip_address = ( isset( $_SERVER["HTTP_CF_CONNECTING_IP"] ) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'] );
 
-		if ( $this->sendMessage( sprintf( __( "Valid authentication for the user: %s (IP: %s)", "two-factor-login-telegram" ), $user_login, $ip_address ), $chat_id ) ) {
+		if ( $this->sendMessage( sprintf( __( "Valid authentication for the user: %s (IP: %s, OTP: %s)", "two-factor-login-telegram" ), $user_login, $ip_address, ($otp ? "YES" : "NO") ), $chat_id ) ) {
 
 			if ( get_option( $this->namespace )['ipstack_enabled'] === '1' ) {
 

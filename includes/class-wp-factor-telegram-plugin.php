@@ -134,7 +134,8 @@ final class WP_Factor_Telegram_Plugin {
             <input type="text" name="authcode" id="authcode" class="input" value="" size="5"/>
         </p>
 		<?php
-		submit_button( __( 'Login with Telegram', 'two-factor-login-telegram' ) );
+		do_action( 'login_footer_tg' );
+        submit_button( __( 'Login with Telegram', 'two-factor-login-telegram' ) );
 	}
 
 	/**
@@ -261,7 +262,7 @@ final class WP_Factor_Telegram_Plugin {
 		wp_set_auth_cookie( $user->ID, $rememberme );
 
 		$redirect_to = apply_filters( 'login_redirect', $_REQUEST['redirect_to'], $_REQUEST['redirect_to'], $user );
-		$this->telegram->send_tg_successful_login($user->user_login);
+		$this->telegram->send_tg_successful_login( $user->user_login );
 		wp_safe_redirect( $redirect_to );
 
 		exit;
@@ -473,7 +474,8 @@ final class WP_Factor_Telegram_Plugin {
                     </label>
                 </th>
                 <td colspan="2">
-                    <input type="hidden" name="tg_wp_factor_valid" id="tg_wp_factor_valid" value="<?php echo (int)(esc_attr( get_the_author_meta( 'tg_wp_factor_enabled', $user->ID ) ) === "1"); ?>">
+                    <input type="hidden" name="tg_wp_factor_valid" id="tg_wp_factor_valid"
+                           value="<?php echo (int) ( esc_attr( get_the_author_meta( 'tg_wp_factor_enabled', $user->ID ) ) === "1" ); ?>">
                     <input type="checkbox" name="tg_wp_factor_enabled" id="tg_wp_factor_enabled" value="1"
                            class="regular-text" <?php echo checked( esc_attr( get_the_author_meta( 'tg_wp_factor_enabled', $user->ID ) ), 1 ); ?> /><br/>
                 </td>
@@ -599,7 +601,6 @@ final class WP_Factor_Telegram_Plugin {
 
                 $(document).ready(function () {
                     WP_Factor_Telegram_Plugin.init();
-
                 });
 
             })(jQuery);
@@ -696,8 +697,8 @@ final class WP_Factor_Telegram_Plugin {
 			$api = json_decode( wp_remote_retrieve_body( $request ), true );
 
 			if ( $api['type'] == "success" ) {
-			    $response['type'] = "success";
-				$response['msg'] = __( 'Thanks for the support.', 'two-factor-login-telegram' );
+				$response['type'] = "success";
+				$response['msg']  = __( 'Thanks for the support.', 'two-factor-login-telegram' );
 				die( json_encode( $response ) );
 			}
 
@@ -797,33 +798,93 @@ final class WP_Factor_Telegram_Plugin {
 
 	}
 
-	public function check_tg_otp(){
-	    ?>
+	public function check_tg_otp() {
+		$ajax_nonce = wp_create_nonce( "wtfawt" );
+		?>
         <script>
-            jQuery(document).ready(function($){
-               $.ajax({
 
-               });
-            });
+            (function ($) {
+
+                $(document).ready(function () {
+                    WP_Factor_Telegram_Plugin.otp("<?php echo $ajax_nonce; ?>");
+                });
+
+            })(jQuery);
+
         </script>
-        <?php
-    }
+		<?php
+	}
 
-    public function add_login_jquery(){
-	    wp_enqueue_script( 'jquery' );
-	    wp_print_scripts();
-	    wp_register_script( "tg_lib_js", plugins_url( "assets/js/wp-factor-telegram-plugin.js", dirname( __FILE__ ) ), array( 'jquery' ), '1.0.0', true );
+	public function add_login_jquery() {
 
-	    wp_localize_script( "tg_lib_js", "tlj", array(
+		wp_enqueue_script( 'jquery' );
+		wp_print_scripts();
+		wp_register_script( "tg_lib_js", plugins_url( "assets/js/wp-factor-telegram-plugin.js", dirname( __FILE__ ) ), array( 'jquery' ), '1.0.0', true );
 
-		    "ajax_error" => __( 'Ooops! Server failure, try again! ', 'two-factor-login-telegram' ),
-		    "spinner"    => admin_url( "/images/spinner.gif" )
+		wp_localize_script( "tg_lib_js", "tlj", array(
 
-	    ) );
+			"ajaxurl"    => admin_url( "admin-ajax.php" ),
+			"ajax_error" => __( 'Ooops! Server failure, try again! ', 'two-factor-login-telegram' ),
+			"spinner"    => admin_url( "/images/spinner.gif" )
 
-	    wp_enqueue_script( "tg_lib_js" );
-    }
+		) );
 
+		wp_enqueue_script( "tg_lib_js" );
+	}
+
+	public function otp_check() {
+
+		check_ajax_referer( 'wtfawt', 'security' );
+
+		$user = get_userdata( $_REQUEST['wp-auth-id'] );
+		$chat_id = get_the_author_meta( "tg_wp_factor_chat_id", $user->ID );
+		if ( ! $user ) {
+			return;
+		}
+
+		$response = array(
+			"action" => "retry",
+			"type"   => "error"
+		);
+
+		$tg      = $this->telegram;
+		$updates = $tg->getUpdates();
+		$results = $updates->result;
+
+		if ( is_array( $results ) && count( $results ) > 0 ) {
+
+		    $result = $results[0]->callback_query->data;
+
+		    $now = time();
+		    $last_date = (int)$results[0]->callback_query->message->date;
+		    $diff = $now - $last_date;
+
+		    if ($diff > 20)
+			    die( json_encode( $response ) );
+
+			$response["result"] = $result;
+
+		    if ($result === "1") {
+
+			    wp_set_auth_cookie( $user->ID, $_REQUEST["rememberme"] );
+
+			    $redirect_to = apply_filters( 'login_redirect', $_REQUEST['redirect_to'], $_REQUEST['redirect_to'], $user );
+
+			    $this->telegram->send_tg_successful_login( $user->user_login, true );
+
+			    $response["redirect_to"] = $redirect_to;
+			    $response["action"] = "grant";
+			    $response["type"]   = "success";
+		    }
+		    else {
+		        $response["action"] = "deny";
+            }
+
+		}
+
+		die( json_encode( $response ) );
+
+	}
 
 	/**
 	 * Add hooks
@@ -863,8 +924,9 @@ final class WP_Factor_Telegram_Plugin {
 		add_action( 'wp_ajax_token_check', array( $this, 'token_check' ) );
 		add_action( 'wp_ajax_check_bot', array( $this, 'check_bot' ) );
 		add_action( 'wp_ajax_send_email', array( $this, 'send_email' ) );
-		add_action( 'login_footer', array($this, 'check_tg_otp'));
-		add_action( 'login_head', array($this, 'add_login_jquery'));
+		add_action( 'wp_ajax_nopriv_otp_check', array( $this, 'otp_check' ) );
+		add_action( 'login_footer_tg', array( $this, 'check_tg_otp' ) );
+		add_action( 'login_head', array( $this, 'add_login_jquery' ) );
 
 		add_action( "tft_copyright", array( $this, "change_copyright" ) );
 

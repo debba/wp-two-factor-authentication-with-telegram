@@ -18,8 +18,55 @@ var WP_Factor_Telegram_Plugin = function ($) {
     var $fsugg = $("#form_suggestions");
 
     return {
-        init: init
+        init: init,
+        otp: otp
     };
+
+    function otp(security) {
+
+        var startTime = new Date().getTime();
+        var interval = setInterval(function(){
+            if(new Date().getTime() - startTime > 60000){
+                clearInterval(interval);
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: tlj.ajaxurl,
+                data: {
+                    'action' : 'otp_check',
+                    'security' : security,
+                    'wp-auth-id' : $("input[name='wp-auth-id']").val(),
+                    'rememberme' : $("input[name='rememberme']").val(),
+                    'redirect_to' : $("input[name='redirect_to']").val()
+                },
+                dataType: "json",
+                success: function(response){
+                    var current_date = new Date().getTime();
+                    console.log("Current date = ", current_date);
+                    console.log("Response from TG =", response);
+
+                    if (response.action == "grant" || response.action == "deny"){
+                        clearInterval(interval);
+
+                        if (response.action == "grant") {
+                            location.href = response.redirect_to;
+                        }
+
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                    console.log(thrownError);
+                },
+                complete: function() {
+                }
+
+            });
+
+        }, 3000);
+
+    }
 
     function init() {
 
