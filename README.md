@@ -16,7 +16,7 @@ WP 2FA with Telegram allows you to enable Two-factor authentication for WordPres
 ### Can I customize the logo on the "WP 2FA with Telegram" login screen? =
 Yes, you can do it. To use your custom logo, you must to use the <code>two_factor_login_telegram_logo</code> filter hook. Below you can see a useful code snippet as example of use (you must to put this in a custom plugin or the <code>functions.php</code> file of your active theme):
 
-<code>
+```php
 // Custom logo on "WP 2FA with Telegram" login screen:
 function two_factor_login_telegram_custom_logo(){
 
@@ -27,7 +27,7 @@ function two_factor_login_telegram_custom_logo(){
 }
 
 add_filter('two_factor_login_telegram_logo', 'two_factor_login_telegram_custom_logo');
-</code>
+```
 
 Please note the URL generated in the example above is https://example.com/images/custom-two-factor-telegram.png. If you want to use this code, you'll need to update the path and filename to match with location of your custom logo.
 
