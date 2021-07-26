@@ -23,7 +23,6 @@ class WP_Telegram {
 
 	private function get_route( $route ) {
 		$endpoint = sprintf( "https://api.telegram.org/bot%s", $this->bot_token );
-
 		return $endpoint . $route;
 	}
 
@@ -50,7 +49,7 @@ class WP_Telegram {
 	 * Send telegram message
 	 *
 	 * @param $msg
-	 * @param chat_id
+	 * @param $chat_id
 	 *
 	 * @return bool
 	 */
@@ -58,8 +57,9 @@ class WP_Telegram {
 	public function send( $msg, $chat_id ) {
 
 		$request = $this->make_request( "/sendMessage", array(
-			'chat_id' => $chat_id,
-			'text'    => $msg
+			'chat_id' 		=> $chat_id,
+			'text'    		=> $msg,
+			'parse_mode'	=> 'HTML'
 		) );
 
 		if ( is_wp_error( $request ) ) {
@@ -149,16 +149,61 @@ class WP_Telegram {
 	 */
 
 	public function send_tg_failed_login( $user_login ) {
-		$chat_id = get_option( $this->namespace )['chat_id'];
+		
+		// Get plugin options
+		$options = get_option($this->namespace);
+		
+		// Get Chat ID
+		$chat_id = $options['chat_id'];
 
 		/**
 		 * @from 1.2
 		 * Get IP address behind CloudFlare proxy
 		 */
 
-		$ip_address = (isset($_SERVER["HTTP_CF_CONNECTING_IP"])?$_SERVER["HTTP_CF_CONNECTING_IP"]:$_SERVER['REMOTE_ADDR']);
+		// Get IP from computer attempting to login
+		$ip_address = (isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR']);
 
-		return $this->send( sprintf( __( "Failed attempt to access for the user: %s (IP: %s)", "two-factor-login-telegram" ), $user_login, $ip_address ), $chat_id );
+		
+		 if ( $options['show_site_name'] === '1' && $options['show_site_url'] === '1' ) {
+
+			// Get site name
+			$site_name = get_bloginfo('name');
+
+			// Get site URL
+			$site_url = home_url();
+			
+			// Message with site name
+			/* translators: 1. Site name, 2. Site URL, 3. Username, 4. IP address */
+			$msg = sprintf(__("Failed attempt to access to the site <strong>%s</strong> (%s) for the user: %s (IP: %s)", "two-factor-login-telegram"), $site_name, $site_url, $user_login, $ip_address);
+
+		 } elseif ( $options['show_site_name'] === '1' ) {
+
+			// Get site name
+			$site_name = get_bloginfo('name');
+
+			// Message with URL
+			/* translators: 1. Site name, 2. Username, 3. IP address */
+			$msg = sprintf(__("Failed attempt to access to the site <strong>%s</strong> for the user: %s (IP: %s)", "two-factor-login-telegram"), $site_name, $user_login, $ip_address);
+
+		} elseif ( $options['show_site_url'] === '1' ) {
+
+			// Get site URL
+			$site_url = home_url();
+
+			// Message with URL
+			/* translators: 1. Site URL, 2. Username, 3. IP address */
+			$msg = sprintf(__("Failed attempt to access to the site %s for the user: %s (IP: %s)", "two-factor-login-telegram"), $site_url, $user_login, $ip_address);
+
+		} else {
+
+			// Message just with Username and IP address
+			/* translators: 1. Username, 2. IP address */
+			$msg = sprintf(__("Failed attempt to access for the user: %s (IP: %s)", "two-factor-login-telegram"), $user_login, $ip_address);
+
+		}
+
+		return $this->send( $msg, $chat_id );
 	}
 
 }

@@ -99,10 +99,10 @@
                         <div>
                             <p>
 								<?php _e( "Chat ID identifies your user profile in Telegram.",
-									"wp-factor-telegram" ); ?>
+									"two-factor-login-telegram" ); ?>
                                 <br/>
-								<?php _e( "You have no idea what is your Chat ID? Follow these simple steps.",
-									"wp-factor-telegram" ); ?>
+								<?php _e( "You have no idea what is your Chat ID? Follow these simple steps:",
+									"two-factor-login-telegram" ); ?>
 
                             <ol>
 
