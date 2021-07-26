@@ -4,7 +4,7 @@ Tags: two factor authentication, authentication, telegram, authenticate, securit
 Requires at least: 4.7.4
 Requires PHP: 7.0
 Tested up to: 5.8
-Stable tag: 2.1
+Stable tag: 2.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,7 +12,7 @@ This plugin enables two factor authentication with Telegram by increasing your w
 
 == Description ==
 
-WP 2FA with Telegram allows you to enable 2FA authentication for WordPress Login using Telegram.
+WP 2FA with Telegram allows you to enable Two-factor authentication for WordPress Login using Telegram.
 
 * **Easy Configuration**: install plugin and setup in a few seconds.
 * **Increase security**: increase the level of security in your blog / website by adding and additional authentication factor
