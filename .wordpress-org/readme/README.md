@@ -3,8 +3,8 @@ Contributors: dueclic, yordansoares
 Tags: two factor authentication, authentication, telegram, authenticate, security
 Requires at least: 4.7.4
 Requires PHP: 7.0
-Tested up to: 5.9
-Stable tag: 2.3
+Tested up to: 6.0
+Stable tag: 2.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
