@@ -912,28 +912,12 @@ final class WP_Factor_Telegram_Plugin {
 		add_filter( 'update_footer', array( $this, 'ts_footer_version' ), 11 );
 	}
 
-	public function activate() {
-		$response
-			= wp_remote_post( "https://www.dueclic.com/plugins/collect_data.php",
-			array(
-				'body' => array(
-					'auth_key'    => 'collectData',
-					'plugin_name' => 'wtfawt',
-					'plugin_host' => $_SERVER['HTTP_HOST'],
-				),
-			) );
-
-		return true;
-	}
-
 
 	/**
 	 * Add hooks
 	 */
 
 	public function add_hooks() {
-		register_activation_hook( WP_FACTOR_TG_FILE,
-			array( $this, 'activate' ) );
 		add_action( 'wp_login', array( $this, 'tg_login' ), 10, 2 );
 		add_action( 'wp_login_failed',
 			array( $this->telegram, 'send_tg_failed_login' ), 10, 2 );
