@@ -561,7 +561,7 @@ final class WP_Factor_Telegram_Plugin {
 								<?php
 								printf( __( 'Open Telegram and start a conversation with %s',
 									"two-factor-login-telegram" ),
-									'<a href="https://telegram.me/WordPressLoginBot" target="_blank">@WordpressLoginBot</a>' );
+									'<a href="https://telegram.me/myidbot" target="_blank">@MyIDBot</a>' );
 								?>
                             </li>
 
@@ -569,7 +569,7 @@ final class WP_Factor_Telegram_Plugin {
 								<?php
 								printf( __( 'Type command %s to obtain your Chat ID.',
 									"two-factor-login-telegram" ),
-									'<code>/get_id</code>' );
+									'<code>/getid</code>' );
 								?>
                             </li>
                             <li>
