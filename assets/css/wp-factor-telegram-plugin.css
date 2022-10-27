@@ -103,3 +103,38 @@
 .heading-top h1 {
     text-align:center;
 }
+
+#wpft-howto {
+    margin: 20px auto;
+}
+
+#wpft-howto .ui-accordion-content {
+    background-color: #f3f3f3;
+    width: 100%;
+    color: #777;
+    font-size: 1em;
+    line-height: 1.2;
+}
+
+#wpft-howto .ui-accordion-content > * {
+    margin: 0;
+    padding: 20px;
+}
+
+#wpft-howto .ui-accordion-content ol {
+    list-style-position: inside;
+}
+
+#wpft-howto .ui-accordion-header {
+    color: white;
+    line-height: 2.625;
+    display: block;
+    font-size: 1.2em;
+    width: 100%;
+    cursor:pointer;
+    text-indent: 10px;
+}
+
+#wpft-howto .ui-accordion-header {
+    background-color: #389abe;
+}
