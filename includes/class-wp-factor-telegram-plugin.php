@@ -665,6 +665,7 @@ final class WP_Factor_Telegram_Plugin {
 
 				"ajax_error" => __( 'Ooops! Server failure, try again! ',
 					'two-factor-login-telegram' ),
+                "checkbot_nonce" => wp_create_nonce('ajax-checkbot-nonce'),
 				"spinner"    => admin_url( "/images/spinner.gif" ),
 
 			) );
@@ -745,13 +746,20 @@ final class WP_Factor_Telegram_Plugin {
 	}
 
 	public function check_bot() {
-		$response = array(
-			'type' => 'error',
-			'msg'  => __( 'This bot does not exists.',
-				'two-factor-login-telegram' ),
-		);
+
+        $response = array(
+            'type' => 'error'
+        );
+
+        if ( ! wp_verify_nonce( $_POST['nonce'], 'ajax-checkbot-nonce' ) ) {
+            $response['msg'] = __( 'Security check error',
+                'two-factor-login-telegram' );
+            die( json_encode( $response ) );
+        }
 
 		if ( ! isset( $_POST['bot_token'] ) || $_POST['bot_token'] == "" ) {
+            $response['msg'] = __( 'This bot does not exists.',
+                'two-factor-login-telegram' );
 			die( json_encode( $response ) );
 		}
 
@@ -759,6 +767,8 @@ final class WP_Factor_Telegram_Plugin {
 		$me = $tg->set_bot_token( $_POST['bot_token'] )->get_me();
 
 		if ( $me === false ) {
+            $response['msg'] = __( 'Unable to get Bot infos, please retry.',
+                'two-factor-login-telegram' );
 			die( json_encode( $response ) );
 		}
 

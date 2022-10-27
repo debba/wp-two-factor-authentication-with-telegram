@@ -61,6 +61,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
             type:"POST",
             url: ajaxurl,
             data: {
+                'nonce': tlj.checkbot_nonce,
                 'action' : 'check_bot',
                 'bot_token' : bot_token
             },

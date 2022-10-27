@@ -1,6 +1,6 @@
 <?php
 	if ( isset( $_GET['tab'] ) ) {
-		$active_tab = $_GET['tab'];
+		$active_tab = sanitize_text_field($_GET['tab']);
 	} else {
 		$active_tab = 'config';
 	}
@@ -191,7 +191,6 @@
                         <form method="post" enctype="multipart/form-data" action="options.php">
 
 							<?php
-
 								settings_fields( 'tg_col' );
 								do_settings_sections( 'tg_col.php' );
 							?>
