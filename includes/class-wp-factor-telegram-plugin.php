@@ -447,10 +447,10 @@ final class WP_Factor_Telegram_Plugin {
                 <label for="<?php
 				echo $id; ?>">
                     <input class="regular-text <?php
-					echo $class; ?>" type="checkbox" id="<?php
-					echo $id; ?>" name="<?php
-					echo $option_name; ?>[<?php
-					echo $id; ?>]" value="1" <?php
+					echo esc_attr($class); ?>" type="checkbox" id="<?php
+					echo esc_attr($id); ?>" name="<?php
+					echo esc_attr($option_name); ?>[<?php
+					echo esc_attr($id); ?>]" value="1" <?php
 					echo checked( 1, $options[ $id ] ); ?> />
 					<?php
 					echo ( $desc != '' ) ? $desc : ""; ?>
