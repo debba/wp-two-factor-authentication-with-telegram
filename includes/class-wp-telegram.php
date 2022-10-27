@@ -111,7 +111,7 @@ class WP_Telegram {
 
 		$body = json_decode( wp_remote_retrieve_body( $request ) );
 		if ( $body->ok != 1 ) {
-			$this->lastError = sprintf( __( "%s (Error code %d)", $body->description, $body->error_code, "two-factor-login-telegram" ) );
+			$this->lastError = sprintf( esc_html__( "%s (Error code %d)", "two-factor-login-telegram" ), $body->description, $body->error_code);
 
 			return false;
 		}
@@ -137,7 +137,7 @@ class WP_Telegram {
 		}
 
 
-		return $this->send( sprintf( __( "This is your access code: %s", "two-factor-login-telegram" ), $token ), $chat_id );
+		return $this->send( sprintf( esc_html__( "This is your access code: %s", "two-factor-login-telegram" ), $token ), $chat_id );
 	}
 
 	/**

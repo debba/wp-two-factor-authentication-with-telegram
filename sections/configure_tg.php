@@ -87,13 +87,11 @@
 										'two-factor-login-telegram' ); ?>
 
                                     <img style="width:500px;height:auto;"
-                                         src="<?php echo plugins_url( "/assets/img/help-api-token.jpg",
+                                         src="<?php echo plugins_url( "/assets/img/help-api-token.png",
 										     WP_FACTOR_TG_FILE ); ?>">
 
                                 </li>
                             </ol>
-
-                            </p>
                         </div>
                         <h3><?php _e( "Get Chat ID for Telegram user", "two-factor-login-telegram" ); ?></h3>
                         <div>
@@ -143,97 +141,6 @@
 
 					<?php
 
-				} elseif ( $active_tab == "suggestions" ) {
-					?>
-
-                    <div id="wpft-suggestions">
-                        <h3><?php _e( "Suggestions", "two-factor-login-telegram" ); ?></h3>
-                        <div>
-                            <p>
-                                <em>
-									<?php _e( "We developed this plugin to improve the security in WordPress. We love Telegram and let's hope that this plugin would be agreeable.",
-										"two-factor-login-telegram" ); ?>
-                                    <br/><?php _e( "We consider these early versions only a test, but we have got so many ideas for the future. ",
-										"two-factor-login-telegram" ); ?>
-                                    <br/>
-									<?php _e( "If you like the project and you've suggestions or you want report problems, please compile this form.",
-										"two-factor-login-telegram" ); ?>
-                                </em>
-                            </p>
-                            <p style="text-align:right;">
-								<?php _e( "Thanks", "two-factor-login-telegram" ); ?> - dueclic.
-                            </p>
-                        </div>
-
-                        <form method="post" enctype="multipart/form-data" action="" id="form_suggestions">
-
-                            <table class="form-table">
-                                <tbody>
-
-                                <tr class="css_class">
-                                    <th scope="row"><label
-                                                for="your_name"> <?php _e( "Your name",
-												"two-factor-login-telegram" ); ?> </label>
-                                    </th>
-                                    <td><input class="regular-text css_class" type="text" id="your_name"
-                                               name="your_name"
-                                               value=""
-                                               placeholder="<?php _e( "Your name", "two-factor-login-telegram" ); ?>">
-                                    </td>
-
-                                </tr>
-                                <tr class="css_class">
-                                    <th scope="row"><label
-                                                for="your_email"><?php _e( "Your email",
-												"two-factor-login-telegram" ); ?></label>
-                                    </th>
-                                    <td><input class="regular-text css_class" type="text" id="your_email"
-                                               name="your_email"
-                                               value=""
-                                               placeholder="<?php _e( "Your email", "two-factor-login-telegram" ); ?>">
-                                    </td>
-                                </tr>
-                                <tr class="css_class">
-                                    <th scope="row"><label
-                                                for="your_name"><?php _e( "Message",
-												"two-factor-login-telegram" ); ?></label>
-                                    </th>
-                                    <td><textarea id="your_message" name="your_message" rows="20" cols="20"
-                                                  style="width:350px;height:200px;"
-                                                  placeholder="<?php _e( "Leave a message",
-										              "two-factor-login-telegram" ); ?>"></textarea>
-                                    </td>
-                                </tr>
-
-                                </tbody>
-                            </table>
-
-                            <p class="submit">
-                                <input type="submit" class="button-primary"
-                                       value="<?php _e( 'Send', "two-factor-login-telegram" ) ?>"/>
-                            </p>
-
-                            <div class="wpft-notice wpft-notice-error response-email-error">
-
-                                <p></p>
-
-                            </div>
-
-                            <div class="wpft-notice wpft-notice-success response-email-success">
-
-                                <p class="first"></p>
-                                <p><?php _e( 'If you want, follow us on ', "two-factor-login-telegram" ); ?><a
-                                            class="social-foot" href="https://www.facebook.com/dueclic/"><span
-                                                class="dashicons dashicons-facebook bg-fb"></span></a> <?php _e( " and keep update!",
-										"two-factor-login-telegram" ); ?></p>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
-					<?php
 				} else {
 
 					if ( $this->is_valid_bot() && get_the_author_meta( "tg_wp_factor_chat_id",

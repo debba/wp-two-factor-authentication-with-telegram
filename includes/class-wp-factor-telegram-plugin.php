@@ -676,13 +676,15 @@ final class WP_Factor_Telegram_Plugin {
 				'custom-accordion',
 				plugins_url( 'assets/js/wp-factor-telegram-accordion.js',
 					dirname( __FILE__ ) ),
-				array( 'jquery' )
+				array( 'jquery', 'jquery-ui-core', 'jquery-ui-accordion' )
 			);
 
-			wp_register_style( 'jquery-custom-style',
-				plugins_url( '/assets/jquery-ui-1.11.4.custom/jquery-ui.css',
+
+			/*wp_register_style( 'jquery-custom-style',
+				plugins_url( '/assets/css/jquery-ui.custom.style.min.css',
 					dirname( __FILE__ ) ), array(), '1', 'screen' );
-			wp_enqueue_style( 'jquery-custom-style' );
+			wp_enqueue_style( 'jquery-custom-style' );*/
+
 		}
 	}
 
