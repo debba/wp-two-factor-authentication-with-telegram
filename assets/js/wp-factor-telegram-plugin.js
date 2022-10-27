@@ -15,7 +15,6 @@ var WP_Factor_Telegram_Plugin = function ($) {
     var $twbcheck = $("#checkbot");
     var $twb = $("#bot_token");
     var $twbdesc = $("#bot_token_desc");
-    var $fsugg = $("#form_suggestions");
 
     return {
         init: init
@@ -50,57 +49,6 @@ var WP_Factor_Telegram_Plugin = function ($) {
             check_tg_bot(bot_token);
 
         });
-
-        $fsugg.on("submit", function(evt){
-
-            evt.preventDefault();
-
-            send_email();
-
-        });
-
-    }
-
-    function send_email() {
-
-        $rsucc = $(".response-email-success");
-        $rerr  = $(".response-email-error");
-
-        $.ajax({
-
-            type:"POST",
-            url: ajaxurl,
-            data: {
-                'action' : 'send_email',
-                'your_email': $fsugg.find("input[name='your_email']").val(),
-                'your_name': $fsugg.find("input[name='your_name']").val(),
-                'your_message': $fsugg.find("textarea[name='your_message']").val()
-            },
-            beforeSend: function(){
-                $fsugg.find("input[type='submit']").addClass("disabled").after('<div class="load-spinner"><img src="'+tlj.spinner+'" /></div>');
-                $(".response-email-success, .response-email-error").hide();
-            },
-            dataType: 'json',
-            success: function(response) {
-
-                if (response.type === "success") {
-                    $fsugg.trigger("reset");
-                    $rsucc.find("p.first").text(response.msg);
-                    $rsucc.show();
-                }
-
-                else {
-                    $rerr.find("p").text(response.msg);
-                    $rerr.show();
-                }
-
-            },
-            complete: function() {
-                $fsugg.find("input[type='submit']").removeClass("disabled");
-                $(".load-spinner").remove();
-            }
-
-        })
 
     }
 
