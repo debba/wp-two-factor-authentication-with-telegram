@@ -97,6 +97,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
             url: ajaxurl,
             data: {
                 'action' : 'token_check',
+                'nonce': tlj.sendtoken_nonce,
                 'token' : token
             },
             beforeSend: function(){
@@ -141,6 +142,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
             url: ajaxurl,
             data: {
                 'action' : 'send_token_check',
+                'nonce': tlj.tokencheck_nonce,
                 'chat_id' : chat_id
             },
             beforeSend: function(){

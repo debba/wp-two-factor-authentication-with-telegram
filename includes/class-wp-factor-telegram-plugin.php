@@ -666,8 +666,9 @@ final class WP_Factor_Telegram_Plugin {
 				"ajax_error" => __( 'Ooops! Server failure, try again! ',
 					'two-factor-login-telegram' ),
                 "checkbot_nonce" => wp_create_nonce('ajax-checkbot-nonce'),
-				"spinner"    => admin_url( "/images/spinner.gif" ),
-
+                "sendtoken_nonce" => wp_create_nonce('ajax-sendtoken-nonce'),
+                "tokencheck_nonce" => wp_create_nonce('ajax-tokencheck-nonce'),
+                "spinner"    => admin_url( "/images/spinner.gif" )
 			) );
 
 			wp_enqueue_script( "tg_lib_js" );
@@ -711,11 +712,17 @@ final class WP_Factor_Telegram_Plugin {
 
 	public function send_token_check() {
 		$response = array(
-			'type' => 'error',
-			'msg'  => __( 'Please fill Chat ID field.',
-				'two-factor-login-telegram' ),
+			'type' => 'error'
 		);
 
+        if ( ! wp_verify_nonce( $_POST['nonce'], 'ajax-tokencheck-nonce' ) ) {
+            $response['msg'] = __( 'Security check error',
+                'two-factor-login-telegram' );
+            die( json_encode( $response ) );
+        }
+
+        $response['msg']  = __( 'Please fill Chat ID field.',
+            'two-factor-login-telegram' );
 
 		if ( ! isset( $_POST['chat_id'] ) || $_POST['chat_id'] == "" ) {
 			die( json_encode( $response ) );
@@ -787,10 +794,17 @@ final class WP_Factor_Telegram_Plugin {
 
 	public function token_check() {
 		$response = array(
-			'type' => 'error',
-			'msg'  => __( 'The token entered is wrong.',
-				'two-factor-login-telegram' ),
+			'type' => 'error'
 		);
+
+        if ( ! wp_verify_nonce( $_POST['nonce'], 'ajax-sendtoken-nonce' ) ) {
+            $response['msg'] = __( 'Security check error',
+                'two-factor-login-telegram' );
+            die( json_encode( $response ) );
+        }
+
+        $response['msg'] = __( 'The token entered is wrong.',
+            'two-factor-login-telegram' );
 
 
 		if ( ! isset( $_POST['token'] ) || $_POST['token'] == "" ) {
