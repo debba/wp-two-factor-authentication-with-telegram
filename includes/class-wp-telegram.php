@@ -162,7 +162,7 @@ class WP_Telegram {
 		 */
 
 		// Get IP from computer attempting to login
-		$ip_address = (isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR']);
+		$ip_address = (isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? wp_unslash($_SERVER["HTTP_CF_CONNECTING_IP"]) : wp_unslash($_SERVER['REMOTE_ADDR']));
 
 		
 		 if ( $options['show_site_name'] === '1' && $options['show_site_url'] === '1' ) {

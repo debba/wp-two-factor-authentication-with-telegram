@@ -4,7 +4,7 @@
  * Plugin Name: WP 2FA with Telegram
  * Plugin URI: https://blog.dueclic.com/wordpress-autenticazione-due-fattori-telegram/
  * Description: This plugin enables two factor authentication with Telegram by increasing your website security and sends an alert every time a wrong login occurs.
- * Version: 2.6
+ * Version: 2.7
  * Requires at least: 4.7.4
  * Tested up to: 6.1.0
  * Requires PHP: 7.0

@@ -109,7 +109,7 @@ final class WP_Factor_Telegram_Plugin {
 		$this->telegram->send_tg_token( $auth_code, $chat_id );
 
 		$redirect_to = isset( $_REQUEST['redirect_to'] )
-			? $_REQUEST['redirect_to'] : $_SERVER['REQUEST_URI'];
+			? wp_sanitize_redirect($_REQUEST['redirect_to']) : wp_unslash($_SERVER['REQUEST_URI']);
 
 		$this->login_html( $user, $redirect_to );
 	}
@@ -171,7 +171,7 @@ final class WP_Factor_Telegram_Plugin {
 
         <style>
             body.login div#login h1 a {
-                background-image: url("<?php echo $plugin_logo; ?>");
+                background-image: url("<?php echo esc_url($plugin_logo); ?>");
             }
         </style>
 
@@ -445,7 +445,7 @@ final class WP_Factor_Telegram_Plugin {
 				$options[ $id ] = esc_attr( $options[ $id ] );
 				?>
                 <label for="<?php
-				echo $id; ?>">
+				echo esc_attr($id); ?>">
                     <input class="regular-text <?php
 					echo esc_attr($class); ?>" type="checkbox" id="<?php
 					echo esc_attr($id); ?>" name="<?php
@@ -453,7 +453,7 @@ final class WP_Factor_Telegram_Plugin {
 					echo esc_attr($id); ?>]" value="1" <?php
 					echo checked( 1, $options[ $id ] ); ?> />
 					<?php
-					echo ( $desc != '' ) ? $desc : ""; ?>
+					echo esc_html($desc); ?>
                 </label>
 				<?php
 				break;
