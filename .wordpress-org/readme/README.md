@@ -1,10 +1,10 @@
 === WP 2FA with Telegram ===
 Contributors: dueclic, yordansoares
-Tags: two factor authentication, authentication, telegram, authenticate, security
+Tags: 2fa, authentication, telegram, authenticate, security
 Requires at least: 5.0.0
 Requires PHP: 7.0
-Tested up to: 6.3
-Stable tag: 2.9
+Tested up to: 6.6
+Stable tag: 3.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -51,6 +51,9 @@ Please note the URL generated in the example above is https://example.com/images
 7. You can customize the logo with yours using "two_factor_login_telegram_logo" filter hook. See the instructions of use in FAQ.
 
 == Changelog ==
+
+= 3.0 =
+* Extended compatibility to WP 6.6
 
 = 2.9 =
 * Extended compatibility to WP 6.3
