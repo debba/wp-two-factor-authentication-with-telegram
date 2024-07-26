@@ -1,5 +1,5 @@
 
-![WP 2FA with Telegram](https://raw.githubusercontent.com/debba/wp-two-factor-authentication-with-telegram/master/assets/img/plugin_cover.png)
+![WP 2FA with Telegram](https://github.com/debba/wp-two-factor-authentication-with-telegram/raw/master/.wordpress-org/assets/banner-772x250.png?raw=true)
 
 WP 2FA with Telegram allows you to enable Two-factor authentication for WordPress Login using Telegram.
 
