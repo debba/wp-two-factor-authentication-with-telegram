@@ -38,7 +38,8 @@ var WP_Factor_Telegram_Plugin = function ($) {
 
             evt.preventDefault();
             var token = $twfciconf.val();
-            check_tg_token(token);
+            var chat_id = $twfci.val();
+            check_tg_token(token, chat_id);
 
         });
 
@@ -89,7 +90,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
 
     }
 
-    function check_tg_token(token){
+    function check_tg_token(token, chat_id){
 
         $.ajax({
 
@@ -98,6 +99,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
             data: {
                 'action' : 'token_check',
                 'nonce': tlj.sendtoken_nonce,
+                'chat_id': chat_id,
                 'token' : token
             },
             beforeSend: function(){

@@ -20,14 +20,6 @@ final class WP_Factor_Telegram_Plugin
     private $namespace = "tg_col";
 
     /**
-     * Check cookie Name
-     *
-     * @var string
-     */
-
-    private $check_cookie_name = "check_tg_cookie";
-
-    /**
      * @var WP_Telegram
      */
 
@@ -187,7 +179,7 @@ final class WP_Factor_Telegram_Plugin
         $user_id = is_object($user) ? $user->ID : intval($user);
 
         $creation_date = current_time('mysql');  // Data attuale
-        $expiration_date = date('Y-m-d H:i:s', strtotime($creation_date) + 60 * 20);
+        $expiration_date = date('Y-m-d H:i:s', strtotime($creation_date) + WP_FACTOR_AUTHCODE_EXPIRE_SECONDS);
 
         $this->invalidate_existing_auth_codes($user_id);
 
@@ -299,7 +291,8 @@ final class WP_Factor_Telegram_Plugin
         <form name="validate_tg" id="loginform" action="<?php
         echo esc_url(site_url('wp-login.php?action=validate_tg',
             'login_post')); ?>" method="post" autocomplete="off">
-            <input type="hidden" name="nonce" value="<?php echo wp_create_nonce( 'wp2fa_telegram_auth_nonce_' . $user->ID ); ?>">
+            <input type="hidden" name="nonce"
+                   value="<?php echo wp_create_nonce('wp2fa_telegram_auth_nonce_' . $user->ID); ?>">
             <input type="hidden" name="wp-auth-id" id="wp-auth-id" value="<?php
             echo esc_attr($user->ID); ?>"/>
             <input type="hidden" name="redirect_to" value="<?php
@@ -347,16 +340,9 @@ final class WP_Factor_Telegram_Plugin
         }
     }
 
-    private function is_valid_tokencheck_authcode($authcode)
+    private function is_valid_tokencheck_authcode($authcode, $chat_id)
     {
-        $cookie_name = $this->cookie_name;
-
-        if ($_COOKIE[$cookie_name] === sha1($authcode)) {
-            return true;
-        }
-
-        return false;
-
+        return hash('sha256', $authcode) === get_transient("wp2fa_telegram_authcode_".$chat_id);
     }
 
     private function is_valid_authcode($authcode, $user_id)
@@ -394,7 +380,7 @@ final class WP_Factor_Telegram_Plugin
             return;
         }
 
-        if (!wp_verify_nonce($_POST['nonce'], 'wp2fa_telegram_auth_nonce_'.$user->ID)) {
+        if (!wp_verify_nonce($_POST['nonce'], 'wp2fa_telegram_auth_nonce_' . $user->ID)) {
             return;
         }
 
@@ -807,12 +793,12 @@ final class WP_Factor_Telegram_Plugin
         if (in_array($screen->id, ["profile", "settings_page_tg-conf"])) {
             wp_register_style("tg_lib_css",
                 plugins_url("assets/css/wp-factor-telegram-plugin.css",
-                    dirname(__FILE__)));
+                    dirname(__FILE__)), array(), WP_FACTOR_PLUGIN_VERSION);
             wp_enqueue_style("tg_lib_css");
 
             wp_register_script("tg_lib_js",
-                plugins_url("assets/js/wp-factor-telegram-plugin.js",
-                    dirname(__FILE__)), array('jquery'), '1.0.0', true);
+            plugins_url("assets/js/wp-factor-telegram-plugin.js",
+                dirname(__FILE__)), array('jquery'), WP_FACTOR_PLUGIN_VERSION, true);
 
             wp_localize_script("tg_lib_js", "tlj", array(
 
@@ -885,9 +871,7 @@ final class WP_Factor_Telegram_Plugin
 
         $auth_code = $this->get_auth_code();
 
-        setcookie($this->check_cookie_name, null, strtotime('-1 day'));
-        setcookie($this->check_cookie_name, sha1($auth_code),
-            time() + (60 * 20));
+        set_transient('wp2fa_telegram_authcode_' . $_POST['chat_id'], hash('sha256', $auth_code), WP_FACTOR_AUTHCODE_EXPIRE_SECONDS);
 
         $tg = $this->telegram;
         $send
@@ -960,16 +944,25 @@ final class WP_Factor_Telegram_Plugin
             die(json_encode($response));
         }
 
-        $response['msg'] = __('The token entered is wrong.',
-            'two-factor-login-telegram');
+        $messages = [
+            "token_wrong" => __('The token entered is wrong.',
+                'two-factor-login-telegram'),
+            "chat_id_wrong" => __('Chat ID is wrong.',
+                'two-factor-login-telegram')
+        ];
 
 
         if (!isset($_POST['token']) || $_POST['token'] == "") {
+            $response['msg'] = $messages["token_wrong"];
             die(json_encode($response));
         }
 
+        if (!isset($_POST['chat_id']) || $_POST['chat_id'] == "") {
+            $response['msg'] = $messages["chat_id_wrong"];
+            die(json_encode($response));
+        }
 
-        if (!$this->is_valid_tokencheck_authcode($_POST['token'])) {
+        if (!$this->is_valid_tokencheck_authcode($_POST['token'], $_POST['chat_id'])) {
             $response['msg'] = __('Validation code entered is wrong.',
                 'two-factor-login-telegram');
         } else {

@@ -28,6 +28,8 @@ if ( ! defined('ABSPATH')) {
 
 define('WP_FACTOR_PLUGIN_VERSION', '3.1');
 
+define('WP_FACTOR_AUTHCODE_EXPIRE_SECONDS', 60 * 20);
+
 /**
  *
  * Full path to the WP Two Factor Telegram File
