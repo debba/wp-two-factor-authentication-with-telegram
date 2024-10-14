@@ -54,6 +54,7 @@ Please note the URL generated in the example above is https://example.com/images
 
 = 3.1 =
 * Updated auth code storage
+* Fix Suggestions tab
 
 = 3.0 =
 * Extended compatibility to WP 6.6
