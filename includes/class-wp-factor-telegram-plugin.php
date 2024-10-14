@@ -894,6 +894,42 @@ final class WP_Factor_Telegram_Plugin {
 		add_filter( 'update_footer', array( $this, 'ts_footer_version' ), 11 );
 	}
 
+    private function create_or_update_telegram_auth_codes_table() {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . 'telegram_auth_codes';
+
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,  
+        auth_code varchar(5) NOT NULL,            
+        user_id bigint(20) UNSIGNED NOT NULL,    
+        creation_date datetime NOT NULL,          
+        expiration_date datetime NOT NULL,        
+        PRIMARY KEY (id),                         
+        KEY auth_code (auth_code)
+    ) $charset_collate";
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+        // Esegue la query per creare/aggiornare la tabella
+        dbDelta($sql);
+    }
+
+    function plugin_activation() {
+        $this->create_or_update_telegram_auth_codes_table();
+        update_option('wp_factor_plugin_version', WP_FACTOR_PLUGIN_VERSION);
+    }
+
+    function check_plugin_update() {
+        $installed_version = get_option('wp_factor_plugin_version');
+
+        if ($installed_version !== WP_FACTOR_PLUGIN_VERSION) {
+            $this->create_or_update_telegram_auth_codes_table();
+            update_option('wp_factor_plugin_version', WP_FACTOR_PLUGIN_VERSION);
+        }
+    }
+
 
 	/**
 	 * Add hooks
@@ -904,6 +940,9 @@ final class WP_Factor_Telegram_Plugin {
 		add_action( 'wp_login_failed',
 			array( $this->telegram, 'send_tg_failed_login' ), 10, 2 );
 		add_action( 'login_form_validate_tg', array( $this, 'validate_tg' ) );
+
+        register_activation_hook(WP_FACTOR_TG_FILE, array($this, 'plugin_activation'));
+        add_action('plugins_loaded', array($this, 'check_plugin_update'));
 
 		if ( is_admin() ) {
 			add_action( 'admin_init', array( $this, 'tg_register_settings' ) );
@@ -942,5 +981,5 @@ final class WP_Factor_Telegram_Plugin {
 		add_action( 'wp_ajax_check_bot', array( $this, 'check_bot' ) );
 		add_action( "tft_copyright", array( $this, "change_copyright" ) );
 	}
-	
+
 }
