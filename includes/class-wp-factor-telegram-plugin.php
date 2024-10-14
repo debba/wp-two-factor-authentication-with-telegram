@@ -299,7 +299,7 @@ final class WP_Factor_Telegram_Plugin
         <form name="validate_tg" id="loginform" action="<?php
         echo esc_url(site_url('wp-login.php?action=validate_tg',
             'login_post')); ?>" method="post" autocomplete="off">
-            <input type="hidden" name="nonce" value="<?php echo wp_create_nonce('ajax-login-tg'); ?>">
+            <input type="hidden" name="nonce" value="<?php echo wp_create_nonce( 'wp2fa_telegram_auth_nonce_' . $user->ID ); ?>">
             <input type="hidden" name="wp-auth-id" id="wp-auth-id" value="<?php
             echo esc_attr($user->ID); ?>"/>
             <input type="hidden" name="redirect_to" value="<?php
@@ -385,16 +385,16 @@ final class WP_Factor_Telegram_Plugin
     public function validate_tg()
     {
 
-        if (!wp_verify_nonce($_POST['nonce'], 'ajax-login-tg')) {
-            return;
-        }
-
         if (!isset($_POST['wp-auth-id'])) {
             return;
         }
 
         $user = get_userdata($_POST['wp-auth-id']);
         if (!$user) {
+            return;
+        }
+
+        if (!wp_verify_nonce($_POST['nonce'], 'wp2fa_telegram_auth_nonce_'.$user->ID)) {
             return;
         }
 
