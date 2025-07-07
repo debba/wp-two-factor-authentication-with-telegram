@@ -12,7 +12,7 @@ if (isset($_GET['tab'])) {
         <div class="cover-tg-plugin">
         </div>
         <h1><?php _e("Setup", "two-factor-login-telegram"); ?>
-            - <?php _e("Two Factor Authentication with Telegram", "two-factor-login-telegram"); ?></h1>
+            - <?php _e("2FA with Telegram", "two-factor-login-telegram"); ?></h1>
     </div>
     <h2 class="wpft-tab-wrapper nav-tab-wrapper">
         <a href="<?php echo admin_url('options-general.php?page=tg-conf&tab=config'); ?>"
@@ -58,7 +58,7 @@ if (isset($_GET['tab'])) {
                 <h3 id="first"><?php _e("Bot token", "two-factor-login-telegram"); ?></h3>
                 <div>
                     <p>
-                        <?php _e('If you want to enable <strong>Two Factor Authentication with Telegram</strong> plugin you need to provide a valid token for a Telegram Bot.',
+                        <?php _e('If you want to enable <strong>2FA with Telegram</strong> plugin you need to provide a valid token for a Telegram Bot.',
                             "two-factor-login-telegram"); ?>
                         <br/>
                         <?php _e('Have you ever created a bot in Telegram? It\'s so easy!',

@@ -419,9 +419,9 @@ final class WP_Factor_Telegram_Plugin
 
     public function tg_load_menu()
     {
-        add_options_page(__("Two-Factor Authentication with Telegram",
+        add_options_page(__("2FA with Telegram",
             "two-factor-login-telegram"),
-            __("Two-Factor Authentication with Telegram",
+            __("2FA with Telegram",
                 "two-factor-login-telegram"), "manage_options", "tg-conf",
             array(
                 $this,
@@ -582,7 +582,7 @@ final class WP_Factor_Telegram_Plugin
                     echo esc_attr($id); ?>]" value="1" <?php
                     echo checked(1, $options[$id]); ?> />
                     <?php
-                    echo esc_html($desc); ?>
+                    _e($desc); ?>
                 </label>
                 <?php
                 break;
@@ -627,7 +627,7 @@ final class WP_Factor_Telegram_Plugin
             ?>
             <div class="notice notice-warning is-dismissible">
                 <p><?php
-                    printf(__('Do you want to configure Two Factor Authentication with Telegram?  <a href="%s">click here</a>!',
+                    printf(__('Do you want to configure 2FA with Telegram?  <a href="%s">click here</a>!',
                         "two-factor-login-telegram"),
                         admin_url("profile.php"));
                     ?></p>
@@ -642,7 +642,7 @@ final class WP_Factor_Telegram_Plugin
             ?>
             <div class="notice notice-error is-dismissible">
                 <p><?php
-                    printf(__('Do you want to configure Two Factor Authentication with Telegram?  <a href="%s">click here</a>!',
+                    printf(__('Do you want to configure 2FA with Telegram?  <a href="%s">click here</a>!',
                         "two-factor-login-telegram"),
                         admin_url("options-general.php?page=tg-conf")); ?>
                 </p>
@@ -659,7 +659,7 @@ final class WP_Factor_Telegram_Plugin
     {
         ?>
         <h3 id="wptl"><?php
-            _e('Two-Factor Authentication with Telegram',
+            _e('2FA with Telegram',
                 'two-factor-login-telegram'); ?></h3>
 
         <table class="form-table">
@@ -667,7 +667,7 @@ final class WP_Factor_Telegram_Plugin
             <tr>
                 <th>
                     <label for="tg_wp_factor_enabled"><?php
-                        _e('Enable Two-Factor Authentication',
+                        _e('Enable 2FA',
                             'two-factor-login-telegram'); ?>
                     </label>
                 </th>
@@ -1002,7 +1002,6 @@ final class WP_Factor_Telegram_Plugin
             === false
         ) {
             $is_valid_bot = $this->telegram->get_me() !== false;
-            var_dump($is_valid_bot);
             set_transient($valid_bot_transient, $is_valid_bot, 60 * 60 * 24);
         }
 
