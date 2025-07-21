@@ -4,6 +4,37 @@ if (isset($_GET['tab'])) {
 } else {
     $active_tab = 'config';
 }
+
+// Handle telegram validation action
+if (isset($_GET['action']) && $_GET['action'] === 'telegram_validate') {
+    $user_id = intval($_GET['user_id']);
+    $token = sanitize_text_field($_GET['token']);
+    $nonce = sanitize_text_field($_GET['nonce']);
+    
+    // Verify nonce
+    if (wp_verify_nonce($nonce, 'telegram_validate_' . $user_id . '_' . $token)) {
+        // Check if the token is valid using transient
+        $chat_id = get_user_meta($user_id, 'tg_wp_factor_chat_id', true);
+        if ($chat_id && hash('sha256', $token) === get_transient('wp2fa_telegram_authcode_' . $chat_id)) {
+            // Token is valid, show success message
+            echo '<div class="notice notice-success is-dismissible"><p>';
+            printf(__('✅ Telegram validation successful! Your 2FA setup with chat ID %s is now confirmed.', 'two-factor-login-telegram'), $chat_id);
+            echo '</p></div>';
+            // Delete the transient as it's been used
+            delete_transient('wp2fa_telegram_authcode_' . $chat_id);
+        } else {
+            // Token is invalid or expired
+            echo '<div class="notice notice-error is-dismissible"><p>';
+            _e('❌ Validation failed. The token is invalid or has expired.', 'two-factor-login-telegram');
+            echo '</p></div>';
+        }
+    } else {
+        // Nonce verification failed
+        echo '<div class="notice notice-error is-dismissible"><p>';
+        _e('❌ Security check failed. Please try again.', 'two-factor-login-telegram');
+        echo '</p></div>';
+    }
+}
 ?>
 
 <div id="wft-wrap" class="wrap">
@@ -24,6 +55,14 @@ if (isset($_GET['tab'])) {
                     class="dashicons dashicons-editor-help"></span> <?php _e("FAQ",
                 "two-factor-login-telegram"); ?>
         </a>
+
+       <?php if ($this->is_valid_bot()) { ?>
+            <a href="<?php echo admin_url('options-general.php?page=tg-conf&tab=logs'); ?>"
+               class="nav-tab <?php echo $active_tab == 'logs' ? 'nav-tab-active' : ''; ?>"><span
+                        class="dashicons dashicons-list-view"></span> <?php _e("Bot Logs",
+                    "two-factor-login-telegram"); ?>
+            </a>
+        <?php } ?>
 
         <?php
 
@@ -48,7 +87,57 @@ if (isset($_GET['tab'])) {
 
         <?php
 
-        if ($active_tab == "howto") {
+        if ($active_tab == "logs") {
+
+            // Handle clear logs action
+            if (isset($_POST['clear_logs']) && wp_verify_nonce($_POST['_wpnonce'], 'clear_telegram_logs')) {
+                delete_option('telegram_bot_logs');
+                echo '<div class="notice notice-success is-dismissible"><p>' . __('Logs cleared successfully.', 'two-factor-login-telegram') . '</p></div>';
+            }
+
+            $logs = get_option('telegram_bot_logs', array());
+            ?>
+
+            <h2><?php _e("Bot Logs", "two-factor-login-telegram"); ?></h2>
+
+            <form method="post">
+                <?php wp_nonce_field('clear_telegram_logs'); ?>
+                <input type="submit" name="clear_logs" class="button button-secondary" value="<?php _e('Clear Logs', 'two-factor-login-telegram'); ?>" onclick="return confirm('<?php _e('Are you sure you want to clear all logs?', 'two-factor-login-telegram'); ?>')">
+            </form>
+
+            <br>
+
+            <?php if (empty($logs)): ?>
+                <p><?php _e('No logs available.', 'two-factor-login-telegram'); ?></p>
+            <?php else: ?>
+                <table class="wp-list-table widefat fixed striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;"><?php _e('Timestamp', 'two-factor-login-telegram'); ?></th>
+                            <th style="width: 15%;"><?php _e('Action', 'two-factor-login-telegram'); ?></th>
+                            <th><?php _e('Data', 'two-factor-login-telegram'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($logs as $log): ?>
+                            <tr>
+                                <td><?php echo esc_html($log['timestamp']); ?></td>
+                                <td><?php echo esc_html($log['action']); ?></td>
+                                <td>
+                                    <details>
+                                        <summary><?php _e('View details', 'two-factor-login-telegram'); ?></summary>
+                                        <pre style="background: #f1f1f1; padding: 10px; margin-top: 10px; overflow-x: auto;"><?php echo esc_html(print_r($log['data'], true)); ?></pre>
+                                    </details>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+
+            <?php
+
+        } else if ($active_tab == "howto") {
 
             ?>
 
@@ -104,28 +193,51 @@ if (isset($_GET['tab'])) {
                             "two-factor-login-telegram"); ?>
 
                     <ol>
+                        <?php
+                        $bot_username = null;
+                        if ($this->is_valid_bot()) {
+                            $me = $this->telegram->get_me();
+                            if ($me && isset($me->username)) {
+                                $bot_username = $me->username;
+                            }
+                        }
 
-                        <li>
-                            <?php
-                            printf(__('Open Telegram and start a conversation with %s',
-                                "two-factor-login-telegram"),
-                                '<a href="https://telegram.me/myidbot" target="_blank">@MyIDBot</a>');
-                            ?>
-                        </li>
-
-                        <li>
-                            <?php
-                            printf(__('Type command %s to obtain your Chat ID.',
-                                "two-factor-login-telegram"), '<code>/getid</code>');
-                            ?>
-                        </li>
-                        <li>
-                            <?php
-                            _e("Inside of the answer you'll find your <strong>Chat ID</strong>",
-                                'two-factor-login-telegram');
-                            ?>
-                        </li>
-
+                        if ($bot_username): ?>
+                            <li>
+                                <?php
+                                printf(__('Open Telegram and start a conversation with your configured bot %s and press on <strong>Start</strong>',
+                                    "two-factor-login-telegram"),
+                                    '<a href="https://telegram.me/' . $bot_username . '" target="_blank">@' . $bot_username . '</a>');
+                                ?>
+                            </li>
+                            <li>
+                                <?php
+                                printf(__('Type command %s to obtain your Chat ID.',
+                                    "two-factor-login-telegram"), '<code>/get_id</code>');
+                                ?>
+                            </li>
+                            <li>
+                                <?php
+                                _e("The bot will reply with your <strong>Chat ID</strong> number",
+                                    'two-factor-login-telegram');
+                                ?>
+                            </li>
+                        <?php else: ?>
+                            <li>
+                                <?php _e('First configure your bot token in the Setup tab, then return here for specific instructions.',
+                                    "two-factor-login-telegram"); ?>
+                            </li>
+                            <li>
+                                <?php _e('Alternatively, you can use a generic bot like',
+                                    "two-factor-login-telegram"); ?>
+                                <?php
+                                printf(__(' %s and type %s to get your Chat ID.',
+                                    "two-factor-login-telegram"),
+                                    '<a href="https://telegram.me/myidbot" target="_blank">@MyIDBot</a>',
+                                    '<code>/getid</code>');
+                                ?>
+                            </li>
+                        <?php endif; ?>
                     </ol>
 
                     </p>

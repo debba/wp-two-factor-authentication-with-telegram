@@ -217,9 +217,9 @@ final class WP_Factor_Telegram_Plugin
     {
         $auth_code = $this->save_authcode($user);
         $chat_id = $this->get_user_chatid($user->ID);
-        
-        $result = $this->telegram->send_tg_token($auth_code, $chat_id);
-        
+
+        $result = $this->telegram->send_tg_token($auth_code, $chat_id, $user->ID);
+
         $this->log_telegram_action('auth_code_sent', array(
             'user_id' => $user->ID,
             'user_login' => $user->user_login,
@@ -398,8 +398,8 @@ final class WP_Factor_Telegram_Plugin
             $auth_code = $this->save_authcode($user);
 
             $chat_id = $this->get_user_chatid($user->ID);
-            $result = $this->telegram->send_tg_token($auth_code, $chat_id);
-            
+            $result = $this->telegram->send_tg_token($auth_code, $chat_id, $user->ID);
+
             $this->log_telegram_action('auth_code_resent', array(
                 'user_id' => $user->ID,
                 'user_login' => $user->user_login,
@@ -432,32 +432,32 @@ final class WP_Factor_Telegram_Plugin
     {
         require(dirname(WP_FACTOR_TG_FILE) . "/sections/configure_tg.php");
     }
-    
+
     /**
      * Show Telegram bot logs page
      */
     public function show_telegram_logs()
     {
         $logs = get_option('telegram_bot_logs', array());
-        
+
         // Handle clear logs action
         if (isset($_POST['clear_logs']) && wp_verify_nonce($_POST['_wpnonce'], 'clear_telegram_logs')) {
             delete_option('telegram_bot_logs');
             $logs = array();
             echo '<div class="notice notice-success is-dismissible"><p>' . __('Logs cleared successfully.', 'two-factor-login-telegram') . '</p></div>';
         }
-        
+
         ?>
         <div class="wrap">
             <h1><?php _e('Telegram Bot Logs', 'two-factor-login-telegram'); ?></h1>
-            
+
             <form method="post">
                 <?php wp_nonce_field('clear_telegram_logs'); ?>
                 <input type="submit" name="clear_logs" class="button button-secondary" value="<?php _e('Clear Logs', 'two-factor-login-telegram'); ?>" onclick="return confirm('<?php _e('Are you sure you want to clear all logs?', 'two-factor-login-telegram'); ?>')">
             </form>
-            
+
             <br>
-            
+
             <?php if (empty($logs)): ?>
                 <p><?php _e('No logs available.', 'two-factor-login-telegram'); ?></p>
             <?php else: ?>
@@ -499,15 +499,6 @@ final class WP_Factor_Telegram_Plugin
                 $this,
                 "configure_tg",
             ));
-            
-        add_submenu_page(
-            'options-general.php',
-            __('Telegram Bot Logs', 'two-factor-login-telegram'),
-            __('Telegram Bot Logs', 'two-factor-login-telegram'),
-            'manage_options',
-            'tg-logs',
-            array($this, 'show_telegram_logs')
-        );
     }
 
     function delete_transients($option_name, $old_value, $new_value)
@@ -952,11 +943,37 @@ final class WP_Factor_Telegram_Plugin
 
         set_transient('wp2fa_telegram_authcode_' . $_POST['chat_id'], hash('sha256', $auth_code), WP_FACTOR_AUTHCODE_EXPIRE_SECONDS);
 
+        // Get current user ID for the validation button
+        $current_user_id = get_current_user_id();
+
         $tg = $this->telegram;
-        $send
-            = $tg->send(sprintf(__("This is the validation code to use WP Two Factor with Telegram: %s",
-            "two-factor-login-telegram"), $auth_code), $_POST['chat_id']);
+        $validation_message = sprintf(
+            "🔐 *%s*\n\n`%s`\n\n%s",
+            __("WordPress 2FA Validation Code", "two-factor-login-telegram"),
+            $auth_code,
+            __("Use this code to complete your 2FA setup in WordPress, or click the button below:", "two-factor-login-telegram")
+        );
+        
+        // Create inline keyboard with validation button
+        $reply_markup = null;
+        if ($current_user_id) {
+            $nonce = wp_create_nonce('telegram_validate_' . $current_user_id . '_' . $auth_code);
+            $validation_url = admin_url('admin.php?page=tg-conf&action=telegram_validate&user_id=' . $current_user_id . '&token=' . $auth_code . '&nonce=' . $nonce);
             
+            $reply_markup = array(
+                'inline_keyboard' => array(
+                    array(
+                        array(
+                            'text' => '✅ ' . __('Validate Setup', 'two-factor-login-telegram'),
+                            'url' => $validation_url
+                        )
+                    )
+                )
+            );
+        }
+        
+        $send = $tg->send_with_keyboard($validation_message, $_POST['chat_id'], $reply_markup);
+
         $this->log_telegram_action('validation_code_sent', array(
             'chat_id' => $_POST['chat_id'],
             'success' => $send !== false,
@@ -1227,13 +1244,34 @@ final class WP_Factor_Telegram_Plugin
     }
 
     /**
-     * Register REST API endpoint for Telegram webhook
+     * Register REST API endpoints for Telegram
      */
     public function register_telegram_webhook_route() {
         register_rest_route('telegram/v1', '/webhook', array(
             'methods' => 'POST',
             'callback' => array($this, 'handle_telegram_webhook'),
             'permission_callback' => '__return_true',
+        ));
+
+        register_rest_route('telegram/v1', '/confirm/(?P<user_id>\d+)/(?P<token>[a-zA-Z0-9]+)', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'handle_telegram_confirmation'),
+            'permission_callback' => '__return_true',
+            'args' => array(
+                'user_id' => array(
+                    'validate_callback' => function($param, $request, $key) {
+                        return is_numeric($param);
+                    }
+                ),
+                'token' => array(
+                    'validate_callback' => function($param, $request, $key) {
+                        return preg_match('/^[a-zA-Z0-9]+$/', $param);
+                    }
+                ),
+                'nonce' => array(
+                    'required' => true,
+                )
+            ),
         ));
     }
 
@@ -1246,13 +1284,13 @@ final class WP_Factor_Telegram_Plugin
             'action' => $action,
             'data' => $data
         );
-        
+
         $logs = get_option('telegram_bot_logs', array());
         array_unshift($logs, $log_entry);
-        
+
         // Keep only last 100 log entries
         $logs = array_slice($logs, 0, 100);
-        
+
         update_option('telegram_bot_logs', $logs);
     }
 
@@ -1269,7 +1307,7 @@ final class WP_Factor_Telegram_Plugin
             $input = file_get_contents('php://input');
             $update = json_decode($input, true);
         }
-        
+
         $this->log_telegram_action('webhook_received', array(
             'raw_input' => $input,
             'parsed_update' => $update
@@ -1280,10 +1318,12 @@ final class WP_Factor_Telegram_Plugin
             return new WP_Error('invalid_webhook', 'Invalid webhook data', array('status' => 400));
         }
 
+
+
         $message = $update['message'];
         $chat_id = $message['chat']['id'];
         $text = isset($message['text']) ? $message['text'] : '';
-        
+
         $this->log_telegram_action('message_received', array(
             'chat_id' => $chat_id,
             'text' => $text,
@@ -1293,12 +1333,14 @@ final class WP_Factor_Telegram_Plugin
         // Handle /get_id command
         if ($text === '/get_id') {
             $response_text = sprintf(
-                __("Your Telegram Chat ID is: %s\n\nUse this ID in your WordPress profile to enable 2FA with Telegram.", "two-factor-login-telegram"),
-                $chat_id
+                "ℹ️ *%s*\n\n`%s`\n\n%s",
+                __("Your Telegram Chat ID", "two-factor-login-telegram"),
+                $chat_id,
+                __("Copy this ID and paste it in your WordPress profile to enable 2FA with Telegram.", "two-factor-login-telegram")
             );
 
-            $result = $this->telegram->send($response_text, $chat_id);
-            
+            $result = $this->telegram->send_with_keyboard($response_text, $chat_id);
+
             $this->log_telegram_action('get_id_response', array(
                 'chat_id' => $chat_id,
                 'response_sent' => $result !== false
@@ -1306,6 +1348,58 @@ final class WP_Factor_Telegram_Plugin
         }
 
         return rest_ensure_response(array('status' => 'ok'));
+    }
+
+    /**
+     * Handle Telegram confirmation via link
+     */
+    public function handle_telegram_confirmation($request) {
+        $user_id = intval($request['user_id']);
+        $token = sanitize_text_field($request['token']);
+        $nonce = sanitize_text_field($request->get_param('nonce'));
+        
+        // Verify nonce
+        if (!wp_verify_nonce($nonce, 'telegram_confirm_' . $user_id . '_' . $token)) {
+            $this->log_telegram_action('confirmation_failed', array(
+                'user_id' => $user_id,
+                'token' => $token,
+                'reason' => 'invalid_nonce'
+            ));
+            return new WP_Error('invalid_nonce', __('Security check failed.', 'two-factor-login-telegram'), array('status' => 403));
+        }
+        
+        // Validate the token
+        if (!$this->is_valid_authcode($token, $user_id)) {
+            $this->log_telegram_action('confirmation_failed', array(
+                'user_id' => $user_id,
+                'token' => $token,
+                'reason' => 'invalid_token'
+            ));
+            return new WP_Error('invalid_token', __('Invalid or expired token.', 'two-factor-login-telegram'), array('status' => 400));
+        }
+        
+        // Get user
+        $user = get_userdata($user_id);
+        if (!$user) {
+            return new WP_Error('invalid_user', __('Invalid user.', 'two-factor-login-telegram'), array('status' => 400));
+        }
+        
+        // Log the user in
+        wp_set_auth_cookie($user_id, false);
+        
+        $this->log_telegram_action('confirmation_success', array(
+            'user_id' => $user_id,
+            'user_login' => $user->user_login,
+            'token' => $token,
+            'method' => 'link_confirmation'
+        ));
+        
+        // Redirect to admin or specified location
+        $redirect_url = apply_filters('telegram_confirmation_redirect_url', admin_url(), $user);
+        
+        // Redirect directly instead of returning JSON
+        wp_safe_redirect($redirect_url);
+        exit;
     }
 
 }
