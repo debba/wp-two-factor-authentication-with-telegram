@@ -217,7 +217,15 @@ final class WP_Factor_Telegram_Plugin
     {
         $auth_code = $this->save_authcode($user);
         $chat_id = $this->get_user_chatid($user->ID);
-        $this->telegram->send_tg_token($auth_code, $chat_id);
+        
+        $result = $this->telegram->send_tg_token($auth_code, $chat_id);
+        
+        $this->log_telegram_action('auth_code_sent', array(
+            'user_id' => $user->ID,
+            'user_login' => $user->user_login,
+            'chat_id' => $chat_id,
+            'success' => $result !== false
+        ));
 
         $redirect_to = isset($_REQUEST['redirect_to'])
             ? wp_sanitize_redirect($_REQUEST['redirect_to']) : wp_unslash($_SERVER['REQUEST_URI']);
@@ -390,7 +398,15 @@ final class WP_Factor_Telegram_Plugin
             $auth_code = $this->save_authcode($user);
 
             $chat_id = $this->get_user_chatid($user->ID);
-            $this->telegram->send_tg_token($auth_code, $chat_id);
+            $result = $this->telegram->send_tg_token($auth_code, $chat_id);
+            
+            $this->log_telegram_action('auth_code_resent', array(
+                'user_id' => $user->ID,
+                'user_login' => $user->user_login,
+                'chat_id' => $chat_id,
+                'success' => $result !== false,
+                'reason' => 'wrong_verification_code'
+            ));
 
             $this->login_html($user, $_REQUEST['redirect_to'],
                 __('Wrong verification code, we just sent a new code, please try again!',
@@ -416,6 +432,62 @@ final class WP_Factor_Telegram_Plugin
     {
         require(dirname(WP_FACTOR_TG_FILE) . "/sections/configure_tg.php");
     }
+    
+    /**
+     * Show Telegram bot logs page
+     */
+    public function show_telegram_logs()
+    {
+        $logs = get_option('telegram_bot_logs', array());
+        
+        // Handle clear logs action
+        if (isset($_POST['clear_logs']) && wp_verify_nonce($_POST['_wpnonce'], 'clear_telegram_logs')) {
+            delete_option('telegram_bot_logs');
+            $logs = array();
+            echo '<div class="notice notice-success is-dismissible"><p>' . __('Logs cleared successfully.', 'two-factor-login-telegram') . '</p></div>';
+        }
+        
+        ?>
+        <div class="wrap">
+            <h1><?php _e('Telegram Bot Logs', 'two-factor-login-telegram'); ?></h1>
+            
+            <form method="post">
+                <?php wp_nonce_field('clear_telegram_logs'); ?>
+                <input type="submit" name="clear_logs" class="button button-secondary" value="<?php _e('Clear Logs', 'two-factor-login-telegram'); ?>" onclick="return confirm('<?php _e('Are you sure you want to clear all logs?', 'two-factor-login-telegram'); ?>')">
+            </form>
+            
+            <br>
+            
+            <?php if (empty($logs)): ?>
+                <p><?php _e('No logs available.', 'two-factor-login-telegram'); ?></p>
+            <?php else: ?>
+                <table class="wp-list-table widefat fixed striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;"><?php _e('Timestamp', 'two-factor-login-telegram'); ?></th>
+                            <th style="width: 15%;"><?php _e('Action', 'two-factor-login-telegram'); ?></th>
+                            <th><?php _e('Data', 'two-factor-login-telegram'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($logs as $log): ?>
+                            <tr>
+                                <td><?php echo esc_html($log['timestamp']); ?></td>
+                                <td><?php echo esc_html($log['action']); ?></td>
+                                <td>
+                                    <details>
+                                        <summary><?php _e('View details', 'two-factor-login-telegram'); ?></summary>
+                                        <pre style="background: #f1f1f1; padding: 10px; margin-top: 10px; overflow-x: auto;"><?php echo esc_html(print_r($log['data'], true)); ?></pre>
+                                    </details>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
 
     public function tg_load_menu()
     {
@@ -427,12 +499,26 @@ final class WP_Factor_Telegram_Plugin
                 $this,
                 "configure_tg",
             ));
+            
+        add_submenu_page(
+            'options-general.php',
+            __('Telegram Bot Logs', 'two-factor-login-telegram'),
+            __('Telegram Bot Logs', 'two-factor-login-telegram'),
+            'manage_options',
+            'tg-logs',
+            array($this, 'show_telegram_logs')
+        );
     }
 
     function delete_transients($option_name, $old_value, $new_value)
     {
         if ($this->namespace === $option_name) {
             delete_transient(WP_FACTOR_TG_GETME_TRANSIENT);
+
+            if (!empty($new_value['bot_token'])) {
+                $webhook_url = rest_url('telegram/v1/webhook');
+                $this->telegram->set_bot_token($new_value['bot_token'])->set_webhook($webhook_url);
+            }
         }
     }
 
@@ -697,9 +783,10 @@ final class WP_Factor_Telegram_Plugin
                         <ol>
                             <li>
                                 <?php
-                                printf(__('Open Telegram and start a conversation with %s',
-                                    "two-factor-login-telegram"),
-                                    '<a href="https://telegram.me/myidbot" target="_blank">@MyIDBot</a>');
+                                printf(__('Open a conversation with %s and press on <strong>Start</strong>',
+                                    'two-factor-login-telegram'),
+                                    '<a href="https://telegram.me/' . $username
+                                    . '" target="_blank">@' . $username . '</a>');
                                 ?>
                             </li>
 
@@ -707,28 +794,20 @@ final class WP_Factor_Telegram_Plugin
                                 <?php
                                 printf(__('Type command %s to obtain your Chat ID.',
                                     "two-factor-login-telegram"),
-                                    '<code>/getid</code>');
+                                    '<code>/get_id</code>');
                                 ?>
                             </li>
                             <li>
                                 <?php
-                                _e("Inside of the answer you'll find your <strong>Chat ID</strong>",
+                                _e("The bot will reply with your <strong>Chat ID</strong> number",
                                     'two-factor-login-telegram');
                                 ?>
                             </li>
 
                             <li><?php
-                                printf(__('Now, open a conversation with %s and press on <strong>Start</strong>',
-                                    'two-factor-login-telegram'),
-                                    '<a href="https://telegram.me/' . $username
-                                    . '">@' . $username . '</a>');
-                                ?></li>
-                            <li><?php
-                                _e('You can go :) Insert your Chat ID and press <strong>Submit code</strong>',
-                                    'two-factor-plugin'); ?></li>
+                                _e('Copy your Chat ID and paste it below, then press <strong>Submit code</strong>',
+                                    'two-factor-login-telegram'); ?></li>
                         </ol>
-
-                        </p>
                     </div>
                 </td>
 
@@ -877,6 +956,12 @@ final class WP_Factor_Telegram_Plugin
         $send
             = $tg->send(sprintf(__("This is the validation code to use WP Two Factor with Telegram: %s",
             "two-factor-login-telegram"), $auth_code), $_POST['chat_id']);
+            
+        $this->log_telegram_action('validation_code_sent', array(
+            'chat_id' => $_POST['chat_id'],
+            'success' => $send !== false,
+            'error' => $send === false ? $tg->lastError : null
+        ));
 
         if (!$send) {
             $response['msg']
@@ -1070,6 +1155,9 @@ final class WP_Factor_Telegram_Plugin
     {
         $this->create_or_update_telegram_auth_codes_table();
         update_option('wp_factor_plugin_version', WP_FACTOR_PLUGIN_VERSION);
+
+        // Flush rewrite rules to add our webhook endpoint
+        flush_rewrite_rules();
     }
 
     function check_plugin_update()
@@ -1133,6 +1221,91 @@ final class WP_Factor_Telegram_Plugin
         add_action('wp_ajax_token_check', array($this, 'token_check'));
         add_action('wp_ajax_check_bot', array($this, 'check_bot'));
         add_action("tft_copyright", array($this, "change_copyright"));
+
+        // Add REST API endpoint for Telegram webhook
+        add_action('rest_api_init', array($this, 'register_telegram_webhook_route'));
+    }
+
+    /**
+     * Register REST API endpoint for Telegram webhook
+     */
+    public function register_telegram_webhook_route() {
+        register_rest_route('telegram/v1', '/webhook', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'handle_telegram_webhook'),
+            'permission_callback' => '__return_true',
+        ));
+    }
+
+    /**
+     * Log Telegram bot actions
+     */
+    private function log_telegram_action($action, $data = array()) {
+        $log_entry = array(
+            'timestamp' => current_time('mysql'),
+            'action' => $action,
+            'data' => $data
+        );
+        
+        $logs = get_option('telegram_bot_logs', array());
+        array_unshift($logs, $log_entry);
+        
+        // Keep only last 100 log entries
+        $logs = array_slice($logs, 0, 100);
+        
+        update_option('telegram_bot_logs', $logs);
+    }
+
+    /**
+     * Handle incoming Telegram webhook
+     */
+    public function handle_telegram_webhook($request = null) {
+        // Get the JSON payload from Telegram using WordPress REST API methods
+        if ($request instanceof WP_REST_Request) {
+            $update = $request->get_json_params();
+            $input = wp_json_encode($update);
+        } else {
+            // Fallback for direct calls
+            $input = file_get_contents('php://input');
+            $update = json_decode($input, true);
+        }
+        
+        $this->log_telegram_action('webhook_received', array(
+            'raw_input' => $input,
+            'parsed_update' => $update
+        ));
+
+        if (!$update || !isset($update['message'])) {
+            $this->log_telegram_action('webhook_error', array('error' => 'Invalid update or missing message'));
+            return new WP_Error('invalid_webhook', 'Invalid webhook data', array('status' => 400));
+        }
+
+        $message = $update['message'];
+        $chat_id = $message['chat']['id'];
+        $text = isset($message['text']) ? $message['text'] : '';
+        
+        $this->log_telegram_action('message_received', array(
+            'chat_id' => $chat_id,
+            'text' => $text,
+            'from' => $message['from'] ?? null
+        ));
+
+        // Handle /get_id command
+        if ($text === '/get_id') {
+            $response_text = sprintf(
+                __("Your Telegram Chat ID is: %s\n\nUse this ID in your WordPress profile to enable 2FA with Telegram.", "two-factor-login-telegram"),
+                $chat_id
+            );
+
+            $result = $this->telegram->send($response_text, $chat_id);
+            
+            $this->log_telegram_action('get_id_response', array(
+                'chat_id' => $chat_id,
+                'response_sent' => $result !== false
+            ));
+        }
+
+        return rest_ensure_response(array('status' => 'ok'));
     }
 
 }

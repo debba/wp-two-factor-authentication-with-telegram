@@ -74,7 +74,7 @@ class WP_Telegram {
 			return true;
 		}
 
-		$this->lastError = sprintf( __( "%s (Error code %d)", $body->description, $body->error_code, "two-factor-login-telegram" ) );
+		$this->lastError = sprintf( __( "%s (Error code %d)", "two-factor-login-telegram" ), $body->description, $body->error_code );
 
 		return false;
 
@@ -141,6 +141,33 @@ class WP_Telegram {
 	}
 
 	/**
+	 * Set webhook for bot
+	 *
+	 * @param $webhook_url
+	 *
+	 * @return bool
+	 */
+	public function set_webhook( $webhook_url ) {
+		$request = $this->make_request( "/setWebhook", array(
+			'url' => $webhook_url
+		) );
+
+		if ( is_wp_error( $request ) ) {
+			$this->lastError = __( "Ooops! Server failure, try again!", "two-factor-login-telegram" );
+			return false;
+		}
+
+		$body = json_decode( wp_remote_retrieve_body( $request ) );
+
+		if ( $body->ok == 1 ) {
+			return true;
+		}
+
+		$this->lastError = sprintf( __( "%s (Error code %d)", "two-factor-login-telegram" ), $body->description, $body->error_code );
+		return false;
+	}
+
+	/**
 	 * Send a User failed login notification to Telegram
 	 *
 	 * @param $user_login
@@ -149,10 +176,10 @@ class WP_Telegram {
 	 */
 
 	public function send_tg_failed_login( $user_login ) {
-		
+
 		// Get plugin options
 		$options = get_option($this->namespace);
-		
+
 		// Get Chat ID
 		$chat_id = $options['chat_id'];
 
@@ -164,7 +191,7 @@ class WP_Telegram {
 		// Get IP from computer attempting to login
 		$ip_address = (isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? wp_unslash($_SERVER["HTTP_CF_CONNECTING_IP"]) : wp_unslash($_SERVER['REMOTE_ADDR']));
 
-		
+
 		 if ( $options['show_site_name'] === '1' && $options['show_site_url'] === '1' ) {
 
 			// Get site name
@@ -172,7 +199,7 @@ class WP_Telegram {
 
 			// Get site URL
 			$site_url = home_url();
-			
+
 			// Message with site name
 			/* translators: 1. Site name, 2. Site URL, 3. Username, 4. IP address */
 			$msg = sprintf(__("Failed attempt to access to the site <strong>%s</strong> (%s) for the user: %s (IP: %s)", "two-factor-login-telegram"), $site_name, $site_url, $user_login, $ip_address);
