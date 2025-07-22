@@ -8,6 +8,8 @@ var WP_Factor_Telegram_Plugin = function ($) {
     var $twfciconf = $("#tg_wp_factor_chat_id_confirm");
     var $twbtn = $("#tg_wp_factor_chat_id_send");
     var $twctrl = $("#tg_wp_factor_valid");
+    var $twenabled = $("#tg_wp_factor_enabled");
+    var $twconfig = $("#tg-2fa-configuration");
 
     var $twfcr = $("#factor-chat-response");
     var $twfconf = $("#factor-chat-confirm");
@@ -21,6 +23,23 @@ var WP_Factor_Telegram_Plugin = function ($) {
     };
 
     function init() {
+
+        // Handle checkbox toggle for 2FA configuration
+        $twenabled.on("change", function(evt){
+            if ($(this).is(":checked")) {
+                $twconfig.show();
+            } else {
+                $twconfig.hide();
+                $twctrl.val(0);
+            }
+        });
+
+        // Initialize visibility based on checkbox state
+        if ($twenabled.is(":checked")) {
+            $twconfig.show();
+        } else {
+            $twconfig.hide();
+        }
 
         $twfci.on("change", function(evt){
            $twctrl.val(0);
