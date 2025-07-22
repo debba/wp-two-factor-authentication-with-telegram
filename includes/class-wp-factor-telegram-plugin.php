@@ -55,6 +55,8 @@ final class WP_Factor_Telegram_Plugin
     {
         require_once(dirname(WP_FACTOR_TG_FILE)
             . "/includes/class-wp-telegram.php");
+        require_once(dirname(WP_FACTOR_TG_FILE)
+            . "/includes/class-telegram-logs-list-table.php");
     }
 
 
@@ -393,7 +395,7 @@ final class WP_Factor_Telegram_Plugin
 
     public function configure_tg()
     {
-        require_once(dirname(WP_FACTOR_TG_FILE) . "/sections/configure_tg.php");
+        require_once(dirname(WP_FACTOR_TG_FILE) . "/templates/configuration.php");
     }
 
     /**
