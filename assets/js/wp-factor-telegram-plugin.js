@@ -30,15 +30,20 @@ var WP_Factor_Telegram_Plugin = function ($) {
         $twenabled.on("change", function(evt){
             var isConfigured = $twconfigrow.length > 0;
 
-            if ($(this).is(":checked") && !isConfigured) {
-                $twconfig.addClass('show').show();
-                updateProgress(25);
+            if ($(this).is(":checked")) {
+                // Enable 2FA = 1, so tg_wp_factor_valid = 0
+                $twctrl.val(0);
+                if (!isConfigured) {
+                    $twconfig.addClass('show').show();
+                    updateProgress(25);
+                }
             } else {
+                // Enable 2FA = 0, so tg_wp_factor_valid = 1
+                $twctrl.val(1);
                 $twconfig.removeClass('show');
                 setTimeout(function() {
                     $twconfig.hide();
                 }, 300);
-                $twctrl.val(0);
                 updateProgress(0);
                 resetStatusIndicators();
             }

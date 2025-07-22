@@ -4,7 +4,7 @@ Tags: 2fa, authentication, telegram, authenticate, security
 Requires at least: 6.0
 Requires PHP: 7.0
 Tested up to: 6.8
-Stable tag: 3.5.1
+Stable tag: 3.5.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -52,8 +52,8 @@ Please note the URL generated in the example above is https://example.com/images
 
 == Changelog ==
 
-= 3.5.1 =
-* Bugfixes in timestamp
+= 3.5.2 =
+* Timestamp bugfixes
 
 = 3.5.0 =
 * **Enhanced Logs System**: Replaced simple logs with professional WP_List_Table implementation featuring pagination (10 items per page), sorting, and bulk actions
