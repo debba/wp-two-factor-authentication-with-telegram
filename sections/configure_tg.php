@@ -125,7 +125,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'telegram_validate') {
 
             <form method="post">
                 <?php wp_nonce_field('clear_telegram_logs'); ?>
-                <input type="submit" name="clear_logs" class="button button-secondary" value="<?php _e('Clear Logs', 'two-factor-login-telegram'); ?>" onclick="return confirm('<?php _e('Are you sure you want to clear all logs?', 'two-factor-login-telegram'); ?>')">
+                <input type="submit" name="clear_logs" class="tg-action-button" value="<?php _e('Clear Logs', 'two-factor-login-telegram'); ?>" onclick="return confirm('<?php _e('Are you sure you want to clear all logs?', 'two-factor-login-telegram'); ?>')">
             </form>
 
             <br>
@@ -361,7 +361,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'telegram_validate') {
                 do_settings_sections('tg_col.php');
                 ?>
                 <p class="submit">
-                    <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>"/>
+                    <input type="submit" class="tg-action-button" value="<?php _e('Save Changes') ?>"/>
                 </p>
 
             </form>

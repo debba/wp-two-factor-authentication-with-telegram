@@ -10,6 +10,8 @@ var WP_Factor_Telegram_Plugin = function ($) {
     var $twctrl = $("#tg_wp_factor_valid");
     var $twenabled = $("#tg_wp_factor_enabled");
     var $twconfig = $("#tg-2fa-configuration");
+    var $tweditbtn = $("#tg-edit-chat-id");
+    var $twconfigrow = $(".tg-configured-row");
 
     var $twfcr = $("#factor-chat-response");
     var $twfconf = $("#factor-chat-confirm");
@@ -24,42 +26,99 @@ var WP_Factor_Telegram_Plugin = function ($) {
 
     function init() {
 
-        // Handle checkbox toggle for 2FA configuration
+        // Handle checkbox toggle for 2FA configuration with smooth animation
         $twenabled.on("change", function(evt){
-            if ($(this).is(":checked")) {
-                $twconfig.show();
+            var isConfigured = $twconfigrow.length > 0;
+
+            if ($(this).is(":checked") && !isConfigured) {
+                $twconfig.addClass('show').show();
+                updateProgress(25);
             } else {
-                $twconfig.hide();
+                $twconfig.removeClass('show');
+                setTimeout(function() {
+                    $twconfig.hide();
+                }, 300);
                 $twctrl.val(0);
+                updateProgress(0);
+                resetStatusIndicators();
             }
         });
 
-        // Initialize visibility based on checkbox state
-        if ($twenabled.is(":checked")) {
-            $twconfig.show();
+        // Handle edit button click (when 2FA is already configured)
+        $tweditbtn.on("click", function(evt){
+            evt.preventDefault();
+
+            // Hide configured row and show configuration form
+            $twconfigrow.hide();
+            $twconfig.addClass('show').show();
+
+            // Make the input editable and clear it
+            $twfci.prop('readonly', false).removeClass('input-valid').css('background', '').val('');
+
+            // Reset validation state
+            $twctrl.val(0);
+            updateProgress(25);
+            resetStatusIndicators();
+            
+            // Show modifying status message
+            $('.tg-status.success').removeClass('success').addClass('warning').text(tlj.modifying_setup);
+        });
+
+        // Watch for changes in Chat ID when in edit mode
+        $twfci.on("input", function(){
+            var currentValue = $(this).val();
+            var originalValue = $(this).data('original-value');
+
+            // If value changed from original, require re-validation
+            if (currentValue !== originalValue) {
+                $twctrl.val(0);
+                $(this).removeClass('input-valid');
+            }
+        });
+
+        // Initialize visibility based on checkbox state and configuration
+        var isConfigured = $twconfigrow.length > 0;
+        if ($twenabled.is(":checked") && !isConfigured) {
+            $twconfig.addClass('show').show();
+            updateProgress(25);
         } else {
-            $twconfig.hide();
+            $twconfig.removeClass('show').hide();
+        }
+
+        // Store original chat ID value for comparison
+        if ($twfci.length) {
+            $twfci.data('original-value', $twfci.val());
         }
 
         $twfci.on("change", function(evt){
            $twctrl.val(0);
+           // Validate Chat ID format (basic validation)
+           validateChatId($(this).val());
         });
 
         $twbtn.on("click", function(evt){
-
             evt.preventDefault();
             var chat_id = $twfci.val();
-            send_tg_token(chat_id);
 
+            if (!validateChatId(chat_id)) {
+                showStatus('#chat-id-status', 'error', tlj.invalid_chat_id);
+                return;
+            }
+
+            send_tg_token(chat_id);
         });
 
         $twfcheck.on("click", function(evt){
-
             evt.preventDefault();
             var token = $twfciconf.val();
             var chat_id = $twfci.val();
-            check_tg_token(token, chat_id);
 
+            if (!token.trim()) {
+                showStatus('#validation-status', 'error', tlj.enter_confirmation_code);
+                return;
+            }
+
+            check_tg_token(token, chat_id);
         });
 
         $twbcheck.on("click", function(evt){
@@ -124,6 +183,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
             beforeSend: function(){
                 $twfcheck.addClass('disabled').after('<div class="load-spinner"><img src="'+tlj.spinner+'" /></div>');
                 $twfcr.hide();
+                hideStatus('#validation-status');
             },
             dataType: "json",
             success: function(response){
@@ -132,18 +192,18 @@ var WP_Factor_Telegram_Plugin = function ($) {
                     $twfconf.hide();
                     $twfci.addClass("input-valid");
                     $twctrl.val(1);
+                    updateProgress(100);
+                    showStatus('#validation-status', 'success', tlj.setup_completed);
                 }
                 else {
-                    $twfcr.find(".wpft-notice p").text(response.msg);
-                    $twfcr.show();
+                    showStatus('#validation-status', 'error', response.msg);
                     $twfci.removeClass("input-valid");
                     $twctrl.val(0);
                 }
 
             },
             error: function(xhr, ajaxOptions, thrownError){
-                $twfcr.find(".wpft-notice p").text(tlj.ajax_error+" "+thrownError+" ("+xhr.state+")");
-                $twfcr.show();
+                showStatus('#validation-status', 'error', tlj.ajax_error+" "+thrownError+" ("+xhr.state+")");
                 $twfci.removeClass("input-valid");
             },
             complete: function() {
@@ -170,6 +230,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
                 $twbtn.addClass('disabled').after('<div class="load-spinner"><img src="'+tlj.spinner+'" /></div>');
                 $twfcr.hide();
                 $twfconf.hide();
+                hideStatus('#chat-id-status');
             },
             dataType: "json",
             success: function(response){
@@ -177,16 +238,16 @@ var WP_Factor_Telegram_Plugin = function ($) {
                 if (response.type === "success") {
                     $twfconf.show();
                     $twfci.removeClass("input-valid");
+                    updateProgress(75);
+                    showStatus('#chat-id-status', 'success', tlj.code_sent);
                 }
                 else {
-                    $twfcr.find(".wpft-notice p").text(response.msg);
-                    $twfcr.show();
+                    showStatus('#chat-id-status', 'error', response.msg);
                 }
 
             },
             error: function(xhr, ajaxOptions, thrownError){
-                $twfcr.find(".wpft-notice p").text(tlj.ajax_error+" "+thrownError+" ("+xhr.state+")");
-                $twfcr.show();
+                showStatus('#chat-id-status', 'error', tlj.ajax_error+" "+thrownError+" ("+xhr.state+")");
             },
             complete: function() {
                 $twbtn.removeClass('disabled');
@@ -198,6 +259,42 @@ var WP_Factor_Telegram_Plugin = function ($) {
 
     }
 
+    // Helper functions
+    function updateProgress(percentage) {
+        $('#tg-progress-bar').css('width', percentage + '%');
+    }
 
+    function validateChatId(chatId) {
+        // Telegram Chat ID validation: must be numeric (positive for users, negative for groups)
+        if (!chatId || typeof chatId !== 'string') {
+            return false;
+        }
+        
+        var trimmedId = chatId.trim();
+        if (trimmedId === '') {
+            return false;
+        }
+        
+        // Check if it's a valid number (can be negative for groups)
+        var numericId = parseInt(trimmedId, 10);
+        return !isNaN(numericId) && trimmedId === numericId.toString();
+    }
+
+    function showStatus(selector, type, message) {
+        var $status = $(selector);
+        $status.removeClass('success error warning')
+               .addClass(type)
+               .text(message)
+               .fadeIn(300);
+    }
+
+    function hideStatus(selector) {
+        $(selector).fadeOut(300);
+    }
+
+    function resetStatusIndicators() {
+        hideStatus('#chat-id-status');
+        hideStatus('#validation-status');
+    }
 
 }(jQuery);

@@ -749,7 +749,13 @@ final class WP_Factor_Telegram_Plugin
                 "checkbot_nonce" => wp_create_nonce('ajax-checkbot-nonce'),
                 "sendtoken_nonce" => wp_create_nonce('ajax-sendtoken-nonce'),
                 "tokencheck_nonce" => wp_create_nonce('ajax-tokencheck-nonce'),
-                "spinner" => admin_url("/images/spinner.gif")
+                "spinner" => admin_url("/images/spinner.gif"),
+                // Translated messages
+                "invalid_chat_id" => __('Please enter a valid Chat ID', 'two-factor-login-telegram'),
+                "enter_confirmation_code" => __('Please enter the confirmation code', 'two-factor-login-telegram'),
+                "setup_completed" => __('✅ 2FA setup completed successfully!', 'two-factor-login-telegram'),
+                "code_sent" => __('✅ Code sent! Check your Telegram', 'two-factor-login-telegram'),
+                "modifying_setup" => __('⚠️ Modifying 2FA configuration - validation required', 'two-factor-login-telegram')
             ));
 
             wp_enqueue_script("tg_lib_js");
