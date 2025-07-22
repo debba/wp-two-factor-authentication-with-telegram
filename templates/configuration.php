@@ -151,53 +151,67 @@ if (isset($_GET['action']) && $_GET['action'] === 'telegram_validate') {
             <h2><?php _e("FAQ", "two-factor-login-telegram"); ?></h2>
 
             <div id="wpft-howto">
+                <!-- Bot Token Section -->
                 <h3 id="first"><?php _e("Bot token", "two-factor-login-telegram"); ?></h3>
-                <div>
+                <div class="faq-content">
                     <p>
                         <?php _e('If you want to enable <strong>2FA with Telegram</strong> plugin you need to provide a valid token for a Telegram Bot.',
                             "two-factor-login-telegram"); ?>
-                        <br/>
+                    </p>
+                    <p>
                         <?php _e('Have you ever created a bot in Telegram? It\'s so easy!',
                             "two-factor-login-telegram"); ?>
-                        <br/>
+                    </p>
 
                     <ol>
                         <li>
+                            <strong><?php _e('Open Telegram', 'two-factor-login-telegram'); ?></strong><br>
                             <?php
-                            printf(__('Open Telegram and start a conversation with %s',
+                            printf(__('Start a conversation with %s',
                                 "two-factor-login-telegram"),
-                                '<a href="https://telegram.me/botfather" target="_blank">@BotFather</a>');
+                                '<a href="https://telegram.me/botfather" target="_blank" class="external-link">@BotFather</a>');
                             ?>
                         </li>
 
                         <li>
+                            <strong><?php _e('Create new bot', 'two-factor-login-telegram'); ?></strong><br>
                             <?php
                             printf(__('Type command %s to create a new bot',
-                                "two-factor-login-telegram"), '<code>/newbot</code>');
+                                "two-factor-login-telegram"), '<code class="command">/newbot</code>');
                             ?>
                         </li>
-                        <li><?php
-                            _e('Provide username and name for the new bot.',
-                                'two-factor-login-telegram'); ?></li>
+
                         <li>
-                            <?php _e('In the anwser will be your <strong>Bot Token</strong>',
+                            <strong><?php _e('Configure bot', 'two-factor-login-telegram'); ?></strong><br>
+                            <?php _e('Provide username and name for the new bot.',
                                 'two-factor-login-telegram'); ?>
+                        </li>
 
-                            <img style="width:500px;height:auto;"
-                                 src="<?php echo plugins_url("/assets/img/help-api-token.png",
-                                     WP_FACTOR_TG_FILE); ?>">
-
+                        <li>
+                            <strong><?php _e('Get your Bot Token', 'two-factor-login-telegram'); ?></strong><br>
+                            <?php _e('In the answer will be your <strong>Bot Token</strong>',
+                                'two-factor-login-telegram'); ?>
+                            
+                            <div class="screenshot-container">
+                                <img class="help-screenshot" 
+                                     src="<?php echo plugins_url("/assets/img/help-api-token.png", WP_FACTOR_TG_FILE); ?>"
+                                     alt="<?php _e('Bot token example', 'two-factor-login-telegram'); ?>">
+                            </div>
                         </li>
                     </ol>
                 </div>
+
+                <!-- Chat ID Section -->
                 <h3><?php _e("Get Chat ID for Telegram user", "two-factor-login-telegram"); ?></h3>
-                <div>
+                <div class="faq-content">
                     <p>
                         <?php _e("Chat ID identifies your user profile in Telegram.",
                             "two-factor-login-telegram"); ?>
-                        <br/>
+                    </p>
+                    <p>
                         <?php _e("You have no idea what is your Chat ID? Follow these simple steps:",
                             "two-factor-login-telegram"); ?>
+                    </p>
 
                     <ol>
                         <?php
@@ -211,51 +225,58 @@ if (isset($_GET['action']) && $_GET['action'] === 'telegram_validate') {
 
                         if ($bot_username): ?>
                             <li>
+                                <strong><?php _e('Contact your bot', 'two-factor-login-telegram'); ?></strong><br>
                                 <?php
                                 printf(__('Open Telegram and start a conversation with your configured bot %s and press on <strong>Start</strong>',
                                     "two-factor-login-telegram"),
-                                    '<a href="https://telegram.me/' . $bot_username . '" target="_blank">@' . $bot_username . '</a>');
+                                    '<a href="https://telegram.me/' . $bot_username . '" target="_blank" class="external-link">@' . $bot_username . '</a>');
                                 ?>
                             </li>
                             <li>
+                                <strong><?php _e('Get your ID', 'two-factor-login-telegram'); ?></strong><br>
                                 <?php
                                 printf(__('Type command %s to obtain your Chat ID.',
-                                    "two-factor-login-telegram"), '<code>/get_id</code>');
+                                    "two-factor-login-telegram"), '<code class="command">/get_id</code>');
                                 ?>
                             </li>
                             <li>
-                                <?php
-                                _e("The bot will reply with your <strong>Chat ID</strong> number",
-                                    'two-factor-login-telegram');
-                                ?>
+                                <strong><?php _e('Copy the ID', 'two-factor-login-telegram'); ?></strong><br>
+                                <?php _e("The bot will reply with your <strong>Chat ID</strong> number",
+                                    'two-factor-login-telegram'); ?>
                             </li>
                         <?php else: ?>
                             <li>
+                                <strong><?php _e('Configure bot first', 'two-factor-login-telegram'); ?></strong><br>
                                 <?php _e('First configure your bot token in the Setup tab, then return here for specific instructions.',
                                     "two-factor-login-telegram"); ?>
                             </li>
                             <li>
+                                <strong><?php _e('Alternative method', 'two-factor-login-telegram'); ?></strong><br>
                                 <?php _e('Alternatively, you can use a generic bot like',
                                     "two-factor-login-telegram"); ?>
                                 <?php
                                 printf(__(' %s and type %s to get your Chat ID.',
                                     "two-factor-login-telegram"),
-                                    '<a href="https://telegram.me/myidbot" target="_blank">@MyIDBot</a>',
-                                    '<code>/getid</code>');
+                                    '<a href="https://telegram.me/myidbot" target="_blank" class="external-link">@MyIDBot</a>',
+                                    '<code class="command">/getid</code>');
                                 ?>
                             </li>
                         <?php endif; ?>
                     </ol>
-
-                    </p>
                 </div>
+
+                <!-- Activation Section -->
                 <h3><?php _e("Activation of service", "two-factor-login-telegram"); ?></h3>
-                <div>
+                <div class="faq-content">
                     <p>
                         <?php _e('Open a conversation with the created bot that you provided for the plugin and push <strong>Start</strong>',
-                            'two-factor-login-telegram'); ?>
-                        .
+                            'two-factor-login-telegram'); ?>.
                     </p>
+                    <div class="notice notice-info">
+                        <p>
+                            <?php _e('This step is crucial for the bot to be able to send you messages!', 'two-factor-login-telegram'); ?>
+                        </p>
+                    </div>
                 </div>
             </div>
 

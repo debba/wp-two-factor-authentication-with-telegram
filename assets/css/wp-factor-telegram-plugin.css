@@ -136,7 +136,7 @@
 }
 
 #wpft-howto .ui-accordion-header {
-    background-color: #389abe;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 /* 2FA Configuration Improvements */
@@ -248,6 +248,84 @@
     vertical-align: middle;
 }
 
+/* FAQ Section Styling */
+#wpft-howto {
+    margin: 20px 0;
+}
+
+#wpft-howto h3 {
+    background-color: #389abe;
+    color: white;
+    padding: 15px 20px;
+    margin: 20px 0 0 0;
+    font-size: 16px;
+    border-radius: 5px 5px 0 0;
+}
+
+#wpft-howto .faq-content {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    margin-bottom: 20px;
+}
+
+#wpft-howto p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+#wpft-howto ol {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+#wpft-howto li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+#wpft-howto .command {
+    background: #333;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+#wpft-howto .screenshot-container {
+    margin: 15px 0;
+    text-align: center;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+#wpft-howto .help-screenshot {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+}
+
+#wpft-howto .notice {
+    padding: 12px;
+    margin: 15px 0;
+    border-left: 4px solid #00a0d2;
+    background: #f7fcfe;
+}
+
+#wpft-howto .external-link {
+    color: #0073aa;
+    text-decoration: none;
+}
+
+#wpft-howto .external-link:hover {
+    text-decoration: underline;
+}
+
 .load-spinner img {
     width: 20px;
     height: 20px;
@@ -350,7 +428,7 @@
         width: 100%;
         padding-bottom: 10px;
     }
-    
+
     .tg-action-button {
         width: 100%;
         margin-top: 10px;
