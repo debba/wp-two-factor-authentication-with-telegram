@@ -55,12 +55,17 @@ class Telegram_Logs_List_Table extends WP_List_Table
 
     public function column_timestamp($item)
     {
-        // Format timestamp using WordPress date and time settings
-        $timestamp = $item['timestamp'];
-        $date_format = get_option('date_format');
-        $time_format = get_option('time_format');
-        $formatted_timestamp = wp_date($date_format . ' ' . $time_format, strtotime($timestamp));
-        
+
+        $timestamp_mysql = $item['timestamp']; // es. "2025-07-22 15:40:00"
+        $timezone = wp_timezone();
+
+        $datetime = DateTime::createFromFormat( 'Y-m-d H:i:s', $timestamp_mysql, $timezone );
+
+        $date_format = get_option( 'date_format' );
+        $time_format = get_option( 'time_format' );
+
+        $formatted_timestamp = wp_date( $date_format . ' ' . $time_format, $datetime->getTimestamp(), $timezone );
+
         $delete_url = wp_nonce_url(
             admin_url('options-general.php?page=tg-conf&tab=logs&action=delete&log_id=' . $item['id']),
             'delete_log_' . $item['id']
@@ -87,7 +92,7 @@ class Telegram_Logs_List_Table extends WP_List_Table
     {
         $data = maybe_unserialize($item['data']);
         $formatted_data = print_r($data, true);
-        
+
         return sprintf(
             '<details><summary>%s</summary><pre style="background: #f1f1f1; padding: 10px; margin-top: 10px; overflow-x: auto; font-size: 11px;">%s</pre></details>',
             __('View details', 'two-factor-login-telegram'),
@@ -126,7 +131,7 @@ class Telegram_Logs_List_Table extends WP_List_Table
         if (!in_array($orderby, $allowed_orderby)) {
             $orderby = 'timestamp';
         }
-        
+
         $order = strtoupper($order) === 'ASC' ? 'ASC' : 'DESC';
 
         // Get total items count
@@ -174,9 +179,9 @@ class Telegram_Logs_List_Table extends WP_List_Table
                             ...$log_ids
                         )
                     );
-                    
-                    echo '<div class="notice notice-success is-dismissible"><p>' . 
-                         sprintf(__('Deleted %d log entries.', 'two-factor-login-telegram'), count($log_ids)) . 
+
+                    echo '<div class="notice notice-success is-dismissible"><p>' .
+                         sprintf(__('Deleted %d log entries.', 'two-factor-login-telegram'), count($log_ids)) .
                          '</p></div>';
                 }
             }
@@ -187,8 +192,8 @@ class Telegram_Logs_List_Table extends WP_List_Table
             $log_id = intval($_GET['log_id']);
             if (wp_verify_nonce($_GET['_wpnonce'], 'delete_log_' . $log_id)) {
                 $wpdb->delete($table_name, ['id' => $log_id], ['%d']);
-                echo '<div class="notice notice-success is-dismissible"><p>' . 
-                     __('Log entry deleted.', 'two-factor-login-telegram') . 
+                echo '<div class="notice notice-success is-dismissible"><p>' .
+                     __('Log entry deleted.', 'two-factor-login-telegram') .
                      '</p></div>';
             }
         }
