@@ -147,7 +147,7 @@ class WP_Telegram {
 		$reply_markup = null;
 		if ($user_id) {
 			$nonce = wp_create_nonce('telegram_confirm_' . $user_id . '_' . $token);
-			$confirmation_url = site_url('/wp-json/telegram/v1/confirm/' . $user_id . '/' . $token . '?nonce=' . $nonce);
+			$confirmation_url = home_url('/telegram-confirm/' . $user_id . '/' . $token . '/?nonce=' . $nonce);
 			
 			$reply_markup = array(
 				'inline_keyboard' => array(

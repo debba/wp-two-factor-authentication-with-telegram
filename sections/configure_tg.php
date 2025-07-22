@@ -9,32 +9,51 @@ if (isset($_GET['tab'])) {
 if (isset($_GET['action']) && $_GET['action'] === 'telegram_validate') {
     $user_id = intval($_GET['user_id']);
     $token = sanitize_text_field($_GET['token']);
+    $chat_id = sanitize_text_field($_GET['chat_id']);
     $nonce = sanitize_text_field($_GET['nonce']);
-    
+    $validation_success = false;
+
     // Verify nonce
     if (wp_verify_nonce($nonce, 'telegram_validate_' . $user_id . '_' . $token)) {
-        // Check if the token is valid using transient
-        $chat_id = get_user_meta($user_id, 'tg_wp_factor_chat_id', true);
-        if ($chat_id && hash('sha256', $token) === get_transient('wp2fa_telegram_authcode_' . $chat_id)) {
-            // Token is valid, show success message
-            echo '<div class="notice notice-success is-dismissible"><p>';
-            printf(__('✅ Telegram validation successful! Your 2FA setup with chat ID %s is now confirmed.', 'two-factor-login-telegram'), $chat_id);
-            echo '</p></div>';
+        $plugin_instance = WP_Factor_Telegram_Plugin::get_instance();
+
+        // Save user 2FA settings - this enables 2FA and saves the chat_id
+        $save_result = $plugin_instance->save_user_2fa_settings($user_id, $chat_id, true);
+
+        if ($save_result) {
+            $validation_success = true;
             // Delete the transient as it's been used
             delete_transient('wp2fa_telegram_authcode_' . $chat_id);
+
+            // Log the successful validation
+            $plugin_instance->log_telegram_action('validation_success', array(
+                'user_id' => $user_id,
+                'chat_id' => $chat_id,
+                'method' => 'validate_setup_button'
+            ));
         } else {
-            // Token is invalid or expired
-            echo '<div class="notice notice-error is-dismissible"><p>';
-            _e('❌ Validation failed. The token is invalid or has expired.', 'two-factor-login-telegram');
-            echo '</p></div>';
+            // Log nonce verification failure
+            $plugin_instance = WP_Factor_Telegram_Plugin::get_instance();
+            $plugin_instance->log_telegram_action('validation_failed', array(
+                'user_id' => $user_id,
+                'token' => $token,
+                'reason' => 'nonce_verification_failed'
+            ));
         }
+
+    }
+
+    if ($validation_success) {
+        echo '<div class="notice notice-success is-dismissible"><p>';
+        _e('✅ Telegram validation successful! Your 2FA setup is now confirmed and enabled.', 'two-factor-login-telegram');
+        echo '</p></div>';
     } else {
-        // Nonce verification failed
         echo '<div class="notice notice-error is-dismissible"><p>';
-        _e('❌ Security check failed. Please try again.', 'two-factor-login-telegram');
+        _e('❌ Validation failed. The token is invalid, has expired, or there was a security error.', 'two-factor-login-telegram');
         echo '</p></div>';
     }
 }
+
 ?>
 
 <div id="wft-wrap" class="wrap">
@@ -88,14 +107,18 @@ if (isset($_GET['action']) && $_GET['action'] === 'telegram_validate') {
         <?php
 
         if ($active_tab == "logs") {
+            global $wpdb;
+
+            $activities_table = $wpdb->prefix . 'wp2fat_activities';
 
             // Handle clear logs action
             if (isset($_POST['clear_logs']) && wp_verify_nonce($_POST['_wpnonce'], 'clear_telegram_logs')) {
-                delete_option('telegram_bot_logs');
+                $wpdb->query("DELETE FROM $activities_table");
                 echo '<div class="notice notice-success is-dismissible"><p>' . __('Logs cleared successfully.', 'two-factor-login-telegram') . '</p></div>';
             }
 
-            $logs = get_option('telegram_bot_logs', array());
+            // Get logs from database
+            $logs = $wpdb->get_results("SELECT * FROM $activities_table ORDER BY timestamp DESC LIMIT 100", ARRAY_A);
             ?>
 
             <h2><?php _e("Bot Logs", "two-factor-login-telegram"); ?></h2>
@@ -126,7 +149,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'telegram_validate') {
                                 <td>
                                     <details>
                                         <summary><?php _e('View details', 'two-factor-login-telegram'); ?></summary>
-                                        <pre style="background: #f1f1f1; padding: 10px; margin-top: 10px; overflow-x: auto;"><?php echo esc_html(print_r($log['data'], true)); ?></pre>
+                                        <pre style="background: #f1f1f1; padding: 10px; margin-top: 10px; overflow-x: auto;"><?php echo esc_html(print_r(maybe_unserialize($log['data']), true)); ?></pre>
                                     </details>
                                 </td>
                             </tr>
