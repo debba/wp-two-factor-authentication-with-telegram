@@ -4,7 +4,7 @@ Tags: 2fa, authentication, telegram, authenticate, security
 Requires at least: 6.0
 Requires PHP: 7.0
 Tested up to: 6.8
-Stable tag: 3.4
+Stable tag: 3.5.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -51,6 +51,18 @@ Please note the URL generated in the example above is https://example.com/images
 7. You can customize the logo with yours using "two_factor_login_telegram_logo" filter hook. See the instructions of use in FAQ.
 
 == Changelog ==
+
+= 3.5.0 =
+* **Enhanced Logs System**: Replaced simple logs with professional WP_List_Table implementation featuring pagination (10 items per page), sorting, and bulk actions
+* **Improved User Interface**: Complete UI overhaul with enhanced styling, better form layouts, and improved user experience
+* **Advanced Database Management**: Migrated to MySQL tables for better performance and reliability instead of WordPress options
+* **Better Chat ID Validation**: Enhanced Chat ID validation with proper format checking for both user and group chats
+* **JavaScript Translations**: Implemented proper internationalization for all JavaScript messages using wp_localize_script
+* **Enhanced User Feedback**: Added contextual status messages during 2FA configuration with clear visual indicators
+* **Template System**: Introduced dedicated error templates for better error handling and user guidance
+* **Timestamp Formatting**: Logs now respect WordPress date/time format settings for consistent display
+* **Bug Fixes**: Fixed duplicate Chat ID input elements issue and improved form validation
+* **Performance Improvements**: Optimized database queries and reduced memory usage
 
 = 3.4 =
 * Added Logs
