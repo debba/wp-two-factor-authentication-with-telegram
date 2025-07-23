@@ -9,7 +9,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
     var $twbtn = $("#tg_wp_factor_chat_id_send");
     var $twctrl = $("#tg_wp_factor_valid");
     var $twenabled = $("#tg_wp_factor_enabled");
-    var $twconfig = $("#tg-2fa-configuration");
+    var $twconfig = $("#-2fa-configuration");
     var $tweditbtn = $("#tg-edit-chat-id");
     var $twconfigrow = $(".tg-configured-row");
 
@@ -352,3 +352,49 @@ jQuery(document).ready(function($) {
         });
     });
 });
+
+window.openRecoveryCodesModal = function(url, redirect_to, html) {
+    var oldModal = document.getElementById('tg-modal-recovery');
+    if (oldModal) oldModal.remove();
+    if (html) {
+        var div = document.createElement('div');
+        div.innerHTML = html;
+        var modalElement = div.querySelector('#tg-modal-recovery') || div.firstElementChild;
+        if (modalElement) {
+            document.body.appendChild(modalElement);
+            var btn = document.getElementById('confirm-recovery-codes');
+            if (btn) {
+                btn.onclick = function() {
+                    window.location.href = redirect_to;
+                };
+            }
+        }
+        return;
+    }
+    // Carica via AJAX il contenuto
+    fetch(url)
+        .then(r => r.text())
+        .then(html => {
+            var div = document.createElement('div');
+            div.innerHTML = html;
+            document.body.appendChild(div.firstElementChild);
+            var btn = document.getElementById('confirm-recovery-codes');
+            if (btn) {
+                btn.onclick = function() {
+                    window.location.href = redirect_to;
+                };
+            }
+        });
+}
+window.closeRecoveryModal = function() {
+    var modal = document.getElementById('tg-modal-recovery');
+    if (modal) modal.remove();
+}
+window.copyRecoveryCodes = function() {
+    let codes = Array.from(document.querySelectorAll('.recovery-code-box')).map(e => e.textContent).join('\n');
+    navigator.clipboard.writeText(codes).then(function() {
+        alert('Codes copied to clipboard!');
+    }).catch(function() {
+        alert('Failed to copy codes to clipboard');
+    });
+}
