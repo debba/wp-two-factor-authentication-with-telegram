@@ -303,3 +303,52 @@ var WP_Factor_Telegram_Plugin = function ($) {
     }
 
 }(jQuery);
+
+// Funzionalità per disattivare 2FA dalla lista utenti (admin)
+jQuery(document).ready(function($) {
+    // Handler per i pulsanti di disattivazione 2FA nella lista utenti
+    $('.disable-2fa-btn').on('click', function(e) {
+        e.preventDefault();
+        
+        var $btn = $(this);
+        var userId = $btn.data('user-id');
+        var userName = $btn.data('user-name');
+        
+        if (!confirm('Sei sicuro di voler disattivare la 2FA per l\'utente ' + userName + '?')) {
+            return;
+        }
+        
+        // Aggiungi spinner di caricamento
+        $btn.prop('disabled', true).text('Disattivando...');
+        
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'disable_user_2fa',
+                user_id: userId,
+                nonce: wp_factor_admin.nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Aggiorna l'icona e il pulsante
+                    var $cell = $btn.closest('td');
+                    $cell.html('<span style="color: #999;">❌ Disattivo</span>');
+                    
+                    // Mostra messaggio di successo
+                    $('<div class="notice notice-success is-dismissible"><p>2FA disattivata con successo per ' + userName + '</p></div>')
+                        .insertAfter('.wp-header-end')
+                        .delay(3000)
+                        .fadeOut();
+                } else {
+                    alert('Errore durante la disattivazione: ' + (response.data || 'Errore sconosciuto'));
+                    $btn.prop('disabled', false).text('Disattiva');
+                }
+            },
+            error: function() {
+                alert('Errore di comunicazione con il server');
+                $btn.prop('disabled', false).text('Disattiva');
+            }
+        });
+    });
+});

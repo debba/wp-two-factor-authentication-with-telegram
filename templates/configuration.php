@@ -5,54 +5,6 @@ if (isset($_GET['tab'])) {
     $active_tab = 'config';
 }
 
-// Handle telegram validation action
-if (isset($_GET['action']) && $_GET['action'] === 'telegram_validate') {
-    $user_id = intval($_GET['user_id']);
-    $token = sanitize_text_field($_GET['token']);
-    $chat_id = sanitize_text_field($_GET['chat_id']);
-    $nonce = sanitize_text_field($_GET['nonce']);
-    $validation_success = false;
-
-    // Verify nonce
-    if (wp_verify_nonce($nonce, 'telegram_validate_' . $user_id . '_' . $token)) {
-        $plugin_instance = WP_Factor_Telegram_Plugin::get_instance();
-
-        // Save user 2FA settings - this enables 2FA and saves the chat_id
-        $save_result = $plugin_instance->save_user_2fa_settings($user_id, $chat_id, true);
-
-        if ($save_result) {
-            $validation_success = true;
-            // Delete the transient as it's been used
-            delete_transient('wp2fa_telegram_authcode_' . $chat_id);
-
-            // Log the successful validation
-            $plugin_instance->log_telegram_action('validation_success', array(
-                'user_id' => $user_id,
-                'chat_id' => $chat_id,
-                'method' => 'validate_setup_button'
-            ));
-        } else {
-            // Log nonce verification failure
-            $plugin_instance = WP_Factor_Telegram_Plugin::get_instance();
-            $plugin_instance->log_telegram_action('validation_failed', array(
-                'user_id' => $user_id,
-                'token' => $token,
-                'reason' => 'nonce_verification_failed'
-            ));
-        }
-
-    }
-
-    if ($validation_success) {
-        echo '<div class="notice notice-success is-dismissible"><p>';
-        _e('✅ Telegram validation successful! Your 2FA setup is now confirmed and enabled.', 'two-factor-login-telegram');
-        echo '</p></div>';
-    } else {
-        echo '<div class="notice notice-error is-dismissible"><p>';
-        _e('❌ Validation failed. The token is invalid, has expired, or there was a security error.', 'two-factor-login-telegram');
-        echo '</p></div>';
-    }
-}
 
 ?>
 
@@ -191,9 +143,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'telegram_validate') {
                             <strong><?php _e('Get your Bot Token', 'two-factor-login-telegram'); ?></strong><br>
                             <?php _e('In the answer will be your <strong>Bot Token</strong>',
                                 'two-factor-login-telegram'); ?>
-                            
+
                             <div class="screenshot-container">
-                                <img class="help-screenshot" 
+                                <img class="help-screenshot"
                                      src="<?php echo plugins_url("/assets/img/help-api-token.png", WP_FACTOR_TG_FILE); ?>"
                                      alt="<?php _e('Bot token example', 'two-factor-login-telegram'); ?>">
                             </div>
