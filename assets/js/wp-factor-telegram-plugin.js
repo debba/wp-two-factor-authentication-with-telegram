@@ -9,7 +9,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
     var $twbtn = $("#tg_wp_factor_chat_id_send");
     var $twctrl = $("#tg_wp_factor_valid");
     var $twenabled = $("#tg_wp_factor_enabled");
-    var $twconfig = $("#-2fa-configuration");
+    var $twconfig = $("#tg-2fa-configuration");
     var $tweditbtn = $("#tg-edit-chat-id");
     var $twconfigrow = $(".tg-configured-row");
 
@@ -64,7 +64,7 @@ var WP_Factor_Telegram_Plugin = function ($) {
             $twctrl.val(0);
             updateProgress(25);
             resetStatusIndicators();
-            
+
             // Show modifying status message
             $('.tg-status.success').removeClass('success').addClass('warning').text(tlj.modifying_setup);
         });
@@ -274,12 +274,12 @@ var WP_Factor_Telegram_Plugin = function ($) {
         if (!chatId || typeof chatId !== 'string') {
             return false;
         }
-        
+
         var trimmedId = chatId.trim();
         if (trimmedId === '') {
             return false;
         }
-        
+
         // Check if it's a valid number (can be negative for groups)
         var numericId = parseInt(trimmedId, 10);
         return !isNaN(numericId) && trimmedId === numericId.toString();
@@ -304,23 +304,20 @@ var WP_Factor_Telegram_Plugin = function ($) {
 
 }(jQuery);
 
-// Funzionalità per disattivare 2FA dalla lista utenti (admin)
 jQuery(document).ready(function($) {
-    // Handler per i pulsanti di disattivazione 2FA nella lista utenti
     $('.disable-2fa-btn').on('click', function(e) {
         e.preventDefault();
-        
+
         var $btn = $(this);
         var userId = $btn.data('user-id');
         var userName = $btn.data('user-name');
-        
+
         if (!confirm('Sei sicuro di voler disattivare la 2FA per l\'utente ' + userName + '?')) {
             return;
         }
-        
-        // Aggiungi spinner di caricamento
+
         $btn.prop('disabled', true).text('Disattivando...');
-        
+
         $.ajax({
             url: ajaxurl,
             type: 'POST',
@@ -334,7 +331,7 @@ jQuery(document).ready(function($) {
                     // Aggiorna l'icona e il pulsante
                     var $cell = $btn.closest('td');
                     $cell.html('<span style="color: #999;">❌ Disattivo</span>');
-                    
+
                     // Mostra messaggio di successo
                     $('<div class="notice notice-success is-dismissible"><p>2FA disattivata con successo per ' + userName + '</p></div>')
                         .insertAfter('.wp-header-end')
@@ -371,7 +368,7 @@ window.openRecoveryCodesModal = function(url, redirect_to, html) {
         }
         return;
     }
-    // Carica via AJAX il contenuto
+
     fetch(url)
         .then(r => r.text())
         .then(html => {
@@ -385,6 +382,7 @@ window.openRecoveryCodesModal = function(url, redirect_to, html) {
                 };
             }
         });
+
 }
 window.closeRecoveryModal = function() {
     var modal = document.getElementById('tg-modal-recovery');

@@ -25,6 +25,7 @@ final class WP_Factor_Telegram_Plugin
 
     private $telegram;
 
+
     /**
      * Get WP Factor Telegram
      *
@@ -58,6 +59,14 @@ final class WP_Factor_Telegram_Plugin
             . "/includes/class-wp-telegram.php");
         require_once(dirname(WP_FACTOR_TG_FILE)
             . "/includes/class-telegram-logs-list-table.php");
+        require_once(dirname(WP_FACTOR_TG_FILE)
+            . "/includes/abstract-wp-factor-auth-method.php");
+        require_once(dirname(WP_FACTOR_TG_FILE)
+            . "/includes/class-wp-factor-recovery-codes.php");
+        require_once(dirname(WP_FACTOR_TG_FILE)
+            . "/includes/class-wp-factor-telegram-otp.php");
+        require_once(dirname(WP_FACTOR_TG_FILE)
+            . "/includes/class-wp-factor-auth-factory.php");
     }
 
 
@@ -69,149 +78,6 @@ final class WP_Factor_Telegram_Plugin
      * @return string
      */
 
-    private function get_auth_code($length = 5)
-    {
-        $pool = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z'));
-        $key = "";
-
-        for ($i = 0; $i < $length; $i++) {
-            $key .= $pool[random_int(0, count($pool) - 1)];
-        }
-
-        return $key;
-    }
-
-    private function token_exists($token)
-    {
-        global $wpdb;
-
-        $table_name = $wpdb->prefix . 'telegram_auth_codes';
-        $current_datetime = current_time('mysql');
-        $hashed_token = hash('sha256', $token);
-
-        $query = $wpdb->prepare(
-            "SELECT COUNT(*) 
-        FROM $table_name 
-        WHERE auth_code = %s 
-        AND expiration_date > %s",
-            $hashed_token,
-            $current_datetime
-        );
-
-        return ($wpdb->get_var($query) > 0);
-    }
-
-
-    /**
-     * Get unique authentication code
-     *
-     * @param int $length
-     *
-     * @return string
-     */
-
-    private function get_unique_auth_code($length = 5)
-    {
-        do {
-            $token = $this->get_auth_code($length);
-        } while ($this->token_exists($token));
-
-        return $token;
-    }
-
-    private function invalidate_existing_auth_codes($user_id)
-    {
-        global $wpdb;
-
-        $table_name = $wpdb->prefix . 'telegram_auth_codes';
-
-        $wpdb->update(
-            $table_name,
-            array('expiration_date' => current_time('mysql')), // Imposta l'expiration_date nel passato
-            array('user_id' => $user_id),
-            array('%s'),
-            array('%d')
-        );
-    }
-
-    private function cleanup_old_auth_codes($user_id)
-    {
-        global $wpdb;
-
-        $table_name = $wpdb->prefix . 'telegram_auth_codes';
-
-        // Conta quanti codici ci sono già per l'utente
-        $auth_codes_count = $wpdb->get_var($wpdb->prepare(
-            "SELECT COUNT(*) FROM $table_name WHERE user_id = %d",
-            $user_id
-        ));
-
-        // Se ci sono più di 5 codici, elimina quelli più vecchi
-        if ($auth_codes_count > 5) {
-            // Seleziona gli ID dei codici più vecchi da eliminare, escludendo i 5 più recenti
-            $old_auth_codes = $wpdb->get_col($wpdb->prepare(
-                "SELECT id FROM $table_name WHERE user_id = %d ORDER BY creation_date DESC LIMIT %d, %d",
-                $user_id,
-                5,
-                $auth_codes_count - 5
-            ));
-
-            // Elimina i codici più vecchi
-            if (!empty($old_auth_codes)) {
-                $placeholders = implode(',', array_fill(0, count($old_auth_codes), '%d'));
-                $wpdb->query($wpdb->prepare(
-                    "DELETE FROM $table_name WHERE id IN ($placeholders)",
-                    ...$old_auth_codes
-                ));
-            }
-        }
-    }
-
-
-    /**
-     * Save authentication code in database table
-     *
-     * @param $user
-     * @param $authcode_length
-     * @return string | false
-     */
-
-    private function save_authcode($user, $authcode_length = 5)
-    {
-        global $wpdb;
-
-        $table_name = $wpdb->prefix . 'telegram_auth_codes';
-        $auth_code = $this->get_unique_auth_code($authcode_length);
-        $user_id = is_object($user) ? $user->ID : intval($user);
-
-        $creation_date = current_time('mysql');  // Data attuale
-        $expiration_date = date('Y-m-d H:i:s', strtotime($creation_date) + WP_FACTOR_AUTHCODE_EXPIRE_SECONDS);
-
-        $this->invalidate_existing_auth_codes($user_id);
-
-        $wpdb->insert(
-            $table_name,
-            array(
-                'auth_code' => hash('sha256', $auth_code),
-                'user_id' => $user_id,
-                'creation_date' => $creation_date,
-                'expiration_date' => $expiration_date
-            ),
-            array(
-                '%s',
-                '%d',
-                '%s',
-                '%s'
-            )
-        );
-
-        if ($wpdb->insert_id) {
-            $this->cleanup_old_auth_codes($user_id);
-            return $auth_code;
-        } else {
-            return false;
-        }
-    }
 
     /**
      * Show to factor login html
@@ -221,7 +87,8 @@ final class WP_Factor_Telegram_Plugin
 
     private function show_two_factor_login($user)
     {
-        $auth_code = $this->save_authcode($user);
+        $telegram_otp = WP_Factor_Auth_Factory::create(WP_Factor_Auth_Factory::METHOD_TELEGRAM_OTP);
+        $auth_code = $telegram_otp->save_authcode($user);
         $chat_id = $this->get_user_chatid($user->ID);
 
         $result = $this->telegram->send_tg_token($auth_code, $chat_id, $user->ID);
@@ -283,55 +150,6 @@ final class WP_Factor_Telegram_Plugin
         }
     }
 
-    private function is_valid_tokencheck_authcode($authcode, $chat_id)
-    {
-        return hash('sha256', $authcode) === get_transient("wp2fa_telegram_authcode_" . $chat_id);
-    }
-
-    private function is_valid_authcode($authcode, $user_id)
-    {
-        global $wpdb;
-
-        $table_name = $wpdb->prefix . 'telegram_auth_codes';
-        $hashed_auth_code = hash('sha256', $authcode);
-        $current_datetime = current_time('mysql');
-
-        // Check if token exists for this user
-        $token_exists_query = $wpdb->prepare(
-            "SELECT COUNT(*) 
-            FROM $table_name 
-            WHERE auth_code = %s 
-            AND user_id = %d",
-            $hashed_auth_code,
-            $user_id
-        );
-
-        $token_exists = ($wpdb->get_var($token_exists_query) > 0);
-
-        if (!$token_exists) {
-            return 'invalid'; // Invalid token
-        }
-
-        // Check if token is not expired
-        $valid_token_query = $wpdb->prepare(
-            "SELECT COUNT(*) 
-            FROM $table_name 
-            WHERE auth_code = %s 
-            AND user_id = %d 
-            AND expiration_date > %s",
-            $hashed_auth_code,
-            $user_id,
-            $current_datetime
-        );
-
-        $is_valid = ($wpdb->get_var($valid_token_query) > 0);
-
-        if (!$is_valid) {
-            return 'expired'; // Token exists but expired
-        }
-
-        return 'valid'; // Valid token
-    }
 
     /**
      * Validate telegram auth code login
@@ -358,73 +176,66 @@ final class WP_Factor_Telegram_Plugin
         $login_successful = false;
         $error_message = '';
 
-        if ($login_method === 'recovery') {
-            // Handle recovery code login
-            $recovery_code = isset($_POST['recovery_code']) ? $_POST['recovery_code'] : '';
-            
-            if (empty($recovery_code)) {
-                $error_message = __('Please enter a recovery code.', 'two-factor-login-telegram');
-            } else {
-                $recovery_validation = $this->validate_recovery_code($recovery_code, $user->ID);
-                
-                if ($recovery_validation) {
-                    $login_successful = true;
-                    
-                    $this->log_telegram_action('recovery_code_login_success', array(
-                        'user_id' => $user->ID,
-                        'user_login' => $user->user_login,
-                        'recovery_code_used' => substr($recovery_code, 0, 4) . '****'
-                    ));
-                } else {
-                    $error_message = __('Invalid recovery code. Please check and try again.', 'two-factor-login-telegram');
-                    
-                    $this->log_telegram_action('recovery_code_login_failed', array(
-                        'user_id' => $user->ID,
-                        'user_login' => $user->user_login,
-                        'attempted_code' => substr($recovery_code, 0, 4) . '****'
-                    ));
-                    
-                    do_action('wp_factor_telegram_failed', $user->user_login);
-                }
-            }
-        } else {
-            // Handle Telegram code login (original logic)
-            $authcode_validation = $this->is_valid_authcode($_REQUEST['authcode'], $user->ID);
+        // Get the appropriate code from the form data
+        $code = ($login_method === 'recovery')
+            ? ($_POST['recovery_code'] ?? '')
+            : ($_POST['authcode'] ?? '');
 
-            if ('valid' === $authcode_validation) {
+        if (empty($code)) {
+            $error_message = ($login_method === 'recovery')
+                ? __('Please enter a recovery code.', 'two-factor-login-telegram')
+                : __('Please enter the verification code.', 'two-factor-login-telegram');
+        } else {
+
+            $validation_result = WP_Factor_Auth_Factory::validateByMethod($code, $user->ID, $login_method);
+
+            if ($validation_result) {
                 $login_successful = true;
+
+                // Log successful login
+                $log_action = ($login_method === 'recovery') ? 'recovery_code_login_success' : 'telegram_code_login_success';
+                $this->log_telegram_action($log_action, array(
+                    'user_id' => $user->ID,
+                    'user_login' => $user->user_login,
+                    'method' => $login_method,
+                    'code_used' => substr($code, 0, 4) . '****'
+                ));
             } else {
                 do_action('wp_factor_telegram_failed', $user->user_login);
 
-                $auth_code = $this->save_authcode($user);
+                if ($login_method === 'recovery') {
+                    $error_message = __('Invalid recovery code. Please check and try again.', 'two-factor-login-telegram');
 
-                $chat_id = $this->get_user_chatid($user->ID);
-                $result = $this->telegram->send_tg_token($auth_code, $chat_id, $user->ID);
-
-                // Determine error message based on validation result
-                $log_reason = '';
-
-                if ($authcode_validation === 'expired') {
-                    $error_message = __(
-                        'The verification code has expired. We just sent you a new code, please try again!',
-                        'two-factor-login-telegram'
-                    );
-                    $log_reason = 'expired_verification_code';
+                    $this->log_telegram_action('recovery_code_login_failed', array(
+                        'user_id' => $user->ID,
+                        'user_login' => $user->user_login,
+                        'attempted_code' => substr($code, 0, 4) . '****'
+                    ));
                 } else {
-                    $error_message = __(
-                        'Wrong verification code, we just sent a new code, please try again!',
-                        'two-factor-login-telegram'
-                    );
-                    $log_reason = 'wrong_verification_code';
-                }
+                    // For Telegram OTP, check validation status BEFORE generating new code
+                    $telegram_otp = WP_Factor_Auth_Factory::create(WP_Factor_Auth_Factory::METHOD_TELEGRAM_OTP);
+                    $authcode_validation = $telegram_otp->validate_authcode($code, $user->ID);
 
-                $this->log_telegram_action('auth_code_resent', array(
-                    'user_id' => $user->ID,
-                    'user_login' => $user->user_login,
-                    'chat_id' => $chat_id,
-                    'success' => $result !== false,
-                    'reason' => $log_reason
-                ));
+                    // Now generate new code
+                    $auth_code = $telegram_otp->save_authcode($user);
+
+                    $chat_id = $this->get_user_chatid($user->ID);
+                    $result = $this->telegram->send_tg_token($auth_code, $chat_id, $user->ID);
+
+                    $log_reason = ($authcode_validation === 'expired') ? 'expired_verification_code' : 'wrong_verification_code';
+
+                    $error_message = ($authcode_validation === 'expired')
+                        ? __('The verification code has expired. We just sent you a new code, please try again!', 'two-factor-login-telegram')
+                        : __('Wrong verification code, we just sent a new code, please try again!', 'two-factor-login-telegram');
+
+                    $this->log_telegram_action('auth_code_resent', array(
+                        'user_id' => $user->ID,
+                        'user_login' => $user->user_login,
+                        'chat_id' => $chat_id,
+                        'success' => $result !== false,
+                        'reason' => $log_reason
+                    ));
+                }
             }
         }
 
@@ -441,9 +252,9 @@ final class WP_Factor_Telegram_Plugin
 
         wp_set_auth_cookie($user->ID, $rememberme);
 
-        // Se l'utente non ha recovery codes, mostra wizard
-        if (!$this->has_recovery_codes($user->ID)) {
-            $codes = $this->regenerate_recovery_codes($user->ID);
+        $recovery_codes = WP_Factor_Auth_Factory::create(WP_Factor_Auth_Factory::METHOD_RECOVERY_CODES);
+        if (/*!$recovery_codes->has_recovery_codes($user->ID)*/ true) {
+            $codes = $recovery_codes->regenerate_recovery_codes($user->ID);
             $plugin_logo = apply_filters('two_factor_login_telegram_logo', plugins_url('assets/img/plugin_logo.png', WP_FACTOR_TG_FILE));
             $redirect_to = apply_filters('login_redirect', $_REQUEST['redirect_to'], $_REQUEST['redirect_to'], $user);
             require_once(dirname(WP_FACTOR_TG_FILE) . '/templates/recovery-codes-wizard.php');
@@ -870,36 +681,6 @@ final class WP_Factor_Telegram_Plugin
             return;
         }
 
-        // Gestione rigenerazione recovery codes
-        if (
-            isset($_POST['tg_regenerate_recovery_codes']) &&
-            check_admin_referer('tg_regenerate_recovery_codes_' . $user->ID)
-        ) {
-            // Genera nuovi codici in chiaro
-            $codes = $this->generate_recovery_codes(8, 10);
-            // Salva hashati
-            $this->set_user_recovery_codes($user->ID, $codes);
-            // Salva i codici in chiaro in una transient temporanea per mostrarli via AJAX
-            set_transient('tg_show_new_recovery_' . $user->ID, $codes, 120);
-            // Redirect per mostrare la modale
-            wp_safe_redirect(add_query_arg('show_new_recovery', 1, remove_query_arg('show_new_recovery', $_SERVER['REQUEST_URI'])));
-            exit;
-        }
-
-        // Endpoint AJAX per la modale
-        if (isset($_GET['tg_ajax_recovery']) && $_GET['tg_ajax_recovery'] == 1 && $current_user_id == $user->ID) {
-            $codes = get_transient('tg_show_new_recovery_' . $user->ID);
-            if ($codes && is_array($codes)) {
-                delete_transient('tg_show_new_recovery_' . $user->ID);
-                $plugin_logo = apply_filters('two_factor_login_telegram_logo', plugins_url('assets/img/plugin_logo.png', WP_FACTOR_TG_FILE));
-                $redirect_to = remove_query_arg(['show_new_recovery', 'tg_ajax_recovery'], $_SERVER['REQUEST_URI']);
-                define('IS_PROFILE_PAGE', true);
-                require(dirname(WP_FACTOR_TG_FILE) . '/templates/recovery-codes-wizard.php');
-                exit;
-            }
-            exit; // niente codici
-        }
-
         require_once(dirname(WP_FACTOR_TG_FILE) . "/templates/user-2fa-form.php");
     }
 
@@ -1050,7 +831,9 @@ final class WP_Factor_Telegram_Plugin
             die(json_encode($response));
         }
 
-        $auth_code = $this->get_auth_code();
+        $telegram_otp = WP_Factor_Auth_Factory::create(WP_Factor_Auth_Factory::METHOD_TELEGRAM_OTP);
+        $codes = $telegram_otp->generate_codes(0, ['length' => 5]);
+        $auth_code = !empty($codes) ? $codes[0] : '';
 
         set_transient('wp2fa_telegram_authcode_' . $_POST['chat_id'], hash('sha256', $auth_code), WP_FACTOR_AUTHCODE_EXPIRE_SECONDS);
 
@@ -1191,7 +974,8 @@ final class WP_Factor_Telegram_Plugin
             die(json_encode($response));
         }
 
-        if (!$this->is_valid_tokencheck_authcode($_POST['token'], $_POST['chat_id'])) {
+        $telegram_otp = WP_Factor_Auth_Factory::create(WP_Factor_Auth_Factory::METHOD_TELEGRAM_OTP);
+        if (!$telegram_otp->validate_tokencheck_authcode($_POST['token'], $_POST['chat_id'])) {
             $response['msg'] = __(
                 'Validation code entered is wrong.',
                 'two-factor-login-telegram'
@@ -1625,7 +1409,8 @@ final class WP_Factor_Telegram_Plugin
         }
 
         // Validate the token
-        $authcode_validation = $this->is_valid_authcode($token, $user_id);
+        $telegram_otp = WP_Factor_Auth_Factory::create(WP_Factor_Auth_Factory::METHOD_TELEGRAM_OTP);
+        $authcode_validation = $telegram_otp->validate_authcode($token, $user_id);
 
         if ('valid' !== $authcode_validation) {
             if ($authcode_validation === 'expired') {
@@ -1851,7 +1636,8 @@ final class WP_Factor_Telegram_Plugin
             // Verify nonce
             if (wp_verify_nonce($nonce, 'telegram_validate_' . $user_id . '_' . $token)) {
                 // Check if the token is valid using the transient method
-                if ($this->is_valid_tokencheck_authcode($token, $chat_id)) {
+                $telegram_otp = WP_Factor_Auth_Factory::create(WP_Factor_Auth_Factory::METHOD_TELEGRAM_OTP);
+                if ($telegram_otp->validate_tokencheck_authcode($token, $chat_id)) {
                     // Save user 2FA settings - this enables 2FA and saves the chat_id
                     $save_result = $this->save_user_2fa_settings($user_id, $chat_id, true);
 
@@ -1900,115 +1686,6 @@ final class WP_Factor_Telegram_Plugin
         }
     }
 
-    /**
-     * Genera N recovery codes randomici
-     * @param int $num
-     * @param int $length
-     * @return array
-     */
-    private function generate_recovery_codes($num = 8, $length = 10)
-    {
-        $codes = [];
-        for ($i = 0; $i < $num; $i++) {
-            $codes[] = $this->get_auth_code($length);
-        }
-        return $codes;
-    }
-
-    /**
-     * Restituisce i recovery codes hashati per l'utente
-     * @param int $user_id
-     * @return array
-     */
-    private function get_user_recovery_codes($user_id)
-    {
-        $codes = get_user_meta($user_id, 'tg_wp_factor_recovery_codes', true);
-        if (!is_array($codes))
-            return [];
-        return $codes;
-    }
-
-    /**
-     * Salva i recovery codes hashati per l'utente
-     * @param int $user_id
-     * @param array $codes
-     */
-    private function set_user_recovery_codes($user_id, $codes)
-    {
-        $hashed = array_map(function ($c) {
-            return hash('sha256', $c);
-        }, $codes);
-        update_user_meta($user_id, 'tg_wp_factor_recovery_codes', $hashed);
-    }
-
-    /**
-     * Consuma (elimina) un recovery code se valido
-     * @param int $user_id
-     * @param string $code
-     * @return bool
-     */
-    private function consume_recovery_code($user_id, $code)
-    {
-        $hashed = hash('sha256', $code);
-        $codes = $this->get_user_recovery_codes($user_id);
-        $idx = array_search($hashed, $codes);
-        if ($idx !== false) {
-            unset($codes[$idx]);
-            update_user_meta($user_id, 'tg_wp_factor_recovery_codes', array_values($codes));
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Verifica se l'utente ha recovery codes
-     * @param int $user_id
-     * @return bool
-     */
-    private function has_recovery_codes($user_id)
-    {
-        $codes = $this->get_user_recovery_codes($user_id);
-        return is_array($codes) && count($codes) > 0;
-    }
-
-    /**
-     * Rigenera i recovery codes per l'utente
-     * @param int $user_id
-     * @param int $num
-     * @param int $length
-     * @return array I nuovi codici in chiaro
-     */
-    public function regenerate_recovery_codes($user_id, $num = 8, $length = 10)
-    {
-        $codes = $this->generate_recovery_codes($num, $length);
-        $this->set_user_recovery_codes($user_id, $codes);
-        return $codes;
-    }
-
-    /**
-     * Valida e consuma un recovery code per il login
-     * @param string $code Il recovery code inserito dall'utente
-     * @param int $user_id ID dell'utente
-     * @return bool True se il codice è valido e è stato consumato
-     */
-    public function validate_recovery_code($code, $user_id)
-    {
-        // Normalizza il codice rimuovendo spazi e trattini
-        $normalized_code = strtoupper(str_replace([' ', '-'], '', trim($code)));
-        
-        // Controlla che il codice non sia vuoto
-        if (empty($normalized_code)) {
-            return false;
-        }
-        
-        // Controlla che l'utente abbia recovery codes
-        if (!$this->has_recovery_codes($user_id)) {
-            return false;
-        }
-        
-        // Prova a consumare il codice
-        return $this->consume_recovery_code($user_id, $normalized_code);
-    }
 
     public function ajax_regenerate_recovery()
     {
@@ -2019,15 +1696,16 @@ final class WP_Factor_Telegram_Plugin
         if (!wp_verify_nonce($_POST['_wpnonce'], 'tg_regenerate_recovery_codes_' . $user_id)) {
             wp_send_json_error(['message' => __('Invalid request.', 'two-factor-login-telegram')]);
         }
-        // Genera nuovi codici
-        $codes = $this->generate_recovery_codes(8, 10);
-        $this->set_user_recovery_codes($user_id, $codes);
+        $recovery_codes = WP_Factor_Auth_Factory::create(WP_Factor_Auth_Factory::METHOD_RECOVERY_CODES);
+        $codes = $recovery_codes->regenerate_recovery_codes($user_id, 8, 10);
+
         $plugin_logo = apply_filters('two_factor_login_telegram_logo', plugins_url('assets/img/plugin_logo.png', WP_FACTOR_TG_FILE));
         $redirect_to = $_POST['redirect_to'] ?? admin_url('profile.php');
         ob_start();
         define('IS_PROFILE_PAGE', true);
         require(dirname(WP_FACTOR_TG_FILE) . '/templates/recovery-codes-wizard.php');
         $html = ob_get_clean();
+
         wp_send_json_success(['html' => $html]);
     }
 

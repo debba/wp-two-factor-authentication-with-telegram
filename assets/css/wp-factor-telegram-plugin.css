@@ -482,3 +482,126 @@
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+/* Recovery Codes Modal Styles */
+.tg-modal-recovery h2 {
+    color: #333;
+    font-size: 24px;
+    margin: 0 0 20px 0;
+    font-weight: 600;
+}
+
+.notice-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 15px 0 20px 0;
+    color: #856404;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.copy-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.recovery-codes-list {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.recovery-code-box {
+    background: #ffffff;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    padding: 12px 8px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    color: #495057;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    user-select: all;
+}
+
+.recovery-code-box:hover {
+    border-color: #667eea;
+    background: #f8f9ff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.recovery-code-box:active {
+    background: #e7f0ff;
+    border-color: #5a6fd8;
+}
+
+.plugin-logo {
+    margin-bottom: 20px;
+}
+
+.plugin-logo img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+}
+
+.tg-action-button.button-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.tg-action-button.button-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Responsive adjustments for recovery codes */
+@media (max-width: 768px) {
+    .recovery-codes-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 15px;
+    }
+    
+    .recovery-code-box {
+        font-size: 12px;
+        padding: 10px 6px;
+    }
+    
+    .tg-modal-recovery-content {
+        padding: 24px 20px;
+        margin: 20px;
+    }
+}

@@ -221,7 +221,7 @@ _e(
             </div>
         <?php endif; ?>
         <div style="margin-top:10px;">
-            <button type="button" class="button tg-action-button" id="tg-recovery-codes-btn" 
+            <button type="button" class="button tg-action-button" id="tg-recovery-codes-btn"
                     data-nonce="<?php echo wp_create_nonce('tg_regenerate_recovery_codes_' . $user->ID); ?>">
                 <?php _e('Regenerate Recovery Codes', 'two-factor-login-telegram'); ?>
             </button>
