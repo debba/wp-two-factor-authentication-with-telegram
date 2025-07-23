@@ -4,7 +4,7 @@ Tags: 2fa, authentication, telegram, authenticate, security
 Requires at least: 6.0
 Requires PHP: 7.0
 Tested up to: 6.8
-Stable tag: 3.5.2
+Stable tag: 3.5.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -51,6 +51,10 @@ Please note the URL generated in the example above is https://example.com/images
 7. You can customize the logo with yours using "two_factor_login_telegram_logo" filter hook. See the instructions of use in FAQ.
 
 == Changelog ==
+
+= 3.5.3 =
+- Manage 2FA Columns in Users List
+- Better management for token validation
 
 = 3.5.2 =
 * Timestamp bugfixes
