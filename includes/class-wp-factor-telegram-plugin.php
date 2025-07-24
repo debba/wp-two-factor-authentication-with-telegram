@@ -725,7 +725,16 @@ final class WP_Factor_Telegram_Plugin
                 "enter_confirmation_code" => __('Please enter the confirmation code', 'two-factor-login-telegram'),
                 "setup_completed" => __('✅ 2FA setup completed successfully!', 'two-factor-login-telegram'),
                 "code_sent" => __('✅ Code sent! Check your Telegram', 'two-factor-login-telegram'),
-                "modifying_setup" => __('⚠️ Modifying 2FA configuration - validation required', 'two-factor-login-telegram')
+                "modifying_setup" => __('⚠️ Modifying 2FA configuration - validation required', 'two-factor-login-telegram'),
+                // Admin functionality messages
+                "confirm_disable" => __('Are you sure you want to disable 2FA for user %s?', 'two-factor-login-telegram'),
+                "disabling" => __('Disabling...', 'two-factor-login-telegram'),
+                "disable" => __('Disable', 'two-factor-login-telegram'),
+                "inactive" => __('Inactive', 'two-factor-login-telegram'),
+                "success_disabled" => __('2FA successfully disabled for %s', 'two-factor-login-telegram'),
+                "disable_error" => __('Error during deactivation', 'two-factor-login-telegram'),
+                "unknown_error" => __('Unknown error', 'two-factor-login-telegram'),
+                "server_error" => __('Server communication error', 'two-factor-login-telegram')
             ));
 
             wp_enqueue_script("tg_lib_js");
@@ -1017,7 +1026,7 @@ final class WP_Factor_Telegram_Plugin
 
     public function tg_save_custom_user_profile_fields($user_id)
     {
-        // Permetti il salvataggio delle impostazioni 2FA solo se l'utente sta modificando il proprio profilo
+        // Allow saving 2FA settings only if the user is editing their own profile
         $current_user_id = get_current_user_id();
         if ($current_user_id != $user_id) {
             return false;
@@ -1109,7 +1118,7 @@ final class WP_Factor_Telegram_Plugin
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-        // Esegue la query per creare/aggiornare la tabella
+        // Execute the query to create/update the table
         dbDelta($sql);
     }
 
@@ -1132,7 +1141,7 @@ final class WP_Factor_Telegram_Plugin
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-        // Esegue la query per creare/aggiornare la tabella
+        // Execute the query to create/update the table
         dbDelta($sql);
     }
 
