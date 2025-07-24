@@ -125,7 +125,7 @@ final class WP_Factor_Telegram_Plugin
 
         $wpdb->update(
             $table_name,
-            array('expiration_date' => current_time('mysql')), // Imposta l'expiration_date nel passato
+            array('expiration_date' => current_time('mysql')), // Set expiration_date in the past
             array('user_id' => $user_id),
             array('%s'),
             array('%d')
@@ -138,21 +138,17 @@ final class WP_Factor_Telegram_Plugin
 
         $table_name = $wpdb->prefix . 'telegram_auth_codes';
 
-        // Conta quanti codici ci sono già per l'utente
         $auth_codes_count = $wpdb->get_var($wpdb->prepare(
             "SELECT COUNT(*) FROM $table_name WHERE user_id = %d",
             $user_id
         ));
 
-        // Se ci sono più di 5 codici, elimina quelli più vecchi
         if ($auth_codes_count > 5) {
-            // Seleziona gli ID dei codici più vecchi da eliminare, escludendo i 5 più recenti
             $old_auth_codes = $wpdb->get_col($wpdb->prepare(
                 "SELECT id FROM $table_name WHERE user_id = %d ORDER BY creation_date DESC LIMIT %d, %d",
                 $user_id, 5, $auth_codes_count - 5
             ));
 
-            // Elimina i codici più vecchi
             if (!empty($old_auth_codes)) {
                 $placeholders = implode(',', array_fill(0, count($old_auth_codes), '%d'));
                 $wpdb->query($wpdb->prepare(
@@ -180,7 +176,7 @@ final class WP_Factor_Telegram_Plugin
         $auth_code = $this->get_unique_auth_code($authcode_length);
         $user_id = is_object($user) ? $user->ID : intval($user);
 
-        $creation_date = current_time('mysql');  // Data attuale
+        $creation_date = current_time('mysql');  // Current date
         $expiration_date = date('Y-m-d H:i:s', strtotime($creation_date) + WP_FACTOR_AUTHCODE_EXPIRE_SECONDS);
 
         $this->invalidate_existing_auth_codes($user_id);
@@ -728,7 +724,7 @@ final class WP_Factor_Telegram_Plugin
 
     public function tg_add_two_factor_fields($user)
     {
-        // Permetti la configurazione 2FA solo se l'utente sta modificando il proprio profilo
+        // Allow 2FA configuration only if the user is editing their own profile
         $current_user_id = get_current_user_id();
         if ($current_user_id != $user->ID) {
             return;
@@ -757,13 +753,23 @@ final class WP_Factor_Telegram_Plugin
                 "checkbot_nonce" => wp_create_nonce('ajax-checkbot-nonce'),
                 "sendtoken_nonce" => wp_create_nonce('ajax-sendtoken-nonce'),
                 "tokencheck_nonce" => wp_create_nonce('ajax-tokencheck-nonce'),
+                "admin_nonce" => wp_create_nonce('admin-action-nonce'),
                 "spinner" => admin_url("/images/spinner.gif"),
                 // Translated messages
                 "invalid_chat_id" => __('Please enter a valid Chat ID', 'two-factor-login-telegram'),
                 "enter_confirmation_code" => __('Please enter the confirmation code', 'two-factor-login-telegram'),
                 "setup_completed" => __('✅ 2FA setup completed successfully!', 'two-factor-login-telegram'),
                 "code_sent" => __('✅ Code sent! Check your Telegram', 'two-factor-login-telegram'),
-                "modifying_setup" => __('⚠️ Modifying 2FA configuration - validation required', 'two-factor-login-telegram')
+                "modifying_setup" => __('⚠️ Modifying 2FA configuration - validation required', 'two-factor-login-telegram'),
+                // Admin functionality messages
+                "confirm_disable" => __('Are you sure you want to disable 2FA for user %s?', 'two-factor-login-telegram'),
+                "disabling" => __('Disabling...', 'two-factor-login-telegram'),
+                "disable" => __('Disable', 'two-factor-login-telegram'),
+                "inactive" => __('Inactive', 'two-factor-login-telegram'),
+                "success_disabled" => __('2FA successfully disabled for %s', 'two-factor-login-telegram'),
+                "disable_error" => __('Error during deactivation', 'two-factor-login-telegram'),
+                "unknown_error" => __('Unknown error', 'two-factor-login-telegram'),
+                "server_error" => __('Server communication error', 'two-factor-login-telegram')
             ));
 
             wp_enqueue_script("tg_lib_js");
@@ -1026,7 +1032,7 @@ final class WP_Factor_Telegram_Plugin
 
     public function tg_save_custom_user_profile_fields($user_id)
     {
-        // Permetti il salvataggio delle impostazioni 2FA solo se l'utente sta modificando il proprio profilo
+        // Allow saving 2FA settings only if the user is editing their own profile
         $current_user_id = get_current_user_id();
         if ($current_user_id != $user_id) {
             return false;
@@ -1113,7 +1119,7 @@ final class WP_Factor_Telegram_Plugin
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-        // Esegue la query per creare/aggiornare la tabella
+        // Execute the query to create/update the table
         dbDelta($sql);
     }
 
@@ -1136,7 +1142,7 @@ final class WP_Factor_Telegram_Plugin
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-        // Esegue la query per creare/aggiornare la tabella
+        // Execute the query to create/update the table
         dbDelta($sql);
     }
 
